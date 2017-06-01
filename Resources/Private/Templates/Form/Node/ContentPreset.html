@@ -1,0 +1,15 @@
+<div xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="media">
+    <a href="#" class="t3-content-element-wizard-item t3js-content-element-wizard-item" data-parameters="{element.parameters}">
+        <div class="t3-content-element-wizard-item-select media-left">
+            <input type="radio" name="element" />
+        </div>
+        <div class="t3-content-element-wizard-item-icon media-left">
+            {wireframe:icon(identifier: '{element.iconIdentifier}')}
+        </div>
+        <div class="t3-content-element-wizard-item-body media-body">
+            <strong>{element.title}</strong>
+            <br />
+            {element.description}
+        </div>
+    </a>
+</div>

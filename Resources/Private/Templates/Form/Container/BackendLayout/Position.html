@@ -1,0 +1,36 @@
+<table xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="table table-condensed table-bordered table-vertical-top">
+    <colgroup>
+        <f:for each="{columns}" as="column">
+            <col style="width: {column.width}%"></col>
+        </f:for>
+    </colgroup>
+    <f:for each="{rows}" as="row">
+        <tr>
+            <f:for each="{row.cells}" as="cell">
+                <td class="col-nowrap col-min"">
+                    <p>
+                        <strong>{cell.title}</strong>
+                    </p>
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#" data-parameters="{cell.parameters}">
+                                <i class="t3-icon fa fa-long-arrow-left" title="Insert new record here"></i>
+                            </a>
+                        </li>
+                        <f:for each="{cell.elements}" as="element">
+                            <li>
+                                {wireframe:record.icon(table: '{element.table}', row: '{element.data}', size: 'small') -> f:format.html()}
+                                {element.title}
+                            </li>
+                            <li>
+                                <a href="#" data-parameters="{element.parameters}">
+                                    <i class="t3-icon fa fa-long-arrow-left" title="Insert new record here"></i>
+                                </a>
+                            </li>
+                        </f:for>
+                    </ul>
+                </td>
+            </f:for>
+        </tr>
+    </f:for>
+</table>

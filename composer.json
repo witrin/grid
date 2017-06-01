@@ -1,0 +1,29 @@
+{
+  "name": "typo3/cms-wireframe",
+  "type": "typo3-cms-extension",
+  "description": "TYPO3 Core",
+  "homepage": "https://typo3.org",
+  "license": "GPL-2.0+",
+  "require": {
+    "typo3/cms-core": "*",
+    "typo3/cms-backend": "*"
+  },
+  "replace": {
+    "wireframe": "*"
+  },
+  "extra": {
+    "typo3/cms": {
+      "cms-package-dir": "{$vendor-dir}/typo3/cms"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "TYPO3\\CMS\\Wireframe\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TYPO3\\CMS\\Wireframe\\Tests\\": "Tests/"
+    }
+  }
+}

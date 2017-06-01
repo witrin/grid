@@ -1,0 +1,30 @@
+<div xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="t3-sidebar t3js-sidebar" data-toggle="collapsed" data-expandable data-min-width="280">
+    <div class="t3-sidebar-split t3js-sidebar-split ui-resizable-handle ui-resizable-w">
+        <div class="t3-sidebar-toggle t3js-sidebar-toggle"></div>
+    </div>
+    <div class="t3-sidebar-outer">
+        <div class="t3-sidebar-panel t3js-sidebar-panel">
+            <f:for each="{groups}" as="group">
+                <div class="t3-sidebar-group">
+                    <div class="t3-sidebar-group-header">
+                        <span class="t3-sidebar-group-header-title">{group.header}</span>
+                    </div>
+                    <ul class="t3-sidebar-group-container">
+                        <f:for each="{group.elements}" as="element">
+                            <li class="t3-sidebar-group-container-item">
+                                <span class="t3-sidebar-group-container-item-icon t3js-content-element t3js-content-element-draghandle"
+                                      data-values="{element.defaultValues -> wireframe:format.json.encode()}">
+                                    {wireframe:icon(identifier: '{element.iconIdentifier}')}
+                                </span>
+                                <span class="text">
+                                    <span class="title">{element.title}</span><br/>
+                                    <span class="description">{element.description}</span>
+                                </span>
+                            </li>
+                        </f:for>
+                    </ul>
+                </div>
+            </f:for>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.0" xmlns:t3="http://typo3.org/schemas/xliff">
+	<file source-language="en" datatype="plaintext" original="messages" date="2016-07-14T00:00:00Z" product-name="wireframe-example">
+		<header/>
+		<body>
+			<trans-unit id="module.layout.title">
+				<source>Page (refactored)</source>
+			</trans-unit>
+			<trans-unit id="module.layout.description.long">
+				<source>This module allows you to create and edit webpages, view page hit statistics, manage different languages and columns of content per page and access special page contents like guestbooks and shopping items.</source>
+			</trans-unit>
+			<trans-unit id="module.layout.description.short">
+				<source>Page content</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
