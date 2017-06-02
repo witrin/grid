@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Node;
+namespace TYPO3\CMS\Grid\Form\Node;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -25,7 +25,7 @@ class ContentPreset extends AbstractElement
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:wireframe/Resources/Private/Templates/Form/Node/ContentPreset.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/ContentPreset.html';
 
     /**
      * Render the preview

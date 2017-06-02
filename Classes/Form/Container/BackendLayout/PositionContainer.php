@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Form\Container\BackendLayout;
+namespace TYPO3\CMS\Grid\Form\Container\BackendLayout;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,7 +16,7 @@ namespace TYPO3\CMS\Wireframe\Form\Container\BackendLayout;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Wireframe\Form\Node\AbstractContainer;
+use TYPO3\CMS\Grid\Form\Node\AbstractContainer;
 
 /**
  * Render a table with content element positions of the given container
@@ -130,7 +130,7 @@ class PositionContainer extends AbstractContainer
     protected function getTemplatePathAndFilename()
     {
         return GeneralUtility::getFileAbsFileName(
-            'EXT:wireframe/Resources/Private/Templates/Form/Container/BackendLayout/Position.html'
+            'EXT:grid/Resources/Private/Templates/Form/Container/BackendLayout/Position.html'
         );
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "typo3/cms-wireframe",
+  "name": "typo3/cms-grid",
   "type": "typo3-cms-extension",
   "description": "TYPO3 Core",
   "homepage": "https://typo3.org",
@@ -9,7 +9,7 @@
     "typo3/cms-backend": "*"
   },
   "replace": {
-    "wireframe": "*"
+    "grid": "*"
   },
   "extra": {
     "typo3/cms": {
@@ -18,12 +18,12 @@
   },
   "autoload": {
     "psr-4": {
-      "TYPO3\\CMS\\Wireframe\\": "Classes/"
+      "TYPO3\\CMS\\Grid\\": "Classes/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "TYPO3\\CMS\\Wireframe\\Tests\\": "Tests/"
+      "TYPO3\\CMS\\Grid\\Tests\\": "Tests/"
     }
   }
 }

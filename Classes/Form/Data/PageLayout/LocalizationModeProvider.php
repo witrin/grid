@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Form\Data\PageLayout;
+namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
 
 /*
  * This file is part of the TYPO3 CMS project.

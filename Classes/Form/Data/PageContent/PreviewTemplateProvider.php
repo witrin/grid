@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Data\PageContent;
+namespace TYPO3\CMS\Grid\Form\Data\PageContent;
 
 /*
  * This file is part of the TYPO3 CMS project.

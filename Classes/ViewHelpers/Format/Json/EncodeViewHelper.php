@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\ViewHelpers\Format\Json;
+namespace TYPO3\CMS\Grid\ViewHelpers\Format\Json;
 
 /*
  * This file is part of the TYPO3 CMS project.

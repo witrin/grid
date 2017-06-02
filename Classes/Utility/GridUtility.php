@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Utility;
+namespace TYPO3\CMS\Grid\Utility;
 
 /*
  * This file is part of the TYPO3 CMS project.

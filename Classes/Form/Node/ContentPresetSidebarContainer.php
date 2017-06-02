@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Node;
+namespace TYPO3\CMS\Grid\Form\Node;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -27,7 +27,7 @@ class ContentPresetSidebarContainer extends AbstractContainer
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:wireframe/Resources/Private/Templates/Form/Node/ContentPresetSidebarContainer.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/ContentPresetSidebarContainer.html';
 
     /**
      * Entry method
@@ -65,11 +65,11 @@ class ContentPresetSidebarContainer extends AbstractContainer
             parent::initializeResultArray(),
             [
                 'requireJsModules' => [
-                    'TYPO3/CMS/Wireframe/Sidebar',
-                    'TYPO3/CMS/Wireframe/DragDrop'
+                    'TYPO3/CMS/Grid/Sidebar',
+                    'TYPO3/CMS/Grid/DragDrop'
                 ],
                 'stylesheetFiles' => [
-                    'EXT:wireframe/Resources/Public/Css/Sidebar.css'
+                    'EXT:grid/Resources/Public/Css/Sidebar.css'
                 ]
             ]
         );

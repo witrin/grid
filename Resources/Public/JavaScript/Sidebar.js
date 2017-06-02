@@ -12,7 +12,7 @@
  */
 
 /**
- * Module: TYPO3/CMS/Wireframe/Sidebar
+ * Module: TYPO3/CMS/Grid/Sidebar
  * this JS code does the collapsing logic for the Sidebar
  * based on jQuery UI
  */

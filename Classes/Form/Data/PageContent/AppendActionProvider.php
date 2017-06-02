@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Data\PageContent;
+namespace TYPO3\CMS\Grid\Form\Data\PageContent;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -19,7 +19,7 @@ use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
-use TYPO3\CMS\Wireframe\Utility\TcaUtility;
+use TYPO3\CMS\Grid\Utility\TcaUtility;
 
 /**
  * Add action URLs for the

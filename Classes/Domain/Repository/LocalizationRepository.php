@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Domain\Repository;
+namespace TYPO3\CMS\Grid\Domain\Repository;
 
 /*
  * This file is part of the TYPO3 CMS project.

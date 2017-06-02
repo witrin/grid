@@ -12,7 +12,7 @@
  */
 
 /**
- * Module: TYPO3/CMS/Wireframe/Localization
+ * Module: TYPO3/CMS/Grid/Localization
  * UI for localization workflow.
  */
 define([
@@ -27,7 +27,7 @@ define([
 
 	/**
 	 * @type {{identifier: {triggerButton: string}, actions: {translate: $, copy: $}, settings: {}, records: []}}
-	 * @exports TYPO3/CMS/Wireframe/Localization
+	 * @exports TYPO3/CMS/Grid/Localization
 	 */
 	var Localization = {
 		identifier: {

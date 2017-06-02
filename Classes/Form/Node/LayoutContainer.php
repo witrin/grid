@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Node;
+namespace TYPO3\CMS\Grid\Form\Node;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,7 +16,7 @@ namespace TYPO3\CMS\Wireframe\Form\Node;
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Wireframe\Utility\GridUtility;
+use TYPO3\CMS\Grid\Utility\GridUtility;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
 /**
@@ -29,7 +29,7 @@ class LayoutContainer extends AbstractContainer
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:wireframe/Resources/Private/Templates/Form/Node/LayoutContainer.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/LayoutContainer.html';
 
     /**
      * @var string
@@ -138,11 +138,11 @@ class LayoutContainer extends AbstractContainer
                     'TYPO3/CMS/Backend/Tooltip',
                     'TYPO3/CMS/Backend/ClickMenu',
                     'TYPO3/CMS/Backend/Modal',
-                    'TYPO3/CMS/Wireframe/DragDrop'
+                    'TYPO3/CMS/Grid/DragDrop'
                 ],
                 'stylesheetFiles' => [
-                    'EXT:wireframe/Resources/Public/Css/DragDrop.css',
-                    'EXT:wireframe/Resources/Public/Css/BackendLayout.css'
+                    'EXT:grid/Resources/Public/Css/DragDrop.css',
+                    'EXT:grid/Resources/Public/Css/BackendLayout.css'
                 ]
             ]
         );

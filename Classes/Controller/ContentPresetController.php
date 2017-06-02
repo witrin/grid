@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Controller;
+namespace TYPO3\CMS\Grid\Controller;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -24,8 +24,8 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Wireframe\Form\Data\GridContainerGroup;
-use TYPO3\CMS\Wireframe\Utility\TcaUtility;
+use TYPO3\CMS\Grid\Form\Data\GridContainerGroup;
+use TYPO3\CMS\Grid\Utility\TcaUtility;
 
 /**
  * Controller for content element wizard
@@ -124,7 +124,7 @@ class ContentPresetController extends AbstractModule
         }
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename('EXT:wireframe/Resources/Private/Templates/ContentPreset/Index.html');
+        $view->setTemplatePathAndFilename('EXT:grid/Resources/Private/Templates/ContentPreset/Index.html');
 
         $view->assignMultiple([
             'form' => [

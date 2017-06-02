@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,7 +18,7 @@ namespace TYPO3\CMS\Wireframe\Form\Data\GridContainer;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Wireframe\Form\Data\GridItemGroup;
+use TYPO3\CMS\Grid\Form\Data\GridItemGroup;
 
 /**
  * Process the items of a grid container and add a shortcut into the custom namespace

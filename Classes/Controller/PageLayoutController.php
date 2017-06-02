@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Controller;
+namespace TYPO3\CMS\Grid\Controller;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -25,7 +25,7 @@ use TYPO3\CMS\Backend\Module\AbstractModule;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Wireframe\Form\Data\GridContainerGroup;
+use TYPO3\CMS\Grid\Form\Data\GridContainerGroup;
 
 /**
  * Controller for Web > Page module
@@ -315,11 +315,11 @@ class PageLayoutController extends AbstractModule
         $params = $this->request->getQueryParams();
 
         $this->view->setTemplatePathAndFilename(
-            'EXT:wireframe/Resources/Private/Templates/PageLayout/' . ucfirst(str_replace('Action', '', $params['action'])) . '.html'
+            'EXT:grid/Resources/Private/Templates/PageLayout/' . ucfirst(str_replace('Action', '', $params['action'])) . '.html'
         );
         // @todo This is nasty! There must be a better way to append the sidebar markup!
-        $this->moduleTemplate->getView()->setLayoutRootPaths(['EXT:wireframe/Resources/Private/Layouts']);
-        $this->moduleTemplate->getView()->setTemplateRootPaths(['EXT:wireframe/Resources/Private/Templates']);
+        $this->moduleTemplate->getView()->setLayoutRootPaths(['EXT:grid/Resources/Private/Layouts']);
+        $this->moduleTemplate->getView()->setTemplateRootPaths(['EXT:grid/Resources/Private/Templates']);
 
         //$this->moduleTemplate->setFlashMessageQueue($this->controllerContext->getFlashMessageQueue());
 

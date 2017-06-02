@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\ViewHelpers;
+namespace TYPO3\CMS\Grid\ViewHelpers;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,7 +15,7 @@ namespace TYPO3\CMS\Wireframe\ViewHelpers;
  */
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\CMS\Wireframe\Collection\FilterableCollection;
+use TYPO3\CMS\Grid\Collection\FilterableCollection;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 

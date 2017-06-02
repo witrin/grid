@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Node;
+namespace TYPO3\CMS\Grid\Form\Node;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -27,7 +27,7 @@ class LocalizationContainer extends LayoutContainer
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:wireframe/Resources/Private/Templates/Form/Node/LocalizationContainer.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/LocalizationContainer.html';
 
     /**
      * @param ViewInterface $view
@@ -85,7 +85,7 @@ class LocalizationContainer extends LayoutContainer
         return array_merge_recursive(
             parent::initializeResultArray(),
             [
-                'requireJsModules' => ['TYPO3/CMS/Wireframe/Localization']
+                'requireJsModules' => ['TYPO3/CMS/Grid/Localization']
             ]
         );
     }

@@ -1,7 +1,7 @@
 <?php
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'TYPO3 Wireframe',
-    'description' => 'Wireframe component for the TYPO3 backend.',
+    'title' => 'TYPO3 Grid',
+    'description' => 'Grid component for the TYPO3 backend.',
     'category' => 'be',
     'state' => 'alpha',
     'uploadfolder' => 0,

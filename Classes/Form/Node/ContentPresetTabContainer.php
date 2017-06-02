@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Wireframe\Form\Node;
+namespace TYPO3\CMS\Grid\Form\Node;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -28,7 +28,7 @@ class ContentPresetTabContainer extends AbstractContainer
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:wireframe/Resources/Private/Templates/Form/Node/ContentPresetTabContainer.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/ContentPresetTabContainer.html';
 
     /**
      * Entry method
@@ -122,10 +122,10 @@ class ContentPresetTabContainer extends AbstractContainer
                 'requireJsModules' => [
                     'TYPO3/CMS/Backend/Tabs',
                     'TYPO3/CMS/Backend/ClickMenu',
-                    'TYPO3/CMS/Wireframe/Wizard'
+                    'TYPO3/CMS/Grid/Wizard'
                 ],
                 'stylesheetFiles' => [
-                    'EXT:wireframe/Resources/Public/Css/Wizard.css'
+                    'EXT:grid/Resources/Public/Css/Wizard.css'
                 ]
             ]
         );

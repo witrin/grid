@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Definitions for routes provided by EXT:wireframe
+ * Definitions for routes provided by EXT:grid
  */
 return [
     // Get languages in grid area
     'grid_area_languages' => [
-        'path' => '/wireframe/records/localize/get-languages',
-        'target' => \TYPO3\CMS\Wireframe\Controller\LocalizationController::class . '::getLanguages'
+        'path' => '/grid/records/localize/get-languages',
+        'target' => \TYPO3\CMS\Grid\Controller\LocalizationController::class . '::getLanguages'
     ],
     // Get summary of records to localize
     'records_localize_summary' => [
-        'path' => '/wireframe/records/localize/summary',
-        'target' => \TYPO3\CMS\Wireframe\Controller\LocalizationController::class . '::getSummary'
+        'path' => '/grid/records/localize/summary',
+        'target' => \TYPO3\CMS\Grid\Controller\LocalizationController::class . '::getSummary'
     ],
     // Localize the records
     'records_localize' => [
-        'path' => '/wireframe/records/localize',
-       'target' => \TYPO3\CMS\Wireframe\Controller\LocalizationController::class . '::localizeRecords'
+        'path' => '/grid/records/localize',
+       'target' => \TYPO3\CMS\Grid\Controller\LocalizationController::class . '::localizeRecords'
     ]
 ];

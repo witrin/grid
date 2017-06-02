@@ -12,8 +12,8 @@
  */
 
 /**
- * Module: TYPO3/CMS/Wireframe/DragDrop
- * this JS code does the drag+drop logic for the Wireframe Component
+ * Module: TYPO3/CMS/Grid/DragDrop
+ * this JS code does the drag+drop logic for the Grid Component
  * based on jQuery UI
  */
 define(['jquery', 'jquery-ui/droppable'], function($) {

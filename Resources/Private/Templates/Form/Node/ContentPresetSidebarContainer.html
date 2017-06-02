@@ -1,4 +1,4 @@
-<div xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="t3-sidebar t3js-sidebar" data-toggle="collapsed" data-expandable data-min-width="280">
+<div xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" class="t3-sidebar t3js-sidebar" data-toggle="collapsed" data-expandable data-min-width="280">
     <div class="t3-sidebar-split t3js-sidebar-split ui-resizable-handle ui-resizable-w">
         <div class="t3-sidebar-toggle t3js-sidebar-toggle"></div>
     </div>
@@ -13,8 +13,8 @@
                         <f:for each="{group.elements}" as="element">
                             <li class="t3-sidebar-group-container-item">
                                 <span class="t3-sidebar-group-container-item-icon t3js-content-element t3js-content-element-draghandle"
-                                      data-values="{element.defaultValues -> wireframe:format.json.encode()}">
-                                    {wireframe:icon(identifier: '{element.iconIdentifier}')}
+                                      data-values="{element.defaultValues -> g:format.json.encode()}">
+                                    {g:icon(identifier: '{element.iconIdentifier}')}
                                 </span>
                                 <span class="text">
                                     <span class="title">{element.title}</span><br/>

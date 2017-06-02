@@ -12,7 +12,7 @@
  */
 
 /**
- * Module: TYPO3/CMS/Wireframe/Wizard
+ * Module: TYPO3/CMS/Grid/Wizard
  * this JS code does the form logic for the content element wizard
  * based on jQuery UI
  */

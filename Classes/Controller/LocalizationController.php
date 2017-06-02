@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Controller;
+namespace TYPO3\CMS\Grid\Controller;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -17,7 +17,7 @@ namespace TYPO3\CMS\Wireframe\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
-use TYPO3\CMS\Wireframe\Domain\Repository\LocalizationRepository;
+use TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;

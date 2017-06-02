@@ -1,4 +1,4 @@
-<table xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="table table-condensed table-bordered table-vertical-top">
+<table xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" class="table table-condensed table-bordered table-vertical-top">
     <colgroup>
         <f:for each="{columns}" as="column">
             <col style="width: {column.width}%"></col>
@@ -19,7 +19,7 @@
                         </li>
                         <f:for each="{cell.elements}" as="element">
                             <li>
-                                {wireframe:record.icon(table: '{element.table}', row: '{element.data}', size: 'small') -> f:format.html()}
+                                {g:record.icon(table: '{element.table}', row: '{element.data}', size: 'small') -> f:format.html()}
                                 {element.title}
                             </li>
                             <li>

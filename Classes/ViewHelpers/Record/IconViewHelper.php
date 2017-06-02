@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\ViewHelpers\Record;
+namespace TYPO3\CMS\Grid\ViewHelpers\Record;
 
 /*
  * This file is part of the TYPO3 CMS project.

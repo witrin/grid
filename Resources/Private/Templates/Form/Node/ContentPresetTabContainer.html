@@ -1,7 +1,7 @@
-<h1 xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers">{f:translate(key: 'LLL:EXT:lang/locallang_misc.xlf:newContentElement')}</h1>
+<h1 xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">{f:translate(key: 'LLL:EXT:lang/locallang_misc.xlf:newContentElement')}</h1>
 <f:if condition="{areas}">
     <f:then>
-        <div class="t3-content-element-wizard-advanced t3js-content-element-wizard-advanced" data-tca="{tca -> wireframe:format.json.encode()}">
+        <div class="t3-content-element-wizard-advanced t3js-content-element-wizard-advanced" data-tca="{tca -> g:format.json.encode()}">
             <h2>{f:translate(key: 'LLL:EXT:lang/locallang_misc.xlf:1_selectType')}</h2>
             <div class="t3-content-element-wizard-items t3js-content-element-wizard-items">
                 <p>{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_db_new_content_el.xlf:sel1')}</p>

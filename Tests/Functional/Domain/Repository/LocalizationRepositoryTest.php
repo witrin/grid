@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Tests\Functional\Domain\Repository;
+namespace TYPO3\CMS\Grid\Tests\Functional\Domain\Repository;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -14,11 +14,11 @@ namespace TYPO3\CMS\Wireframe\Tests\Functional\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Wireframe\Domain\Repository\LocalizationRepository;
+use TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository;
 use TYPO3\CMS\Core\Core\Bootstrap;
 
 /**
- * Test case for TYPO3\CMS\Wireframe\Domain\Repository\LocalizationRepository
+ * Test case for TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository
  */
 class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase
 {
@@ -33,8 +33,8 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
     protected function setUp()
     {
         $this->testExtensionsToLoad = [
-            'typo3conf/ext/wireframe',
-            'typo3conf/ext/wireframe/Tests/Functional/Fixtures/Extensions/grid_example'
+            'typo3conf/ext/grid',
+            'typo3conf/ext/grid/Tests/Functional/Fixtures/Extensions/grid_example'
         ];
 
         parent::setUp();
@@ -42,7 +42,7 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
         $this->setUpBackendUserFromFixture(1);
         Bootstrap::getInstance()->initializeLanguageObject();
 
-        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/wireframe/Tests/Functional/Domain/Repository/Fixtures/GridContainerAndItems.csv');
+        $this->importCSVDataSet(ORIGINAL_ROOT . 'typo3conf/ext/grid/Tests/Functional/Domain/Repository/Fixtures/GridContainerAndItems.csv');
 
         $this->subject = new LocalizationRepository();
     }

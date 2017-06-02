@@ -1,5 +1,5 @@
 <?php
-namespace TYPO3\CMS\Wireframe\Hook\Core\Page\PageRenderer;
+namespace TYPO3\CMS\Grid\Hook\Core\Page\PageRenderer;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -42,7 +42,7 @@ class RenderPreProcessHook
     protected function removeJavaScriptModuleLocalization(&$parameters, PageRenderer $pageRenderer)
     {
         if (
-            isset($parameters['jsInline']['RequireJS-Module-TYPO3/CMS/Wireframe/Localization'])
+            isset($parameters['jsInline']['RequireJS-Module-TYPO3/CMS/Grid/Localization'])
             && isset($parameters['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization'])
         ) {
             unset($parameters['jsInline']['RequireJS-Module-TYPO3/CMS/Backend/Localization']);

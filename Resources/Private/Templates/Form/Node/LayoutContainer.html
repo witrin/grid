@@ -1,5 +1,5 @@
-<div xmlns:wireframe="http://typo3.org/ns/TYPO3/CMS/Wireframe/ViewHelpers" class="t3-grid-container t3js-content-container"
-     data-tca="{tca -> wireframe:format.json.encode()}" data-language="{language.uid}" data-uid="{uid}" data-pid="{pid}">
+<div xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" class="t3-grid-container t3js-content-container"
+     data-tca="{tca -> g:format.json.encode()}" data-language="{language.uid}" data-uid="{uid}" data-pid="{pid}">
     <table class="t3-backend-layout-columns t3-grid-table t3js-backend-layout-columns">
         <colgroup>
             <f:for each="{columns}" as="column">
@@ -63,7 +63,7 @@
         <f:if condition="{url}">
             <div class="t3js-new-content-element">
                 <a href="{url -> f:format.htmlspecialchars()}" class="btn btn-default btn-sm">
-                    {wireframe:icon(identifier: 'actions-document-new', size: 'small')}
+                    {g:icon(identifier: 'actions-document-new', size: 'small')}
                     {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:content')}
                 </a>
             </div>
