@@ -4,7 +4,7 @@
 		<header/>
 		<body>
 			<trans-unit id="module.layout.title">
-				<source>Page (refactored)</source>
+				<source>Page (grid)</source>
 			</trans-unit>
 			<trans-unit id="module.layout.description.long">
 				<source>This module allows you to create and edit webpages, view page hit statistics, manage different languages and columns of content per page and access special page contents like guestbooks and shopping items.</source>
