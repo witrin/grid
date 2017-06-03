@@ -147,6 +147,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentElement'] = array_merge(
     [
         \TYPO3\CMS\Grid\Form\Data\GridItem\AreaUidProvider::class => [],
+        \TYPO3\CMS\Grid\Form\Data\ContentElement\AppendActionProvider::class => [],
         \TYPO3\CMS\Grid\Form\Data\ContentElement\EditActionProvider::class => [],
         \TYPO3\CMS\Grid\Form\Data\ContentElement\PreviewTemplateProvider::class => [],
         \TYPO3\CMS\Grid\Form\Data\ContentElement\DeleteActionProvider::class => [],

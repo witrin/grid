@@ -70,7 +70,7 @@ class LayoutContainer extends AbstractContainer
     protected function prepareItem(array &$item) {
         $item['renderType'] = $this->itemRenderType;
         $item['renderData'] = [
-            'pageLayoutView' => $this->data['pageLayoutView'],
+            'contentTemplatePathAndFilename' => $item['customData']['tx_grid']['previewTemplate'],
             'showFlag' => $item['customData']['tx_grid']['languageUid'] > 0,
             'returnUrl' => $this->data['returnUrl'],
             'hasErrors' => !$item['customData']['tx_grid']['hasTranslations'] &&
@@ -107,6 +107,7 @@ class LayoutContainer extends AbstractContainer
             ),
             'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
             'uid' => $this->data['vanillaUid'],
+            'pid' => $this->data['effectivePid'],
             'tca' => [
                 'container' => [
                     'table' => $this->data['tableName'],
