@@ -87,11 +87,11 @@ class PageLayoutController extends AbstractModule
 
         if (!isset($this->request->getQueryParams()['action'])) {
             $this->request = $this->request->withQueryParams(
-                array_merge($this->request->getQueryParams(), ['action' => 'indexAction'])
+                array_merge($this->request->getQueryParams(), ['action' => 'index'])
             );
         }
 
-        $methodName = $this->request->getQueryParams()['action'];
+        $methodName = $this->request->getQueryParams()['action'] . 'Action';
 
         if (!is_callable([$this, $methodName])) {
             throw new \InvalidArgumentException(
@@ -146,7 +146,7 @@ class PageLayoutController extends AbstractModule
                     'before' => $formResult['before'],
                     'after' => $formResult['after'],
                     'content' => $formResult['html'],
-                    'action' => $this->getActionUrl('indexAction', [
+                    'action' => $this->getActionUrl('index', [
                         'page' => $pageUid,
                         'language' => $languageUid
                     ])
@@ -199,7 +199,7 @@ class PageLayoutController extends AbstractModule
                     'before' => $formResult['before'],
                     'after' => $formResult['after'],
                     'content' => $formResult['html'],
-                    'action' => $this->getActionUrl('translateAction', [
+                    'action' => $this->getActionUrl('translate', [
                         'page' => $pageUid,
                         'language' => $languageUid
                     ])
@@ -315,7 +315,7 @@ class PageLayoutController extends AbstractModule
         $params = $this->request->getQueryParams();
 
         $this->view->setTemplatePathAndFilename(
-            'EXT:grid/Resources/Private/Templates/PageLayout/' . ucfirst(str_replace('Action', '', $params['action'])) . '.html'
+            'EXT:grid/Resources/Private/Templates/PageLayout/' . ucfirst($params['action']) . '.html'
         );
         // @todo This is nasty! There must be a better way to append the sidebar markup!
         $this->moduleTemplate->getView()->setLayoutRootPaths(['EXT:grid/Resources/Private/Layouts']);
@@ -407,8 +407,8 @@ class PageLayoutController extends AbstractModule
     protected function createMenus($page)
     {
         $actions = [
-            'Columns' => 'indexAction',
-            'Languages' => 'translateAction'
+            'Columns' => 'index',
+            'Languages' => 'translate'
         ];
 
         $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
