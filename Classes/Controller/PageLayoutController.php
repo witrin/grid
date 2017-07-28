@@ -243,12 +243,10 @@ class PageLayoutController extends AbstractModule
                     ]
                 ]
             ];
-            $formData = $formDataCompiler->compile($formDataCompilerInput);
-        } else {
-            $formData = $this->cache[$hash];
+            $this->cache[$hash] = $formDataCompiler->compile($formDataCompilerInput);
         }
 
-        return $formData;
+        return $this->cache[$hash];
     }
 
     /**
@@ -274,7 +272,6 @@ class PageLayoutController extends AbstractModule
     /**
      * Initializes the arguments
      *
-     * @param ServerRequestInterface $request
      * @return void
      */
     protected function initializeAction()
