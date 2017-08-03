@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,9 +18,9 @@ namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Calculate the dimensions of a grid template
+ * Sort the areas of a grid template by there row and column
  */
-class TemplateDimensionsProvider implements FormDataProviderInterface
+class TemplateAreasSortingProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,19 +30,15 @@ class TemplateDimensionsProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $max = array_reduce(
-            $result['customData']['tx_grid']['template']['areas'],
-            function($max, &$area) {
-                return [
-                    max($max[0], $area['row']['end']),
-                    max($max[1], $area['column']['end'])
-                ];
-            },
-            [0,0]
-        );
+        $row = [];
+        $column = [];
 
-        $result['customData']['tx_grid']['template']['rows'] = $max[0];
-        $result['customData']['tx_grid']['template']['columns'] = $max[1];
+        foreach ((array)$result['customData']['tx_grid']['template']['areas'] as $key => &$area) {
+            $row[$key] = $area['row']['start'];
+            $column[$key] = $area['column']['start'];
+        }
+
+        array_multisort($row, SORT_ASC, $column, SORT_ASC, $result['customData']['tx_grid']['template']['areas']);
 
         return $result;
     }

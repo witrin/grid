@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,9 +18,9 @@ namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Add the default values for an entry in items
+ * Add the TCA of the items column
  */
-class ItemsDefaultValuesProvider implements FormDataProviderInterface
+class ItemsConfigProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,19 +30,16 @@ class ItemsDefaultValuesProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $config = $result['customData']['tx_grid']['itemsConfig'];
+        $columnToProcess = $result['customData']['tx_grid']['columnToProcess'];
 
-        $result['customData']['tx_grid']['itemsDefaultValues'] = array_filter(
-            array_merge([
-                $config['foreign_field'] => $result['vanillaUid'],
-                $config['foreign_table_field'] => $result['tableName'],
-            ], (array)$config['foreign_match_fields']),
-            function($key, $value) {
-                return !empty($key) && !empty($value);
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
+        if (empty($result['processedTca']['columns'][$columnToProcess]) || !is_array($result['processedTca']['columns'][$columnToProcess])) {
+            throw new \InvalidArgumentException(
+                'Missing column ' . $columnToProcess . ' in TCA for table ' . $result['tableName'],
+                1465680013
+            );
+        }
 
+        $result['customData']['tx_grid']['itemsConfig'] = &$result['processedTca']['columns'][$columnToProcess]['config'];
         return $result;
     }
 }

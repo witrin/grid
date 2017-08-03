@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\Record;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,9 +18,9 @@ namespace TYPO3\CMS\Grid\Form\Data\Record;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Add the language of a content element
+ * Calculate the dimensions of a grid template
  */
-class LanguageUidProvider implements FormDataProviderInterface
+class TemplateDimensionsProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,13 +30,19 @@ class LanguageUidProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        if (!empty($result['processedTca']['ctrl']['languageField'])) {
-            $field = $result['processedTca']['ctrl']['languageField'];
+        $max = array_reduce(
+            $result['customData']['tx_grid']['template']['areas'],
+            function($max, &$area) {
+                return [
+                    max($max[0], $area['row']['end']),
+                    max($max[1], $area['column']['end'])
+                ];
+            },
+            [0,0]
+        );
 
-            $result['customData']['tx_grid']['languageUid'] = (int)$result['databaseRow'][$field][0];
-        } else {
-            $result['customData']['tx_grid']['languageUid'] = -1;
-        }
+        $result['customData']['tx_grid']['template']['rows'] = $max[0];
+        $result['customData']['tx_grid']['template']['columns'] = $max[1];
 
         return $result;
     }

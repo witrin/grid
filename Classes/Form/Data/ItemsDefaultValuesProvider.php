@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,9 +18,9 @@ namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Add the vanilla TCA of the items table
+ * Add the default values for an entry in items
  */
-class ItemsTcaProvider implements FormDataProviderInterface
+class ItemsDefaultValuesProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,16 +30,18 @@ class ItemsTcaProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $config = &$result['customData']['tx_grid']['itemsConfig'];
+        $config = $result['customData']['tx_grid']['itemsConfig'];
 
-        if (empty($GLOBALS['TCA'][$config['foreign_table']]['ctrl']['sortby'])) {
-            throw new \InvalidArgumentException(
-                'Missing sorting field in TCA for table ' . $config['foreign_table'],
-                1465681034
-            );
-        }
-
-        $result['customData']['tx_grid']['vanillaItemsTca'] = $GLOBALS['TCA'][$config['foreign_table']];
+        $result['customData']['tx_grid']['itemsDefaultValues'] = array_filter(
+            array_merge([
+                $config['foreign_field'] => $result['vanillaUid'],
+                $config['foreign_table_field'] => $result['tableName'],
+            ], (array)$config['foreign_match_fields']),
+            function($key, $value) {
+                return !empty($key) && !empty($value);
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
 
         return $result;
     }

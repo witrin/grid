@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\ContentElement;
+namespace TYPO3\CMS\Grid\Form\Data\Layout;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Type\Bitmask\Permission;
 /**
  * Add action URLs for the content element
  */
-class DeleteActionProvider implements FormDataProviderInterface
+class DeleteItemActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -36,13 +36,15 @@ class DeleteActionProvider implements FormDataProviderInterface
         // @todo PageTsConfig
         $authentication = $this->getBackendUserAuthentication();
 
-        if (
-            $authentication->recordEditAccessInternals($result['tableName'], $result['databaseRow']) &&
-            $authentication->doesUserHaveAccess($result['parentPageRow'], Permission::CONTENT_EDIT)
-        ) {
-            $result['customData']['tx_grid']['actions']['delete'] = BackendUtility::getLinkToDataHandlerAction(
-                '&cmd[' . $result['tableName'] . '][' . $result['vanillaUid'] . '][delete]=1'
-            );
+        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+            if (
+                $authentication->recordEditAccessInternals($item['tableName'], $item['databaseRow']) &&
+                $authentication->doesUserHaveAccess($item['parentPageRow'], Permission::CONTENT_EDIT)
+            ) {
+                $item['customData']['tx_grid']['actions']['delete'] = BackendUtility::getLinkToDataHandlerAction(
+                    '&cmd[' . $item['tableName'] . '][' . $item['vanillaUid'] . '][delete]=1'
+                );
+            }
         }
 
         return $result;

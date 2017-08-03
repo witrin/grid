@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -52,6 +52,7 @@ class TemplateAreasItemsProvider implements FormDataProviderInterface
             $areaUid = is_array($item['databaseRow'][$areaField]) ? $item['databaseRow'][$areaField][0] : $item['databaseRow'][$areaField];
             if (isset($areas[$areaUid])) {
                 $result['customData']['tx_grid']['template']['areas'][$areas[$areaUid]]['items'][] = &$item;
+                $item['customData']['tx_grid']['areaUid'] = $areaUid;
             }
         }
 

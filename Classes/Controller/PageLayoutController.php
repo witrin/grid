@@ -186,8 +186,7 @@ class PageLayoutController extends AbstractModule
                 ],
                 $this->compileFormData(
                     $pageUid,
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'],
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContent']
+                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
                 )
             );
 
@@ -222,9 +221,9 @@ class PageLayoutController extends AbstractModule
      * @return array
      * @internal param array $itemsProviderList
      */
-    protected function compileFormData($pageUid, array $containerProviderList = [], array $itemProviderList = []) : array
+    protected function compileFormData($pageUid, array $containerProviderList = []) : array
     {
-        $hash = md5($pageUid . serialize($containerProviderList) . serialize($itemProviderList));
+        $hash = md5($pageUid . serialize($containerProviderList));
 
         if (!$this->cache[$hash]) {
             $formDataGroup = GeneralUtility::makeInstance(GridContainerGroup::class);
@@ -238,8 +237,7 @@ class PageLayoutController extends AbstractModule
                 'customData' => [
                     'tx_grid' => [
                         'columnToProcess' => 'content',
-                        'containerProviderList' => $containerProviderList,
-                        'itemProviderList' => $itemProviderList
+                        'containerProviderList' => $containerProviderList
                     ]
                 ]
             ];
@@ -383,8 +381,7 @@ class PageLayoutController extends AbstractModule
     {
         $formData = $this->compileFormData(
             $page,
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'],
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContent']
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
         );
         $this->moduleTemplate->getView()->assign(
             'sidebar',

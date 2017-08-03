@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\ContentElement;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,14 +16,13 @@ namespace TYPO3\CMS\Grid\Form\Data\ContentElement;
  */
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 
 /**
- * Add action URLs for the content element
+ * Add accessibility information about backend layout columns
  */
-class EditActionProvider implements FormDataProviderInterface
+class TemplateAreasAccessProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -33,21 +32,16 @@ class EditActionProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        // @todo PageTsConfig
-        $authentication = $this->getBackendUserAuthentication();
+        $permissions = $this->getBackendUserAuthentication()->calcPerms(
+            $result['tableName'] === 'pages' ? $result['databaseRow'] : $result['parentPageRow']
+        );
+        $locked = !$this->getBackendUserAuthentication()->isAdmin() &&
+            (($permissions & Permission::CONTENT_EDIT) !== Permission::CONTENT_EDIT ||
+                isset($result['databaseRow']['editlock']) && $result['databaseRow']['editlock']);
 
-        if (
-            $authentication->recordEditAccessInternals($result['tableName'], $result['databaseRow']) &&
-            $authentication->doesUserHaveAccess($result['parentPageRow'], Permission::CONTENT_EDIT)
-        ) {
-            $result['customData']['tx_grid']['actions']['edit'] = BackendUtility::getModuleUrl('record_edit', [
-                'edit' => [
-                    $result['tableName'] => [
-                        $result['vanillaUid'] => 'edit'
-                    ]
-                ],
-                'returnUrl' => $result['returnUrl']
-            ]) . '#element-' . $result['tableName'] . '-' . $result['vanillaUid'];
+        foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
+            $area['locked'] = $locked;
+            $area['restricted'] = !$area['assigned'] || $area['locked'];
         }
 
         return $result;

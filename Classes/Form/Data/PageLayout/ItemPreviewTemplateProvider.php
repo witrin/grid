@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\ContentElement;
+namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -21,7 +21,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 /**
  * Add Fluid preview template file name for a content element from PageTsConfig
  */
-class PreviewTemplateProvider implements FormDataProviderInterface
+class ItemPreviewTemplateProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -35,10 +35,10 @@ class PreviewTemplateProvider implements FormDataProviderInterface
         $typeValue = empty($result['databaseRow'][$typeField]) ? 'default' : $result['databaseRow'][$typeField];
         // @todo check when is this an array and when it's not
         $typeValue = is_array($typeValue) ? $typeValue[0] : $typeValue;
-        $pageTsConfig = $result['pageTsConfig']['tx_grid.'][$result['inlineParentTableName'] . '.'][$result['inlineParentFieldName'] . '.'];
+        $pageTsConfig = $result['pageTsConfig']['mod.']['web_layout.'];
 
-        if (!empty($pageTsConfig['preview.'][$typeValue])) {
-            $result['customData']['tx_grid']['previewTemplate'] = $pageTsConfig['preview.'][$typeValue];
+        if (!empty($pageTsConfig[$result['tableName'] . '.']['preview.'][$typeValue])) {
+            $result['customData']['tx_grid']['previewTemplate'] = $pageTsConfig[$result['tableName'] . '.']['preview.'][$typeValue];
         }
 
         return $result;

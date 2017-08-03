@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -18,9 +18,9 @@ namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Sort the areas of a grid template by there row and column
+ * Add the language of a content element
  */
-class TemplateAreasSortingProvider implements FormDataProviderInterface
+class LanguageUidProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,16 +30,20 @@ class TemplateAreasSortingProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $row = [];
-        $column = [];
+        $result['customData']['tx_grid']['languageUid'] = $this->getLanguageUid($result);
 
-        foreach ((array)$result['customData']['tx_grid']['template']['areas'] as $key => &$area) {
-            $row[$key] = $area['row']['start'];
-            $column[$key] = $area['column']['start'];
+        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+            $item['customData']['tx_grid']['languageUid'] = $this->getLanguageUid($item);
         }
 
-        array_multisort($row, SORT_ASC, $column, SORT_ASC, $result['customData']['tx_grid']['template']['areas']);
-
         return $result;
+    }
+
+    protected function getLanguageUid($data) {
+        if (!empty($data['processedTca']['ctrl']['languageField'])) {
+            return (int)$data['databaseRow'][$data['processedTca']['ctrl']['languageField']][0];
+        } else {
+            return  -1;
+        }
     }
 }

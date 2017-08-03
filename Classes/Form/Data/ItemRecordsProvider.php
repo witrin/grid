@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
+namespace TYPO3\CMS\Grid\Form\Data;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,12 +15,15 @@ namespace TYPO3\CMS\Grid\Form\Data\GridContainer;
  * The TYPO3 project - inspiring people to share!
  */
 
+use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Grid\Form\Data\GridItemGroup;
 
 /**
- * Add the TCA of the items column
+ * Process the items of a grid container and add a shortcut into the custom namespace
  */
-class ItemsConfigProvider implements FormDataProviderInterface
+class ItemRecordsProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -32,14 +35,15 @@ class ItemsConfigProvider implements FormDataProviderInterface
     {
         $columnToProcess = $result['customData']['tx_grid']['columnToProcess'];
 
-        if (empty($result['processedTca']['columns'][$columnToProcess]) || !is_array($result['processedTca']['columns'][$columnToProcess])) {
-            throw new \InvalidArgumentException(
-                'Missing column ' . $columnToProcess . ' in TCA for table ' . $result['tableName'],
-                1465680013
-            );
+        // shortcut for the items data
+        $result['customData']['tx_grid']['items'] = &$result['processedTca']['columns'][$columnToProcess]['children'];
+
+        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+            $item['customData']['tx_grid'] = [
+                'containerProviderList' => $result['customData']['tx_grid']['containerProviderList']
+            ];
         }
 
-        $result['customData']['tx_grid']['itemsConfig'] = &$result['processedTca']['columns'][$columnToProcess]['config'];
         return $result;
     }
 }

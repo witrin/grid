@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\ContentElement;
+namespace TYPO3\CMS\Grid\Form\Data\Layout;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -20,7 +20,7 @@ use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 /**
  * Add visibility information for each content element of a content container
  */
-class VisibilityProvider implements FormDataProviderInterface
+class ItemVisibilityProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -30,14 +30,16 @@ class VisibilityProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        if (!empty($result['processedTca']['ctrl']['enablecolumns']['disabled'])) {
-            $field = $result['processedTca']['ctrl']['enablecolumns']['disabled'];
+        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+            if (!empty($item['processedTca']['ctrl']['enablecolumns']['disabled'])) {
+                $field = $item['processedTca']['ctrl']['enablecolumns']['disabled'];
 
-            if ($field && $result['databaseRow'][$field]) {
-                $result['customData']['tx_grid']['visibility'] = (bool)$result['databaseRow'][$field] ? 'visible' : 'hidden';
+                if ($field && $item['databaseRow'][$field]) {
+                    $item['customData']['tx_grid']['visibility'] = (bool)$item['databaseRow'][$field] ? 'visible' : 'hidden';
+                }
+            } else {
+                $item['customData']['tx_grid']['visibility'] = 'visible';
             }
-        } else {
-            $result['customData']['tx_grid']['visibility'] = 'visible';
         }
 
         return $result;
