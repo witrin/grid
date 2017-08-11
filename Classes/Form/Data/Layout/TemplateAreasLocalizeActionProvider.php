@@ -42,12 +42,14 @@ class TemplateAreasLocalizeActionProvider implements FormDataProviderInterface
             $authentication->doesUserHaveAccess($result['parentPageRow'], Permission::CONTENT_EDIT)
         ) {
             foreach ($customData['template']['areas'] as &$area) {
-                $area['actions']['localize'] = $this->getAction($result, $area, $customData['languageUid']);
+                if (!$area['virtual']) {
+                    $area['actions']['localize'] = $this->getAction($result, $area, $customData['languageUid']);
 
-                if (is_array($area['overlays'])) {
-                    // @todo not sure if something like this might be not better part of a separate data provider
-                    foreach ($area['overlays'] as &$overlay) {
-                        $overlay['actions']['localize'] = $this->getAction($result, $area, $overlay['languageUid']);
+                    if (is_array($area['overlays'])) {
+                        // @todo not sure if something like this might be not better part of a separate data provider
+                        foreach ($area['overlays'] as &$overlay) {
+                            $overlay['actions']['localize'] = $this->getAction($result, $area, $overlay['languageUid']);
+                        }
                     }
                 }
             }

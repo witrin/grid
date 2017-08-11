@@ -51,12 +51,33 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeResolver'][1466746108] = [
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContainer'] = array_merge(
-    // @todo the group `tcaDatabaseRecord` can not reduced only by using the TCA because of the provider `TcaInline`
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
+    array_diff_key(
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
+        [
+            \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class => []
+        ]
+    ),
     [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaRecordTitle::class => [
+            'depends' => [
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInlineIsOnSymmetricSide::class,
+            ],
+        ],
+        \TYPO3\CMS\Grid\Form\Data\TcaInline::class => [
+            'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInlineConfiguration::class,
+                \TYPO3\CMS\Grid\Form\Data\AdditionalLanguageProvider::class,
+            ],
+        ],
+        \TYPO3\CMS\Grid\Form\Data\AdditionalLanguageProvider::class => [
+            'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseLanguageRows::class
+            ]
+        ],
         \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class => [
@@ -74,14 +95,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ]
-        ],
         \TYPO3\CMS\Grid\Form\Data\Layout\AppendItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
@@ -89,22 +105,22 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\EditItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\ItemPreviewTemplateProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\DeleteItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\PrependItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
@@ -112,17 +128,17 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\ToggleItemVisibilityActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\ItemVisibilityProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\TemplateProvider::class => [
@@ -159,8 +175,16 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Grid\Form\Data\TemplateProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemsTcaProvider::class
+            ]
+        ],
+        \TYPO3\CMS\Grid\Form\Data\TemplateAreasUnboundItemsProvider::class => [
+            'depends' => [
+                \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TemplateDimensionsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasOverlaysProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\Layout\AppendItemActionProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasInsertActionProvider::class => [
@@ -182,7 +206,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStrategyProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
             ]
         ],
@@ -196,100 +220,39 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
 );
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] = array_merge(
-    // @todo the group `tcaDatabaseRecord` can not reduced only by using the TCA because of the provider `TcaInline`
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
+    array_diff_key(
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContainer'],
+        [
+            \TYPO3\CMS\Grid\Form\Data\TemplateProvider::class => [],
+            \TYPO3\CMS\Grid\Form\Data\Layout\AppendItemActionProvider::class => [],
+            \TYPO3\CMS\Grid\Form\Data\Layout\ItemPreviewTemplateProvider::class => []
+        ]
+    ),
     [
-        \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\ItemsTcaProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ]
-        ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\TemplateProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
             ],
             'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\AppendItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\EditItemActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\ItemPreviewTemplateProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\DeleteItemActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\PrependItemActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\ToggleItemVisibilityActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\ItemVisibilityProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\TemplateDimensionsProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Grid\Form\Data\PageLayout\TemplateProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\TemplateAreasCollisionsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\TemplateDimensionsProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\TemplateAreasSortingProvider::class => [
@@ -308,49 +271,15 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Grid\Form\Data\PageLayout\TemplateProvider::class
             ],
             'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\TemplateProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemsTcaProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStrategyProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\TemplateAreasUnboundItemsProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Grid\Form\Data\TemplateAreasItemsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasLocalizeActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasInsertActionProvider::class => [
-            'depends' => [
+                \TYPO3\CMS\Grid\Form\Data\TemplateDimensionsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasOverlaysProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasLocalizeActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\Layout\TemplateAreasOverlaysProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageUidProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfig::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemsTcaProvider::class
+                \TYPO3\CMS\Grid\Form\Data\PageLayout\AppendItemActionProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\ItemPresetsProvider::class => [
@@ -359,7 +288,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
             ],
             'before' => [
                 \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizationModeProvider::class => [
@@ -367,26 +296,38 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
             ],
             'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ]
     ]
 );
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreation'] = array_merge(
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
+    array_diff_key(
+        $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
+        [
+            \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class => []
+        ]
+    ),
     [
-        \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class => [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaRecordTitle::class => [
             'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ]
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInlineIsOnSymmetricSide::class,
+            ],
+        ],
+        \TYPO3\CMS\Grid\Form\Data\TcaInline::class => [
+            'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInlineConfiguration::class,
+                \TYPO3\CMS\Grid\Form\Data\AdditionalLanguageProvider::class,
+            ],
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
             ],
             'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemsTcaProvider::class => [
@@ -394,7 +335,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreati
                 \TYPO3\CMS\Grid\Form\Data\ItemsConfigProvider::class
             ],
             'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemsDefaultValuesProvider::class => [
@@ -420,7 +361,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContentCr
             ],
             'before' => [
                 \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemRecordsProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TcaInline::class
             ]
         ]
     ]

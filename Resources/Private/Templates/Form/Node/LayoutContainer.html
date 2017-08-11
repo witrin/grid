@@ -25,27 +25,17 @@
                                     <div class="t3-grid-area-title-label">{cell.title}</div>
                                 </div>
                                 <f:if condition="{cell.assigned}">
-                                    <div class="t3js-sortable t3js-sortable-lang t3js-sortable-lang-{language.uid} t3-backend-layout-column-body
-                                            {f:if(condition: '{cell.empty}', then: ' t3-backend-layout-column-body-empty')}
-                                         "
-                                    >
-                                        <f:render
-                                            section="_insertAction"
-                                            arguments="{url: cell.actions.insert.url, target: uid}"
-                                        />
-                                    </div>
+                                    <f:render
+                                        section="_insertAction"
+                                        arguments="{url: cell.actions.insert.url, target: uid, cell: cell, language: language}"
+                                    />
                                     <f:for each="{cell.items}" as="item">
                                         <f:if condition="{item.renderData.html}">
                                             {item.renderData.html -> f:format.raw()}
-                                            <div class="t3js-sortable t3js-sortable-lang t3js-sortable-lang-{language.uid} t3-backend-layout-column-body
-                                                {f:if(condition: '{cell.empty}', then: ' t3-backend-layout-column-body-empty')}
-                                             "
-                                            >
-                                                <f:render
-                                                    section="_insertAction"
-                                                    arguments="{url: item.customData.tx_grid.actions.append, target: '-{item.vanillaUid}'}"
-                                                />
-                                            </div>
+                                            <f:render
+                                                section="_insertAction"
+                                                arguments="{url: item.customData.tx_grid.actions.append, target: '-{item.vanillaUid}', cell: cell, language: language}"
+                                            />
                                         </f:if>
                                     </f:for>
                                 </f:if>
@@ -61,13 +51,17 @@
     </table>
     <f:section name="_insertAction">
         <f:if condition="{url}">
-            <div class="t3js-new-content-element">
-                <a href="{url -> f:format.htmlspecialchars()}" class="btn btn-default btn-sm">
-                    {g:icon(identifier: 'actions-document-new', size: 'small')}
-                    {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:content')}
-                </a>
+            <div class="t3js-sortable t3js-sortable-lang t3js-sortable-lang-{language.uid} t3-backend-layout-column-body
+                {f:if(condition: '{cell.empty}', then: ' t3-backend-layout-column-body-empty')}"
+            >
+                <div class="t3js-new-content-element">
+                    <a href="{url -> f:format.htmlspecialchars()}" class="btn btn-default btn-sm">
+                        {g:icon(identifier: 'actions-document-new', size: 'small')}
+                        {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:content')}
+                    </a>
+                </div>
+                <div class="t3js-content-element-drop-zone" data-target="{target}"></div>
             </div>
-            <div class="t3js-content-element-drop-zone" data-target="{target}"></div>
         </f:if>
     </f:section>
 </div>

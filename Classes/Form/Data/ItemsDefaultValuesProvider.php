@@ -23,26 +23,51 @@ use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 class ItemsDefaultValuesProvider implements FormDataProviderInterface
 {
     /**
-     * Add data
+     * Add form data to result array
      *
-     * @param array $result
-     * @return array
+     * @param array $result Initialized result array
+     * @return array Result filled with more data
      */
     public function addData(array $result)
     {
-        $config = $result['customData']['tx_grid']['itemsConfig'];
+        if (!empty($result['customData']['tx_grid']['items']['config'])) {
+            $result['customData']['tx_grid']['items']['defaultValues'] = $this->getDefaultValues(
+                $result['customData']['tx_grid']['items']['config'],
+                $result['vanillaUid'],
+                $result['tableName']
+            );
+        }
 
-        $result['customData']['tx_grid']['itemsDefaultValues'] = array_filter(
+        if (!empty($result['inlineParentConfig'])) {
+            $result['customData']['tx_grid']['defaultValues'] = $this->getDefaultValues(
+                $result['inlineParentConfig'],
+                $result['inlineParentUid'],
+                $result['inlineParentTableName']
+            );
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Get default values for a record
+     *
+     * @param array $parentConfig
+     * @param $parentUid
+     * @param $parentTableName
+     * @return array
+     */
+    protected function getDefaultValues(array $parentConfig, $parentUid, $parentTableName) {
+        return array_filter(
             array_merge([
-                $config['foreign_field'] => $result['vanillaUid'],
-                $config['foreign_table_field'] => $result['tableName'],
-            ], (array)$config['foreign_match_fields']),
+                $parentConfig['foreign_field'] => $parentUid,
+                $parentConfig['foreign_table_field'] => $parentTableName,
+            ], (array)$parentConfig['foreign_match_fields']),
             function($key, $value) {
                 return !empty($key) && !empty($value);
             },
             ARRAY_FILTER_USE_BOTH
         );
-
-        return $result;
     }
 }

@@ -36,7 +36,7 @@ class ToggleItemVisibilityActionProvider implements FormDataProviderInterface
         // @todo PageTsConfig
         $authentication = $this->getBackendUserAuthentication();
 
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (
                 $authentication->recordEditAccessInternals($item['tableName'], $item['databaseRow']) &&
                 $authentication->doesUserHaveAccess($item['parentPageRow'], Permission::CONTENT_EDIT)

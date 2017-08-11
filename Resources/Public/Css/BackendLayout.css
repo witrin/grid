@@ -29,6 +29,10 @@
     text-align: left;
     border-bottom: 1px solid #cccccc;
 }
+[data-uid=unused] .t3-grid-area-title,
+[data-uid=unused] .t3-backend-layout-column-header {
+    color: #e8a33d;
+}
 .t3-grid-area-title,
 .t3-backend-layout-column-header a {
     position: relative;

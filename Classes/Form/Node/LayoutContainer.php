@@ -46,7 +46,7 @@ class LayoutContainer extends AbstractContainer
         $result = $this->initializeResultArray();
         $view = $this->initializeView();
 
-        foreach ($this->data['customData']['tx_grid']['items'] as &$item) {
+        foreach ($this->data['customData']['tx_grid']['items']['children'] as &$item) {
             if (!$this->filterItem($item)) {
                 $this->prepareItem($item);
 
@@ -113,13 +113,13 @@ class LayoutContainer extends AbstractContainer
                     'table' => $this->data['tableName'],
                 ],
                 'element' => [
-                    'table' => $this->data['customData']['tx_grid']['itemsConfig']['foreign_table'],
+                    'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table'],
                     'fields' => [
-                        'area' => $this->data['customData']['tx_grid']['itemsConfig']['grid_area_field'],
-                        'language' => $this->data['customData']['tx_grid']['vanillaItemsTca']['ctrl']['languageField'],
+                        'area' => $this->data['customData']['tx_grid']['items']['config']['grid_area_field'],
+                        'language' => $this->data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
                         'foreign' => [
-                            'table' => $this->data['customData']['tx_grid']['itemsConfig']['foreign_table_field'],
-                            'field' => $this->data['customData']['tx_grid']['itemsConfig']['foreign_field']
+                            'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table_field'],
+                            'field' => $this->data['customData']['tx_grid']['items']['config']['foreign_field']
                         ]
                     ]
                 ]

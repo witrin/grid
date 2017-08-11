@@ -30,9 +30,7 @@ class LocalizationStatusProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $customData = &$result['customData']['tx_grid'];
-
-        foreach ($customData['template']['areas'] as &$area) {
+        foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
             $originalItems = [];
             $translatedItems = [];
 

@@ -30,7 +30,7 @@ class LocalizationStrategyProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['items'] as &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             $languageUid = (int)$item['customData']['tx_grid']['languageUid'];
 
             if ($languageUid > 0) {

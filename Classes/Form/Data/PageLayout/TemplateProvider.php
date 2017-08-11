@@ -62,8 +62,8 @@ class TemplateProvider implements FormDataProviderInterface
                         $this->getLanguageService()->sL($column['name']) : $column['name'];
 
                     $column['name'] = BackendUtility::getProcessedValue(
-                        $result['customData']['tx_grid']['itemsConfig']['foreign_table'],
-                        $result['customData']['tx_grid']['vanillaItemsTca']['ctrl']['EXT']['tx_grid']['areaField'],
+                        $result['customData']['tx_grid']['items']['config']['foreign_table'],
+                        $result['customData']['tx_grid']['items']['vanillaTca']['ctrl']['EXT']['tx_grid']['areaField'],
                         $column['colPos']
                     ) ?? $column['name'];
 

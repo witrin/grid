@@ -37,15 +37,15 @@ class AppendItemActionProvider implements FormDataProviderInterface
         $authentication = $this->getBackendUserAuthentication();
         $pageTsConfig = $result['pageTsConfig']['mod.']['web_layout.'];
 
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (
                 $authentication->recordEditAccessInternals($item['tableName'], $item['databaseRow']) &&
                 $authentication->doesUserHaveAccess($item['parentPageRow'], Permission::CONTENT_EDIT)
             ) {
                 $defaultValues = array_merge([
-                    $item['inlineParentFieldName'] => $item['customData']['tx_grid']['areaUid'],
+                    $item['inlineParentFieldName'] => $item['customData']['tx_grid']['area']['uid'],
                     $item['processedTca']['ctrl']['languageField'] => $item['customData']['tx_grid']['languageUid']
-                ], $result['customData']['tx_grid']['itemsDefaultValues']);
+                ], $result['customData']['tx_grid']['items']['defaultValues']);
 
                 if (isset($pageTsConfig['disableNewContentElementWizard']) && (bool)$pageTsConfig['disableNewContentElementWizard']) {
                     $item['customData']['tx_grid']['actions']['append'] = BackendUtility::getModuleUrl(
@@ -77,7 +77,7 @@ class AppendItemActionProvider implements FormDataProviderInterface
                             'containerTable' => $item['inlineParentTableName'],
                             'containerField' => $item['inlineParentFieldName'],
                             'containerUid' => $item['inlineParentUid'],
-                            'columnPosition' => $item['customData']['tx_grid']['areaUid'],
+                            'columnPosition' => $item['customData']['tx_grid']['area']['uid'],
                             'ancestorUid' => $item['vanillaUid'],
                             'languageUid' => $item['customData']['tx_grid']['languageUid'],
                             'returnUrl' => $item['returnUrl']

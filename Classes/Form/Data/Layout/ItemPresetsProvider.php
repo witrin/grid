@@ -53,7 +53,7 @@ class ItemPresetsProvider implements FormDataProviderInterface
                 'header' => $group['header'],
                 'elements' => $this->processGroup(
                     $group,
-                    $result['customData']['tx_grid']['itemsConfig']['foreign_table'],
+                    $result['customData']['tx_grid']['items']['config']['foreign_table'],
                     $result['pageTsConfig']
                 )
             ];

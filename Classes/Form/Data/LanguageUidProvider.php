@@ -32,7 +32,7 @@ class LanguageUidProvider implements FormDataProviderInterface
     {
         $result['customData']['tx_grid']['languageUid'] = $this->getLanguageUid($result);
 
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             $item['customData']['tx_grid']['languageUid'] = $this->getLanguageUid($item);
         }
 

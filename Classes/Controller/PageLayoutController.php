@@ -23,6 +23,7 @@ use TYPO3\CMS\Backend\Form\FormResultCompiler;
 use TYPO3\CMS\Backend\Form\NodeFactory;
 use TYPO3\CMS\Backend\Module\AbstractModule;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Grid\Form\Data\GridContainerGroup;
@@ -52,11 +53,6 @@ class PageLayoutController extends AbstractModule
      * @var ResponseInterface
      */
     protected $response;
-
-    /**
-     * @var array
-     */
-    protected $cache = [];
 
     /**
      * Constructor
@@ -124,21 +120,28 @@ class PageLayoutController extends AbstractModule
         $languageUid = (int)($params['language'] ?? 0);
 
         if ($pageUid > 0) {
-            $formData = array_merge_recursive(
+            $formData = $this->compileFormData(
+                $pageUid,
+                [
+                    'customData' => [
+                        'tx_grid' => [
+                            'additionalLanguages' => [$languageUid]
+                        ]
+                    ]
+                ],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContent']
+            );
+
+            $formResult = $this->createFormResult(array_merge_recursive(
                 [
                     'renderData' => [
                         'languageUid' => $languageUid
                     ],
                     'renderType' => 'layoutContainer'
                 ],
-                $this->compileFormData(
-                    $pageUid,
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'],
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContent']
-                )
-            );
-
-            $formResult = $this->createFormResult($formData);
+                $formData
+            ));
 
             $this->view->assignMultiple([
                 'title' => $formData['recordTitle'],
@@ -152,6 +155,8 @@ class PageLayoutController extends AbstractModule
                     ])
                 ]
             ]);
+
+            $this->createSidebar($pageUid, $formData);
         } else {
             $this->view->assignMultiple([
                 'infoBox' => [
@@ -176,7 +181,19 @@ class PageLayoutController extends AbstractModule
         if ($pageUid > 0) {
             $translationInfo = $this->translationConfigurationProvider->translationInfo('pages', $pageUid);
             $languages = $languageUid > 0 ? [$languageUid] : array_keys($translationInfo['translations']);
-            $formData = array_merge_recursive(
+            $formData = $this->compileFormData(
+                $pageUid,
+                [
+                    'customData' => [
+                        'tx_grid' => [
+                            'additionalLanguages' => $languages
+                        ]
+                    ]
+                ],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
+            );
+
+            $formResult = $this->createFormResult(array_merge_recursive(
                 [
                     'renderType' => 'localizationContainer',
                     'renderData' => [
@@ -184,13 +201,8 @@ class PageLayoutController extends AbstractModule
                         'languageOverlayUids' => array_merge([0], $languages)
                     ]
                 ],
-                $this->compileFormData(
-                    $pageUid,
-                    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
-                )
-            );
-
-            $formResult = $this->createFormResult($formData);
+                $formData
+            ));
 
             $this->view->assignMultiple([
                 'title' => $formData['recordTitle'],
@@ -204,6 +216,8 @@ class PageLayoutController extends AbstractModule
                     ])
                 ]
             ]);
+
+            $this->createSidebar($pageUid, $formData);
         } else {
             $this->view->assignMultiple([
                 'infoBox' => [
@@ -216,35 +230,29 @@ class PageLayoutController extends AbstractModule
 
     /**
      * @param int $pageUid
+     * @param array $additionalParameters
      * @param array $containerProviderList
-     * @param array $itemProviderList
      * @return array
-     * @internal param array $itemsProviderList
      */
-    protected function compileFormData($pageUid, array $containerProviderList = []) : array
+    protected function compileFormData($pageUid, array $additionalParameters = [], array $containerProviderList = []) : array
     {
-        $hash = md5($pageUid . serialize($containerProviderList));
-
-        if (!$this->cache[$hash]) {
-            $formDataGroup = GeneralUtility::makeInstance(GridContainerGroup::class);
-            $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
-            $formDataCompilerInput = [
-                'tableName' => 'pages',
-                'vanillaUid' => $pageUid,
-                'command' => 'edit',
-                'returnUrl' => $this->getActionUrl(null, []),
-                'columnsToProcess' => ['content'],
-                'customData' => [
-                    'tx_grid' => [
-                        'columnToProcess' => 'content',
-                        'containerProviderList' => $containerProviderList
-                    ]
+        $formDataGroup = GeneralUtility::makeInstance(GridContainerGroup::class);
+        $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
+        $formDataCompilerInput = array_merge_recursive([
+            'tableName' => 'pages',
+            'vanillaUid' => $pageUid,
+            'command' => 'edit',
+            'returnUrl' => $this->getActionUrl(null, []),
+            'columnsToProcess' => ['content'],
+            'customData' => [
+                'tx_grid' => [
+                    'columnToProcess' => 'content',
+                    'containerProviderList' => $containerProviderList
                 ]
-            ];
-            $this->cache[$hash] = $formDataCompiler->compile($formDataCompilerInput);
-        }
+            ]
+        ], $additionalParameters);
 
-        return $this->cache[$hash];
+        return $formDataCompiler->compile($formDataCompilerInput);
     }
 
     /**
@@ -320,7 +328,6 @@ class PageLayoutController extends AbstractModule
 
         if (isset($params['page']) && (int)$params['page'] > 0) {
             $this->createMenus((int)$params['page']);
-            $this->createSidebar((int)$params['page']);
 
             // @todo Check access rights
             // @todo Language overlay id
@@ -376,13 +383,17 @@ class PageLayoutController extends AbstractModule
      * Generates the sidebar
      *
      * @param int $page
+     * @param array $formData
      */
-    protected function createSidebar($page)
+    protected function createSidebar($page, array $formData = null)
     {
-        $formData = $this->compileFormData(
-            $page,
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
-        );
+        if ($formData === null) {
+            $formData = $this->compileFormData(
+                $page,
+                [],
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout']
+            );
+        }
         $this->moduleTemplate->getView()->assign(
             'sidebar',
             $this->createFormResult(array_merge(

@@ -37,15 +37,15 @@ class PrependItemActionProvider implements FormDataProviderInterface
         // @todo PageTsConfig
         $authentication = $this->getBackendUserAuthentication();
 
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (
                 $authentication->recordEditAccessInternals($item['tableName'], $item['databaseRow']) &&
                 $authentication->doesUserHaveAccess($item['parentPageRow'], Permission::CONTENT_EDIT)
             ) {
                 $values = array_merge([
-                    $item['inlineParentFieldName'] => $item['customData']['tx_grid']['areaUid'],
+                    $item['inlineParentFieldName'] => $item['customData']['tx_grid']['area']['uid'],
                     $item['processedTca']['ctrl']['languageField'] => $item['customData']['tx_grid']['languageUid']
-                ], (array)$result['customData']['tx_grid']['itemsDefaultValues']);
+                ], (array)$result['customData']['tx_grid']['items']['defaultValues']);
 
                 $item['customData']['tx_grid']['actions']['prependWithWizard'] = BackendUtility::getModuleUrl(
                     'content_element',
@@ -54,7 +54,7 @@ class PrependItemActionProvider implements FormDataProviderInterface
                         'containerTable' => $item['inlineParentTableName'],
                         'containerField' => $item['inlineParentFieldName'],
                         'containerUid' => $item['inlineParentUid'],
-                        'columnPosition' => $item['customData']['tx_grid']['areaUid'],
+                        'columnPosition' => $item['customData']['tx_grid']['area']['uid'],
                         'languageUid' => $item['customData']['tx_grid']['languageUid'],
                         'returnUrl' => $item['returnUrl']
                     ]

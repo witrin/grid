@@ -34,7 +34,8 @@ class LocalizationContainer extends LayoutContainer
      */
     protected function prepareView(ViewInterface $view)
     {
-        $languageOverlayUids = $this->data['renderData']['languageOverlayUids'] ?? null;
+        $languageOverlayUids = $this->data['renderData']['languageOverlayUids']
+            ? array_flip($this->data['renderData']['languageOverlayUids']) : null;
 
         if ($languageOverlayUids) {
             uasort($this->data['systemLanguageRows'], function ($a, $b) {
@@ -46,19 +47,21 @@ class LocalizationContainer extends LayoutContainer
                 [$this->data['systemLanguageRows'][0]] + array_filter(
                     $this->data['systemLanguageRows'],
                     function ($languageRow) use ($languageOverlayUids) {
-                        return $languageRow['uid'] > 0 && in_array($languageRow['uid'], $languageOverlayUids);
+                        return $languageRow['uid'] > 0 && array_key_exists($languageRow['uid'], $languageOverlayUids);
                     }
                 )
             );
 
             foreach ($this->data['customData']['tx_grid']['template']['areas'] as &$area) {
-                foreach ($area['overlays'] as &$overlay) {
-                    $overlay['items'] = array_filter((array)$area['items'], function(&$item) use ($overlay) {
-                        return $item['customData']['tx_grid']['languageUid'] == $overlay['languageUid'];
-                    });
-                }
-                usort($area['overlays'], function($a, $b) {
-                    $this->data['systemLanguageRows'][$a['languageUid']]['sorting'] <=>
+                $area['overlays'] = array_filter(
+                    $area['overlays'],
+                    function ($override) use ($languageOverlayUids) {
+                        return array_key_exists($override['languageUid'], $languageOverlayUids);
+                    }
+                );
+
+                usort($area['overlays'], function ($a, $b) {
+                    return $this->data['systemLanguageRows'][$a['languageUid']]['sorting'] <=>
                         $this->data['systemLanguageRows'][$b['languageUid']]['sorting'];
                 });
             }

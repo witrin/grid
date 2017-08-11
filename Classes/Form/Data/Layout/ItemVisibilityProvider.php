@@ -30,7 +30,7 @@ class ItemVisibilityProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (!empty($item['processedTca']['ctrl']['enablecolumns']['disabled'])) {
                 $field = $item['processedTca']['ctrl']['enablecolumns']['disabled'];
 

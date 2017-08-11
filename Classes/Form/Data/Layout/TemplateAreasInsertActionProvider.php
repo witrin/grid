@@ -42,13 +42,15 @@ class TemplateAreasInsertActionProvider implements FormDataProviderInterface
             $authentication->doesUserHaveAccess($result['parentPageRow'], Permission::CONTENT_EDIT)
         ) {
             foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-                $area['actions']['insert'] = $this->getAction($result, $area['uid'], $languageUid);
+                if (!$area['virtual']) {
+                    $area['actions']['insert'] = $this->getAction($result, $area['uid'], $languageUid);
 
-                if (is_array($area['overlays'])) {
-                    // @todo not sure if something like this might be not better part of a separate data provider
-                    foreach ($area['overlays'] as &$overlay) {
-                        $overlay['actions']['insert'] = $this->getAction($result, $overlay['uid'],
-                            $overlay['languageUid']);
+                    if (is_array($area['overlays'])) {
+                        // @todo not sure if something like this might be not better part of a separate data provider
+                        foreach ($area['overlays'] as &$overlay) {
+                            $overlay['actions']['insert'] = $this->getAction($result, $overlay['uid'],
+                                $overlay['languageUid']);
+                        }
                     }
                 }
             }
@@ -71,7 +73,7 @@ class TemplateAreasInsertActionProvider implements FormDataProviderInterface
             $defaultValues = array_merge([
                 $result['processedTca']['ctrl']['EXT']['grid']['areaField'] => $areaUid,
                 $result['processedTca']['ctrl']['languageField'] => $languageUid
-            ], $result['customData']['tx_grid']['itemsDefaultValues']);
+            ], $result['customData']['tx_grid']['items']['defaultValues']);
 
             $action = [
                 'url' => BackendUtility::getModuleUrl(

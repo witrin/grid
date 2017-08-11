@@ -43,7 +43,7 @@ class ContentPresetTabContainer extends AbstractContainer
         $view->assignMultiple([
             'presets' => $this->renderPresets(),
             'areas' => $this->renderAreas(),
-            'tca' => $this->data['customData']['tx_grid']['itemsConfig']
+            'tca' => $this->data['customData']['tx_grid']['items']['config']
         ]);
 
         $result['html'] = $view->render();

@@ -37,16 +37,16 @@ class AppendItemActionProvider implements FormDataProviderInterface
         $authentication = $this->getBackendUserAuthentication();
         $pageTsConfig = $result['pageTsConfig']['tx_grid.'][$result['tableName'] . '.'][$result['customData']['tx_grid']['columnToProcess'] . '.'];
 
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (
                 $authentication->recordEditAccessInternals($item['tableName'], $item['databaseRow']) &&
                 $authentication->doesUserHaveAccess($item['parentPageRow'], Permission::CONTENT_EDIT)
             ) {
                 if (isset($pageTsConfig['disableContentPresetWizard']) && (bool)$pageTsConfig['disableContentPresetWizard']) {
                     $defaultValues = array_merge([
-                        $item['processedTca']['ctrl']['EXT']['grid']['areaField'] => $item['customData']['tx_grid']['areaUid'],
+                        $item['processedTca']['ctrl']['EXT']['grid']['areaField'] => $item['customData']['tx_grid']['area']['uid'],
                         $item['processedTca']['ctrl']['languageField'] => $item['customData']['tx_grid']['languageUid']
-                    ], $result['customData']['tx_grid']['itemsDefaultValues']);
+                    ], $result['customData']['tx_grid']['items']['defaultValues']);
 
                     $item['customData']['tx_grid']['actions']['append'] = BackendUtility::getModuleUrl(
                         'record_edit',
@@ -75,7 +75,7 @@ class AppendItemActionProvider implements FormDataProviderInterface
                             'containerTable' => $item['inlineParentTableName'],
                             'containerField' => $item['inlineParentFieldName'],
                             'containerUid' => $item['inlineParentUid'],
-                            'columnPosition' => $item['customData']['tx_grid']['areaUid'],
+                            'columnPosition' => $item['customData']['tx_grid']['area']['uid'],
                             'ancestorUid' => $item['vanillaUid'],
                             'languageUid' => $item['customData']['tx_grid']['languageUid'],
                             'returnUrl' => $item['returnUrl']

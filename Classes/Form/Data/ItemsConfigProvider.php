@@ -39,7 +39,7 @@ class ItemsConfigProvider implements FormDataProviderInterface
             );
         }
 
-        $result['customData']['tx_grid']['itemsConfig'] = &$result['processedTca']['columns'][$columnToProcess]['config'];
+        $result['customData']['tx_grid']['items']['config'] = &$result['processedTca']['columns'][$columnToProcess]['config'];
         return $result;
     }
 }

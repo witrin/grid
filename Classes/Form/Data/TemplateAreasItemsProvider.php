@@ -18,7 +18,7 @@ namespace TYPO3\CMS\Grid\Form\Data;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 
 /**
- * Add the items of a grid area
+ * Partition the grid items by their area field
  */
 class TemplateAreasItemsProvider implements FormDataProviderInterface
 {
@@ -30,29 +30,30 @@ class TemplateAreasItemsProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        if (empty($result['customData']['tx_grid']['itemsConfig']['grid_area_field'])) {
+        if (empty($result['customData']['tx_grid']['items']['config']['grid_area_field'])) {
             throw new \UnexpectedValueException(
                 'Missing grid_area_field in items configuration.',
                 1496148555
             );
         }
 
-        $areaField = $result['customData']['tx_grid']['itemsConfig']['grid_area_field'];
+        $areaField = $result['customData']['tx_grid']['items']['config']['grid_area_field'];
 
-        if (!isset($result['customData']['tx_grid']['vanillaItemsTca']['columns'][$areaField])) {
+        if (!isset($result['customData']['tx_grid']['items']['vanillaTca']['columns'][$areaField])) {
             throw new \UnexpectedValueException(
-                'Missing foreign field ' . $areaField . ' for grid areas in ' . $result['customData']['tx_grid']['itemsConfig']['foreign_table'],
+                'Missing foreign field ' . $areaField . ' for grid areas in ' . $result['customData']['tx_grid']['items']['config']['foreign_table'],
                 1496148578
             );
         }
 
         $areas = array_flip(array_column((array)$result['customData']['tx_grid']['template']['areas'], 'uid'));
 
-        foreach ($result['customData']['tx_grid']['items'] as &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             $areaUid = is_array($item['databaseRow'][$areaField]) ? $item['databaseRow'][$areaField][0] : $item['databaseRow'][$areaField];
+
             if (isset($areas[$areaUid])) {
                 $result['customData']['tx_grid']['template']['areas'][$areas[$areaUid]]['items'][] = &$item;
-                $item['customData']['tx_grid']['areaUid'] = $areaUid;
+                $item['customData']['tx_grid']['area'] = &$result['customData']['tx_grid']['template']['areas'][$areas[$areaUid]];
             }
         }
 

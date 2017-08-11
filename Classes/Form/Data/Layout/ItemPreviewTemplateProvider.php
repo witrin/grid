@@ -31,7 +31,7 @@ class ItemPreviewTemplateProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['items'] as $key => &$item) {
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             $typeField = $item['processedTca']['ctrl']['type'];
             $typeValue = empty($item['databaseRow'][$typeField]) ? 'default' : $item['databaseRow'][$typeField];
             // @todo check when is this an array and when it's not

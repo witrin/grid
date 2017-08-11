@@ -104,8 +104,8 @@ class ContentPresetController extends AbstractModule
         ))->render();
         $formResultCompiler->mergeResult($formResult);
 
-        $itemsConfig = $formData['customData']['tx_grid']['itemsConfig'];
-        $vanillaItemsTca = $formData['customData']['tx_grid']['vanillaItemsTca'];
+        $itemsConfig = $formData['customData']['tx_grid']['items']['config'];
+        $vanillaItemsTca = $formData['customData']['tx_grid']['items']['vanillaTca'];
 
         $values = array_merge([
             $itemsConfig['grid_area_field'] => $areaUid,

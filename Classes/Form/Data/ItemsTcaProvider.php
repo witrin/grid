@@ -30,7 +30,7 @@ class ItemsTcaProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $config = &$result['customData']['tx_grid']['itemsConfig'];
+        $config = &$result['customData']['tx_grid']['items']['config'];
 
         if (empty($GLOBALS['TCA'][$config['foreign_table']]['ctrl']['sortby'])) {
             throw new \InvalidArgumentException(
@@ -39,7 +39,7 @@ class ItemsTcaProvider implements FormDataProviderInterface
             );
         }
 
-        $result['customData']['tx_grid']['vanillaItemsTca'] = $GLOBALS['TCA'][$config['foreign_table']];
+        $result['customData']['tx_grid']['items']['vanillaTca'] = $GLOBALS['TCA'][$config['foreign_table']];
 
         return $result;
     }

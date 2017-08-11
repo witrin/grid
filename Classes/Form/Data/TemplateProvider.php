@@ -52,13 +52,14 @@ class TemplateProvider implements FormDataProviderInterface
                 $this->getLanguageService()->sL($area['title']) : $area['title'];
 
             $area['title'] = BackendUtility::getProcessedValue(
-                $result['customData']['tx_grid']['itemsConfig']['foreign_table'],
-                $result['customData']['tx_grid']['vanillaItemsTca']['ctrl']['EXT']['tx_grid']['areaField'],
+                $result['customData']['tx_grid']['items']['config']['foreign_table'],
+                $result['customData']['tx_grid']['items']['vanillaTca']['ctrl']['EXT']['tx_grid']['areaField'],
                 $area['uid']
             ) ?? $area['title'];
 
             // @todo do we need BackendUtility::getProcessedValue() here to check this?
             $area['assigned'] = isset($area['uid']);
+            $area['virtual'] = false;
             $area['uid'] = $area['uid'] ?? StringUtility::getUniqueId();
             $area['column']['start'] = max(1, $area['column']['start']);
             $area['row']['start'] = max(1, $area['row']['start']);

@@ -35,10 +35,14 @@ class TemplateAreasOverlaysProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
+            // @todo restrict to translation of the container only?
             foreach ($result['systemLanguageRows'] as &$language) {
                 if ($language['uid'] > 0) {
                     $area['overlays'][] = [
-                        'languageUid' => $language['uid']
+                        'languageUid' => $language['uid'],
+                        'items' => array_filter((array)$area['items'], function(&$item) use ($language) {
+                            return $item['customData']['tx_grid']['languageUid'] == $language['uid'];
+                        })
                     ];
                 }
             }

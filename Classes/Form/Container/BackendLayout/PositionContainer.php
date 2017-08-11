@@ -110,12 +110,12 @@ class PositionContainer extends AbstractContainer
             '',
             [
                 'edit' => [
-                    $this->data['customData']['tx_grid']['itemsConfig']['foreign_table'] => [
+                    $this->data['customData']['tx_grid']['items']['config']['foreign_table'] => [
                         (string)$ancestorUid => 'new'
                     ]
                 ],
                 'defVals' => [
-                    $this->data['customData']['tx_grid']['itemsConfig']['grid_area_field'] => $areaUid
+                    $this->data['customData']['tx_grid']['items']['config']['grid_area_field'] => $areaUid
                 ]
             ],
             '',
