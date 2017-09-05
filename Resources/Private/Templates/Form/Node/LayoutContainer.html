@@ -1,6 +1,6 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
 <div class="t3-content-container t3js-content-container" data-tca="{tca -> f:format.json()}" data-language="{language.uid}" data-uid="{uid}" data-pid="{pid}">
-    <table class="t3-content-areas t3-grid-table t3js-content-area">
+    <table class="t3-content-areas t3-grid-table">
         <colgroup>
             <f:for each="{columns}" as="column">
                 <col style="width: {column}%"></col>
@@ -13,7 +13,7 @@
                         rowspan="{cell.row.end - cell.row.start + 1}"
                         colspan="{cell.column.end - cell.column.start + 1}"
                         data-uid="{cell.uid}"
-                        class="t3js-backend-layout-column t3-content-area{f:if(condition: '!{cell.assigned}', then: ' t3-content-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-content-area-restricted')}">
+                        class="t3js-content-area t3-content-area{f:if(condition: '!{cell.assigned}', then: ' t3-content-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-content-area-restricted')}">
                         <f:render partial="Area" arguments="{items: cell.items, title: cell.title, actions: cell.actions, language: language}" />
                     </td>
                 </f:for>
@@ -21,7 +21,7 @@
         </f:for>
         <f:if condition="{unused -> f:count()} > 0">
             <tr>
-                <td class="t3-content-area">
+                <td class="t3js-content-area t3-content-area">
                     <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning'}" />
                 </td>
             </tr>

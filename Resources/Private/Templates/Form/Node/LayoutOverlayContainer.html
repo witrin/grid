@@ -1,6 +1,6 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
 <div class="t3-content-container t3js-content-container t3js-content-container" data-tca="{tca -> f:format.json()}" data-uid="{uid}" data-pid="{pid}">
-    <table class="t3-grid-table t3-content-overlays t3js-backend-layout-columns">
+    <table class="t3-grid-table t3-content-overlays">
         <tr>
             <td class="t3-content-overlay">
                 <h2>{language.title}</h2>
@@ -45,13 +45,13 @@
             <tr>
                 <td data-uid="{area.uid}"
                     data-language="{language.uid}"
-                    class="t3js-backend-layout-language-column-{language.uid} t3js-backend-layout-column t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                    class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
                     <f:render partial="Area" arguments="{title: area.title, actions: area.actions, items: area.items, language: language}" />
                 </td>
                 <f:for each="{overlays}" as="overlay">
                     <td data-uid="{area.uid}"
                         data-language="{language.uid}"
-                        class="t3js-backend-layout-language-column-{language.uid} t3js-backend-layout-column t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                        class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
                         <f:alias map="{area: '{overlay.customData.tx_grid.template.areas -> g:iterator.filter(filter: area.uid, property: \'uid\') -> g:iterator.first()}'}">
                             <f:render partial="Area" arguments="{title: area.title, actions: area.actions, items: area.items, language: overlay.customData.tx_grid.language}" />
                         </f:alias>
