@@ -27,7 +27,7 @@ define(['jquery', 'TYPO3/CMS/Backend/Storage'], function($, Storage) {
 		settings: {
 		},
 		identifier: {
-			gridContainer: '.t3js-grid-container',
+			gridContainer: '.t3js-content-container',
 			showHiddenContent: '.t3js-hidden-content-toggle',
 			hiddenContent: '.t3js-hidden-content',
 
