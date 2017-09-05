@@ -23,7 +23,7 @@
                     </f:for>
                 </div>
                 {g:record.icon(table: '{tca.container.table}', row: '{row}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
-                {title}
+                {title -> f:format.crop(maxCharacters: 20)}
             </td>
             <f:for each="{overlays}" as="overlay">
                 <td class="t3-content-overlay nowrap">
@@ -37,7 +37,7 @@
                         </f:for>
                     </div>
                     {g:record.icon(table: '{overlay.tableName}', row: '{overlay.databaseRow}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
-                    {overlay.recordTitle}
+                    {overlay.recordTitle -> f:format.crop(maxCharacters: 20)}
                 </td>
             </f:for>
         </tr>
