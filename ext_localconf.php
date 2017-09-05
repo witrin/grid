@@ -237,6 +237,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         \TYPO3\CMS\Grid\Form\Data\Layout\ViewActionProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class
+            ],
+            'before' => [
+                \TYPO3\CMS\Grid\Form\Data\Layout\EditActionProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\EditActionProvider::class => [
