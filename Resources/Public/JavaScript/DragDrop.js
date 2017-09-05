@@ -13,7 +13,7 @@
 
 /**
  * Module: TYPO3/CMS/Grid/DragDrop
- * this JS code does the drag+drop logic for the Grid Component
+ * this JS code does the drag+drop logic for the grid layout component
  * based on jQuery UI
  */
 define(['jquery', 'jquery-ui/droppable'], function($) {
