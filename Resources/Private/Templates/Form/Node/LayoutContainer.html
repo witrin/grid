@@ -21,7 +21,7 @@
         </f:for>
         <f:if condition="{unused -> f:count()} > 0">
             <tr>
-                <td class="t3js-content-area t3-content-area">
+                <td class="t3js-content-area t3-content-area" colspan="{columns -> f:count()}">
                     <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning'}" />
                 </td>
             </tr>
