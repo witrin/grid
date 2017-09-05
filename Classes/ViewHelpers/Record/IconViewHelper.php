@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\Grid\ViewHelpers\Record;
 
 /*
@@ -77,10 +78,7 @@ class IconViewHelper extends AbstractViewHelper
             $html = '<span ' . BackendUtility::getRecordToolTip($arguments['row'], $arguments['table']) . '>' . $html . '</span>';
         }
 
-        if (
-            $arguments['contextMenu'] &&
-            self::getBackendUserAuthentication()->recordEditAccessInternals($arguments['table'], $arguments['row'])
-        ) {
+        if ($arguments['contextMenu']) {
             $html = BackendUtility::wrapClickMenuOnIcon($html, $arguments['table'], $arguments['row']['uid'], true, '', true);
         }
 

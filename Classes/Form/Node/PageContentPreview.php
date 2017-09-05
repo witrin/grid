@@ -62,14 +62,15 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
 
         $view->assignMultiple([
             'table' => $this->data['tableName'],
-            'language' => $this->data['customData']['tx_grid']['languageUid'],
-            'flag' => $this->data['renderData']['showFlag'] ? $this->data['systemLanguageRows'][$this->data['customData']['tx_grid']['languageUid']]['flagIconIdentifier'] : '',
+            'language' => $this->data['customData']['tx_grid']['language']['uid'],
+            'flag' => $this->data['renderData']['showFlag'] ? $this->data['customData']['tx_grid']['language']['flagIconIdentifier'] : '',
             'record' => $this->data['vanillaUid'],
             'actions' => $this->data['customData']['tx_grid']['actions'],
             'wizard' => !$this->data['disableContentElementWizard'],
             'position' => $this->data['customData']['tx_grid']['areaUid'],
-            'visible' => $this->data['customData']['tx_grid']['visibility'] === 'visible',
+            'visible' => $this->data['customData']['tx_grid']['visible'],
             'errors' => $this->data['renderData']['hasErrors'],
+            'warnings' => $this->data['renderData']['hasWarnings'],
             'data' => $this->data['databaseRow'],
             'content' => $header . '<span class="exampleContent">' . $content . '</span>'
         ]);
@@ -121,7 +122,7 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
         if ($this->data['databaseRow']['header']) {
             $note = '';
             if ((int)$this->data['databaseRow']['header_layout'] === 100) {
-                $note = ' <em>[' . htmlspecialchars($this->getLanguageService()->sL('LLL:EXT:lang/locallang_core.xlf:labels.hidden')) . ']</em>';
+                $note = ' <em>[' . htmlspecialchars($this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_core.xlf:labels.hidden')) . ']</em>';
             }
             $html = $this->data['databaseRow']['date'] ?
                 htmlspecialchars(
@@ -335,24 +336,20 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
      * @param array $row The row.
      * @return string If the whole thing was editable $str is return with link around. Otherwise just $str.
      * @deprecated
-     * @todo Flag `doEdit` needs to be set correctly
+     * @todo It does not take access rights into account anymore since this is done by the data providers
      */
     protected function linkEditContent($label, $row)
     {
-        if ($this->getBackendUserAuthentication()->recordEditAccessInternals('tt_content', $row)) {
-            $urlParameters = [
-                'edit' => [
-                    'tt_content' => [
-                        $row['uid'] => 'edit'
-                    ]
-                ],
-                'returnUrl' => GeneralUtility::getIndpEnv('REQUEST_URI') . '#element-tt_content-' . $row['uid']
-            ];
-            $url = BackendUtility::getModuleUrl('record_edit', $urlParameters);
-            // Return link
-            return '<a href="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($this->getLanguageService()->getLL('edit')) . '">' . $label . '</a>';
-        } else {
-            return $label;
-        }
+        $urlParameters = [
+            'edit' => [
+                'tt_content' => [
+                    $row['uid'] => 'edit'
+                ]
+            ],
+            'returnUrl' => GeneralUtility::getIndpEnv('REQUEST_URI') . '#element-tt_content-' . $row['uid']
+        ];
+        $url = BackendUtility::getModuleUrl('record_edit', $urlParameters);
+
+        return '<a href="' . htmlspecialchars($url) . '" title="' . htmlspecialchars($this->getLanguageService()->getLL('edit')) . '">' . $label . '</a>';
     }
 }

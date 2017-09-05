@@ -136,8 +136,8 @@ class LocalizationController
             $response = $response->withStatus(500);
             return $response;
         }
-        
-        $containerTable = $params['containerTable'];
+
+        $itemTable = $GLOBALS['TCA'][$params['containerTable']]['columns'][$params['relationshipColumn']]['config']['foreign_table'];
 
         $records = [];
         $result = $this->localizationRepository->getRecordsToCopyDatabaseResult(
@@ -152,8 +152,8 @@ class LocalizationController
 
         while ($row = $result->fetch()) {
             $records[] = [
-                'icon' => $this->iconFactory->getIconForRecord($containerTable, $row, Icon::SIZE_SMALL)->render(),
-                'title' => $row[$GLOBALS['TCA'][$containerTable]['ctrl']['label']],
+                'icon' => $this->iconFactory->getIconForRecord($itemTable, $row, Icon::SIZE_SMALL)->render(),
+                'title' => $row[$GLOBALS['TCA'][$itemTable]['ctrl']['label']],
                 'uid' => $row['uid']
             ];
         }
@@ -170,7 +170,7 @@ class LocalizationController
     public function localizeRecords(ServerRequestInterface $request, ResponseInterface $response)
     {
         $params = $request->getQueryParams();
-        if (!isset($params['containerUid'], $params['sourceLanguageUid'], $params['destinationLanguageUid'], $params['action'], $params['contentUids'], $params['containerTable'], $params['relationshipColumn'])) {
+        if (!isset($params['containerUid'], $params['sourceLanguageUid'], $params['areaUid'], $params['destinationLanguageUid'], $params['action'], $params['contentUids'], $params['containerTable'], $params['relationshipColumn'])) {
             $response = $response->withStatus(500);
             return $response;
         }
@@ -181,10 +181,55 @@ class LocalizationController
             return $response;
         }
 
+        // Filter transmitted but invalid uids
+        $params['contentUids'] = $this->filterInvalidUids(
+            (int)$params['containerUid'],
+            (int)$params['areaUid'],
+            (int)$params['destinationLanguageUid'],
+            (int)$params['sourceLanguageUid'],
+            (string)$params['containerTable'],
+            (string)$params['relationshipColumn'],
+            $params['contentUids']
+        );
+
         $this->process($params);
 
         $response->getBody()->write(json_encode([]));
         return $response;
+    }
+
+    /**
+     * Gets all possible UIDs of a page, colPos and language that might be processed and removes invalid UIDs that might
+     * be smuggled in.
+     *
+     * @param int $pageId
+     * @param int $colPos
+     * @param int $destLanguageId
+     * @param int $srcLanguageId
+     * @param array $transmittedUidList
+     * @return array
+     */
+    protected function filterInvalidUids(
+        int $containerUid,
+        int $areaUid,
+        int $destinationLanguageUid,
+        int $sourceLanguageUid,
+        string $containerTable,
+        string $relationshipColumn,
+        array $transmittedContentUids
+    ): array {
+        // Get all valid uids that can be processed
+        $validContentUids = $result = $this->localizationRepository->getRecordsToCopyDatabaseResult(
+            $containerUid,
+            $areaUid,
+            $destinationLanguageUid,
+            $sourceLanguageUid,
+            'uid',
+            $containerTable,
+            $relationshipColumn
+        );
+
+        return array_intersect(array_unique($transmittedContentUids), array_column($validContentUids->fetchAll(), 'uid'));
     }
 
     /**
@@ -205,7 +250,7 @@ class LocalizationController
             $contentTable => []
         ];
 
-        if (is_array($params['contentUids'])) {
+        if (isset($params['contentUids']) && is_array($params['contentUids'])) {
             foreach ($params['contentUids'] as $contentUid) {
                 if ($params['action'] === static::ACTION_LOCALIZE) {
                     $cmd[$contentTable][$contentUid] = [

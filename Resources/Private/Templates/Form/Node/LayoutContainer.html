@@ -1,6 +1,6 @@
-<div xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" class="t3-grid-container t3js-content-container"
-     data-tca="{tca -> g:format.json.encode()}" data-language="{language.uid}" data-uid="{uid}" data-pid="{pid}">
-    <table class="t3-backend-layout-columns t3-grid-table t3js-backend-layout-columns">
+<html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
+<div class="t3-content-container t3js-content-container" data-tca="{tca -> f:format.json()}" data-language="{language.uid}" data-uid="{uid}" data-pid="{pid}">
+    <table class="t3-content-areas t3-grid-table t3js-content-area">
         <colgroup>
             <f:for each="{columns}" as="column">
                 <col style="width: {column}%"></col>
@@ -9,59 +9,26 @@
         <f:for each="{rows}" as="row">
             <tr>
                 <f:for each="{row}" as="cell">
-                    <f:if condition="{cell}">
-                        <f:then>
-                            <td valign="top"
-                                rowspan="{cell.row.end - cell.row.start + 1}"
-                                colspan="{cell.column.end - cell.column.start + 1}"
-                                data-uid="{cell.uid}"
-                                class="t3js-backend-layout-column t3-grid-cell t3-backend-layout-column
-                                    {f:if(condition: '!{cell.assigned}', then: ' t3-grid-cell-unassigned')}
-                                    {f:if(condition: '{cell.restricted}', then: ' t3-grid-cell-restricted')}
-                                "
-                            >
-                                <div class="t3-grid-cell t3-grid-area-title">
-                                    <div class="t3-grid-area-title-icons"></div>
-                                    <div class="t3-grid-area-title-label">{cell.title}</div>
-                                </div>
-                                <f:if condition="{cell.assigned}">
-                                    <f:render
-                                        section="_insertAction"
-                                        arguments="{url: cell.actions.insert.url, target: uid, cell: cell, language: language}"
-                                    />
-                                    <f:for each="{cell.items}" as="item">
-                                        <f:if condition="{item.renderData.html}">
-                                            {item.renderData.html -> f:format.raw()}
-                                            <f:render
-                                                section="_insertAction"
-                                                arguments="{url: item.customData.tx_grid.actions.append, target: '-{item.vanillaUid}', cell: cell, language: language}"
-                                            />
-                                        </f:if>
-                                    </f:for>
-                                </f:if>
-                            </td>
-                        </f:then>
-                        <f:else>
-                            <td>Empty</td>
-                        </f:else>
-                    </f:if>
+                    <td valign="top"
+                        rowspan="{cell.row.end - cell.row.start + 1}"
+                        colspan="{cell.column.end - cell.column.start + 1}"
+                        data-uid="{cell.uid}"
+                        class="t3js-backend-layout-column t3-content-area{f:if(condition: '!{cell.assigned}', then: ' t3-content-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-content-area-restricted')}">
+                        <f:render partial="Area" arguments="{items: cell.items, title: cell.title, actions: cell.actions, language: language}" />
+                    </td>
                 </f:for>
             </tr>
         </f:for>
-    </table>
-    <f:section name="_insertAction">
-        <f:if condition="{url}">
-            <div class="t3js-sortable t3js-sortable-lang t3js-sortable-lang-{language.uid} t3-backend-layout-column-body
-                {f:if(condition: '{cell.empty}', then: ' t3-backend-layout-column-body-empty')}"
-            >
-                <div class="t3js-new-content-element">
-                    <a href="{url -> f:format.htmlspecialchars()}" class="btn btn-default btn-sm">
-                        {g:icon(identifier: 'actions-document-new', size: 'small')}
-                        {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:content')}
-                    </a>
-                </div>
-                <div class="t3js-content-element-drop-zone" data-target="{target}"></div>
-            </div>
+        <f:if condition="{unused -> f:count()} > 0">
+            <tr>
+                <td class="t3-content-area">
+                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning'}" />
+                </td>
+            </tr>
         </f:if>
-    </f:section>
+    </table>
+    <f:if condition="{hidden -> f:count()} > 0">
+        <f:render partial="Action" section="ShowHiddenContent" arguments="{count: '{hidden -> f:count()}', checked: settings.showHiddenContent}" />
+    </f:if>
 </div>
+</html>

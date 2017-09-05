@@ -26,7 +26,7 @@ class TcaUtility
      * @param array $fields The array to filter with keys as the field names
      * @return array All entries from $fields which are not hidden through the TCA
      */
-    static public function filterHiddenFields(array &$tca, array $fields)
+    static public function filterHiddenFields(array $tca, array $fields)
     {
         return array_filter(
             $fields,

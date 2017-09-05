@@ -1,0 +1,11 @@
+<html data-namespace-typo3-fluid="true">
+<f:section name="Wrapper">
+    <div class="{f:if(condition: '!{visible}', then: 't3js-hidden-content')}"
+         style="{f:if(condition: '!{visible} && !{settings.showHiddenContent}', then: 'display:none')}">
+        {html -> f:format.raw()}
+        <f:if condition="{actions.append} && {language}">
+            <f:render partial="Action" section="Insert" arguments="{action: actions.append, language: language}" />
+        </f:if>
+    </div>
+</f:section>
+</html>

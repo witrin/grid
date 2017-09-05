@@ -3,15 +3,15 @@ defined('TYPO3_MODE') or die();
 
 if (TYPO3_MODE === 'BE') {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
-        'web',
-        'pageLayout',
+        \TYPO3\CMS\Grid\Controller\PageLayoutController::MODULE_NAMESPACE,
+        \TYPO3\CMS\Grid\Controller\PageLayoutController::MODULE_NAME,
         'top',
         '',
         [
             'routeTarget' => \TYPO3\CMS\Grid\Controller\PageLayoutController::class . '::processRequest',
             'access' => 'user,group',
             'icon' => 'EXT:backend/Resources/Public/Icons/module-page.svg',
-            'name' => 'web_pageLayout',
+            'name' => \TYPO3\CMS\Grid\Controller\PageLayoutController::MODULE_NAMESPACE . '_' . \TYPO3\CMS\Grid\Controller\PageLayoutController::MODULE_NAME,
             'labels' => 'LLL:EXT:grid/Resources/Private/Language/ext_tables:module.layout.title'
         ]
     );

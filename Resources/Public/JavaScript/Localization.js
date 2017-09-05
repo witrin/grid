@@ -101,7 +101,7 @@ define([
 
 			slideStep1 += '<div data-toggle="buttons">' + actions.join('<hr>') + '</div>';
 
-			Wizard.addSlide('localize-choose-action', TYPO3.lang['localize.wizard.header'].replace('{0}', $triggerButton.data('areaName')).replace('{1}', $triggerButton.data('languageName')), slideStep1, Severity.info);
+			Wizard.addSlide('localize-choose-action', TYPO3.lang['localize.wizard.header'].replace('{0}', $triggerButton.data('areaTitle')).replace('{1}', $triggerButton.data('languageTitle')), slideStep1, Severity.info);
 			Wizard.addSlide('localize-choose-language', TYPO3.lang['localize.view.chooseLanguage'], '', Severity.info, function($slide) {
 				Icons.getIcon('spinner-circle-dark', Icons.sizes.large).done(function(markup) {
 					$slide.html(
@@ -161,21 +161,49 @@ define([
 						Localization.records = [];
 
 						$.each(result, function(_, record) {
+							var label = ' (' + record.uid + ') ' + record.title;
 							Localization.records.push(record.uid);
+
 							$summary.append(
-								$('<div />', {class: 'col-sm-6'}).text(' (' + record.uid + ') ' + record.title).prepend(record.icon)
+								$('<div />', {'class': 'col-sm-6'}).append(
+									$('<div />', {'class': 'input-group'}).append(
+										$('<span />', {'class': 'input-group-addon'}).append(
+											$('<input />', {type: 'checkbox', id: 'record-uid-' + record.uid, checked: 'checked', 'data-uid': record.uid, 'aria-label': label})
+										),
+										$('<label />', {'class': 'form-control', for: 'record-uid-' + record.uid}).text(label).prepend(record.icon)
+									)
+								)
 							);
 						});
 						$slide.html($summary);
-
-						// Unlock button as we don't have an option
 						Wizard.unlockNextStep();
+
+						Wizard.getComponent().on('change', 'input[type="checkbox"]', function() {
+							var $me = $(this),
+								uid = $me.data('uid');
+
+							if ($me.is(':checked')) {
+								Localization.records.push(uid);
+							} else {
+								var index = Localization.records.indexOf(uid);
+								if (index > -1) {
+									Localization.records.splice(index, 1);
+								}
+							}
+
+							if (Localization.records.length > 0) {
+								Wizard.unlockNextStep();
+							} else {
+								Wizard.lockNextStep();
+							}
+						});
 					});
 				});
 			});
 			Wizard.addFinalProcessingSlide(function() {
 				Localization.localizeRecords(
 					$triggerButton.data('containerUid'),
+                    $triggerButton.data('areaUid'),
 					$triggerButton.data('languageUid'),
 					Localization.records,
 					$triggerButton.data('containerTable'),
@@ -261,7 +289,7 @@ define([
 		 * @param {String} relationshipColumn
 		 * @return {Promise}
 		 */
-		Localization.localizeRecords = function(containerUid, languageUid, contentUids, containerTable, relationshipColumn) {
+		Localization.localizeRecords = function(containerUid, areaUid, languageUid, contentUids, containerTable, relationshipColumn) {
 			return $.ajax({
 				url: TYPO3.settings.ajaxUrls['records_localize'],
 				data: {
@@ -269,6 +297,7 @@ define([
 					sourceLanguageUid: Localization.settings.language,
 					destinationLanguageUid: languageUid,
 					action: Localization.settings.mode,
+					areaUid: areaUid,
 					contentUids: contentUids,
 					containerTable: containerTable,
 					relationshipColumn: relationshipColumn

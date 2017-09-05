@@ -1,8 +1,9 @@
-<div xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers"
-     class="t3-content-element t3js-content-element t3js-content-element-sortable
-        {f:if(condition: '{visible}', then: ' t3-content-element-hidden')}
-        {f:if(condition: '{errors}', then: ' t3-content-element-danger')}"
-    data-uid="{record}">
+<html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
+<div class="t3-content-element t3js-content-element t3js-content-element-sortable
+        {f:if(condition: '!{visible}', then: ' t3-content-element-hidden')}
+        {f:if(condition: '{errors}', then: ' t3-content-element-danger')}
+        {f:if(condition: '{warnings}', then: ' t3-content-element-warning')}"
+     data-uid="{record}">
     <div class="t3-content-element-drag-item">
         <div class="t3-content-element-header t3-content-element-header-draggable t3js-content-element-drag-handle">
             <div class="t3-content-element-header-icons-left">
@@ -14,43 +15,13 @@
             <div class="t3-content-element-header-icons-right">
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-sm" role="group">
-                        <f:if condition="{actions.edit}">
-                            <a class="btn btn-default"
-                               href="{actions.edit -> f:format.htmlspecialchars()}"
-                               title="{f:translate(key: 'EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit') -> f:format.htmlspecialchars()}"
-                            >
-                                {g:icon(identifier: 'actions-document-open', size: 'small')}
-                            </a>
-                        </f:if>
-                        <f:if condition="{actions.hide}">
-                            <f:then>
-                                <a class="btn btn-default"
-                                   href="{actions.hide -> f:format.htmlspecialchars()}"
-                                   title="{f:translate(key: 'EXT:backend/Resources/Private/Language/locallang_layout.xlf:hide') -> f:format.htmlspecialchars()}"
-                                >
-                                    {g:icon(identifier: 'actions-edit-hide', size: 'small')}
-                                </a>
-                            </f:then>
-                            <f:else if="{actions.unhide}">
-                                <a class="btn btn-default"
-                                   href="{actions.unhide -> f:format.htmlspecialchars()}"
-                                   title="{f:translate(key: 'EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide') -> f:format.htmlspecialchars()}"
-                                >
-                                    {g:icon(identifier: 'actions-edit-unhide', size: 'small')}
-                                </a>
-                            </f:else>
-                        </f:if>
-                        <f:if condition="{actions.delete}">
-                            <a class="btn btn-default t3js-modal-trigger"
-                               href="{actions.delete -> f:format.htmlspecialchars()}"
-                               title="{f:translate(key: 'EXT:backend/Resources/Private/Language/locallang_layout.xlf:delete') -> f:format.htmlspecialchars()}"
-                               data-severity="warning"
-                               data-title="{f:translate(key: 'LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title') -> f:format.htmlspecialchars()}"
-                               data-button-close-text="{f:translate(key: 'LLL:EXT:lang/locallang_common.xlf:cancel') -> f:format.htmlspecialchars()}"
-                            >
-                                {g:icon(identifier: 'actions-edit-delete', size: 'small')}
-                            </a>
-                        </f:if>
+                        <f:for each="{actions}" as="action">
+                            <f:if condition="{action.icon}">
+                                <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                                    {g:icon(identifier: action.icon, size: 'small')}
+                                </g:record.action>
+                            </f:if>
+                        </f:for>
                     </div>
                 </div>
             </div>
@@ -71,3 +42,4 @@
         </div>
     </div>
 </div>
+</html>

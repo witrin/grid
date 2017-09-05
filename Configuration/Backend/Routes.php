@@ -4,9 +4,9 @@
  * Definitions for routes provided by EXT:grid
  */
 return [
-    // Register content element controller
-    'content_element' => [
-        'path' => '/grid/content/',
+    // Register content preset controller
+    'content_preset' => [
+        'path' => '/grid/content/preset/',
         'target' => \TYPO3\CMS\Grid\Controller\ContentPresetController::class . '::processRequest'
     ],
     // Register new content element module

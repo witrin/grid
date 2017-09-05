@@ -21,8 +21,8 @@ define(['jquery', 'jquery-ui/droppable'], function($) {
 
 	/**
 	 *
-	 * @type {{containerIdentifier: string, contentIdentifier: string, dragIdentifier: string, dragHeaderIdentifier: string, dropZoneIdentifier: string, columnIdentifier: string, validDropZoneClass: string, dropPossibleHoverClass: string, addContentIdentifier: string, originalStyles: string}}
-	 * @exports TYPO3/CMS/Backend/LayoutModule/DragDrop
+	 * @type {{containerIdentifier: string, contentIdentifier: string, dragIdentifier: string, dragHeaderIdentifier: string, dropZoneIdentifier: string, areaIdentifier: string, validDropZoneClass: string, dropPossibleHoverClass: string, addContentIdentifier: string, originalStyles: string}}
+	 * @exports TYPO3/CMS/Grid/DragDrop
 	 */
 	var DragDrop = {
 		containerIdentifier: '.t3js-content-container',
@@ -30,7 +30,7 @@ define(['jquery', 'jquery-ui/droppable'], function($) {
 		dragIdentifier: '.t3-content-element-drag-item',
 		dragHeaderIdentifier: '.t3js-content-element-drag-handle',
 		dropZoneIdentifier: '.t3js-content-element-drop-zone',
-		columnIdentifier: '.t3js-backend-layout-column',
+		areaIdentifier: '.t3js-content-area',
 		dropZoneClass: 't3-content-element-drop-zone',
 		dropZoneHoverClass: 't3-content-element-drop-zone-hover',
 		addContentIdentifier: '.t3js-new-content-element',
@@ -158,7 +158,7 @@ define(['jquery', 'jquery-ui/droppable'], function($) {
 		var element = parseInt($draggable.data('uid'));
 		var tca = $droppable.closest('[data-tca]').data('tca');
 		var language = parseInt($droppable.closest('[data-language]').data('language'));
-		var area = $droppable.closest(DragDrop.columnIdentifier).data('uid');
+		var area = $droppable.closest(DragDrop.areaIdentifier).data('uid');
 		var target = parseInt($droppable.attr('data-target'));
 		var data = {};
 		var parameters = {

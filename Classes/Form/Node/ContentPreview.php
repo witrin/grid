@@ -43,14 +43,15 @@ class ContentPreview extends AbstractElement
 
         $view->assignMultiple([
             'table' => $this->data['tableName'],
-            'language' => $this->data['customData']['tx_grid']['languageUid'],
-            'flag' => $this->data['renderData']['showFlag'] ? $this->data['systemLanguageRows'][$this->data['customData']['tx_grid']['languageUid']]['flagIconIdentifier'] : '',
+            'language' => $this->data['customData']['tx_grid']['language']['uid'],
+            'flag' => $this->data['renderData']['showFlag'] ? $this->data['customData']['tx_grid']['language']['flagIconIdentifier'] : '',
             'record' => $this->data['vanillaUid'],
             'actions' => $this->data['customData']['tx_grid']['actions'],
             'wizard' => !$this->data['disableContentElementWizard'],
             'position' => $this->data['customData']['tx_grid']['areaUid'],
-            'visible' => $this->data['customData']['tx_grid']['visibility'] === 'visible',
+            'visible' => $this->data['customData']['tx_grid']['visible'],
             'errors' => $this->data['renderData']['hasErrors'],
+            'warnings' => $this->data['renderData']['hasWarnings'],
             'data' => $this->data['databaseRow'],
             'content' => $this->renderContent()
         ]);

@@ -12,6 +12,9 @@
 			<trans-unit id="module.layout.description.short">
 				<source>Page content</source>
 			</trans-unit>
+			<trans-unit id="module.layout.action.index.csh.title">
+				<source>Page (grid)</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

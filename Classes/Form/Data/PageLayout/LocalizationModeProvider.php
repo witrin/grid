@@ -15,7 +15,6 @@ namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
  */
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Add localization configuration for this page
@@ -30,12 +29,9 @@ class LocalizationModeProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $allowInconsistentLanguageHandling = BackendUtility::getModTSconfig(
-            $result['vanillaUid'],
-            'mod.web_layout.allowInconsistentLanguageHandling'
-        );
+        $pageTsConfig = $result['pageTsConfig']['mod.']['web_layout.'];
 
-        $result['customData']['tx_grid']['localization']['mode'] = $allowInconsistentLanguageHandling ? 'flexible' : 'strict';
+        $result['customData']['tx_grid']['localization']['mode'] = $pageTsConfig['allowInconsistentLanguageHandling'] ? 'flexible' : 'strict';
 
         return $result;
     }

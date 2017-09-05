@@ -1,11 +1,10 @@
-<f:if condition="{infoBox.message}">
-    <f:be.infobox title="{infoBox.title}">
-        {infoBox.message}
-    </f:be.infobox>
+<html data-namespace-typo3-fluid="true">
+<f:render partial="PageLayout/Controls" section="InfoBox" arguments="{info: info}" />
+<f:if condition="{form}">
+    <form id="PageLayoutController" action="{form.action}" method="post">
+        <h1 class="t3js-title-inlineedit">{title}</h1>
+        <f:format.raw>{form.content}</f:format.raw>
+    </form>
+    <f:format.raw>{form.after}</f:format.raw>
 </f:if>
-
-<form id="PageLayoutController" action="{form.action}" method="post">
-    <h1 class="t3js-title-inlineedit">{title}</h1>
-    <f:format.raw>{form.content}</f:format.raw>
-</form>
-<f:format.raw>{form.after}</f:format.raw>
+</html>

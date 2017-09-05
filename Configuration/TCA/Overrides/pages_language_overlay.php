@@ -2,6 +2,14 @@
 
 defined('TYPO3_MODE') or die();
 
-$GLOBALS['TCA']['pages_language_overlay']['columns']['content'] = $GLOBALS['TCA']['pages']['columns']['content'];
-
-$GLOBALS['TCA']['pages_language_overlay']['types'][(string)\TYPO3\CMS\Frontend\Page\PageRepository::DOKTYPE_DEFAULT]['showitem'] .= ',content';
+// this is a hack and will be removed with https://review.typo3.org/51272
+$GLOBALS['TCA']['pages_language_overlay']['columns']['content'] = [
+    'config' => [
+        'type' => 'inline',
+        'foreign_table' => 'tt_content',
+        'foreign_match_fields' => [
+            'uid' => -1
+        ],
+        'grid_area_field' => 'colPos'
+    ]
+];

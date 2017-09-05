@@ -24,7 +24,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Grid\Form\Data\GridContainerGroup;
+use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
 use TYPO3\CMS\Grid\Utility\TcaUtility;
 
 /**
@@ -77,7 +77,7 @@ class ContentPresetController extends AbstractModule
         $returnUrl = GeneralUtility::sanitizeLocalUrl($parameters['returnUrl']);
         $pageUid = isset($parameters['pageUid']) ? (int)$parameters['pageUid'] : null;
 
-        $formDataGroup = GeneralUtility::makeInstance(GridContainerGroup::class);
+        $formDataGroup = GeneralUtility::makeInstance(ContainerGroup::class);
         $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
         $formDataCompilerInput = [
             'tableName' => (string)$parameters['containerTable'],
@@ -110,7 +110,7 @@ class ContentPresetController extends AbstractModule
         $values = array_merge([
             $itemsConfig['grid_area_field'] => $areaUid,
             $vanillaItemsTca['ctrl']['languageField'] => $languageUid
-        ], $formData['customData']['tx_grid']['itemsDefaultValues']);
+        ], $formData['customData']['tx_grid']['items']['defaultValues']);
         $pageUid = isset($pageUid) ? $pageUid : $formData['effectivePid'];
 
         if ($returnUrl) {

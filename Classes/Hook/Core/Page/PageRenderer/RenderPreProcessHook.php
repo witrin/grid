@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\Grid\Hook\Core\Page\PageRenderer;
 
 /*
@@ -27,7 +28,7 @@ class RenderPreProcessHook
      * @param array $parameters
      * @param PageRenderer $pageRenderer
      */
-    public function process(&$parameters, PageRenderer $pageRenderer)
+    public function process(array &$parameters, PageRenderer $pageRenderer)
     {
         $this->removeJavaScriptModuleLocalization($parameters, $pageRenderer);
     }
@@ -39,7 +40,7 @@ class RenderPreProcessHook
      * @param PageRenderer $pageRenderer
      * @deprecated
      */
-    protected function removeJavaScriptModuleLocalization(&$parameters, PageRenderer $pageRenderer)
+    protected function removeJavaScriptModuleLocalization(array &$parameters, PageRenderer $pageRenderer)
     {
         if (
             isset($parameters['jsInline']['RequireJS-Module-TYPO3/CMS/Grid/Localization'])

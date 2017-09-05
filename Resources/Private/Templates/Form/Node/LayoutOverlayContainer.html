@@ -1,0 +1,74 @@
+<html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
+<div class="t3-content-container t3js-content-container t3js-content-container" data-tca="{tca -> f:format.json()}" data-uid="{uid}" data-pid="{pid}">
+    <table class="t3-grid-table t3-content-overlays t3js-backend-layout-columns">
+        <tr>
+            <td class="t3-content-overlay">
+                <h2>{language.title}</h2>
+            </td>
+            <f:for each="{overlays}" as="overlay">
+                <td class="t3-content-overlay">
+                    <h2>{overlay.customData.tx_grid.language.title}</h2>
+                </td>
+            </f:for>
+        </tr>
+        <tr>
+            <td class="t3-content-overlay nowrap">
+                <div class="btn-group">
+                    <f:for each="{actions}" as="action">
+                        <f:if condition="{action.icon}">
+                            <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                                {g:icon(identifier: action.icon, size: 'small')}
+                            </g:record.action>
+                        </f:if>
+                    </f:for>
+                </div>
+                {g:record.icon(table: '{tca.container.table}', row: '{row}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
+                {title}
+            </td>
+            <f:for each="{overlays}" as="overlay">
+                <td class="t3-content-overlay nowrap">
+                    <div class="btn-group">
+                        <f:for each="{overlay.customData.tx_grid.actions}" as="action">
+                            <f:if condition="{action.icon}">
+                                <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                                    {g:icon(identifier: action.icon, size: 'small')}
+                                </g:record.action>
+                            </f:if>
+                        </f:for>
+                    </div>
+                    {g:record.icon(table: '{overlay.tableName}', row: '{overlay.databaseRow}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
+                    {overlay.recordTitle}
+                </td>
+            </f:for>
+        </tr>
+        <f:for each="{areas}" as="area">
+            <tr>
+                <td data-uid="{area.uid}"
+                    data-language="{language.uid}"
+                    class="t3js-backend-layout-language-column-{language.uid} t3js-backend-layout-column t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                    <f:render partial="Area" arguments="{title: area.title, actions: area.actions, items: area.items, language: language}" />
+                </td>
+                <f:for each="{overlays}" as="overlay">
+                    <td data-uid="{area.uid}"
+                        data-language="{language.uid}"
+                        class="t3js-backend-layout-language-column-{language.uid} t3js-backend-layout-column t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                        <f:alias map="{area: '{overlay.customData.tx_grid.template.areas -> g:iterator.filter(filter: area.uid, property: \'uid\') -> g:iterator.first()}'}">
+                            <f:render partial="Area" arguments="{title: area.title, actions: area.actions, items: area.items, language: overlay.customData.tx_grid.language}" />
+                        </f:alias>
+                    </td>
+                </f:for>
+            </tr>
+        </f:for>
+        <f:if condition="{unused -> f:count()} > 0">
+            <tr>
+                <td class="t3-content-area">
+                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning'}" />
+                </td>
+            </tr>
+        </f:if>
+    </table>
+    <f:if condition="{hidden -> f:count()} > 0">
+        <f:render partial="Action" section="ShowHiddenContent" arguments="{count: '{hidden -> f:count()}', checked: settings.showHiddenContent}" />
+    </f:if>
+</div>
+</html>

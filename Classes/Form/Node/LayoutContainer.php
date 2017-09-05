@@ -20,7 +20,7 @@ use TYPO3\CMS\Grid\Utility\GridUtility;
 use TYPO3Fluid\Fluid\View\ViewInterface;
 
 /**
- * Render a content container
+ * Render the layout of a content container
  *
  * This is an entry container called from controllers.
  */
@@ -30,6 +30,11 @@ class LayoutContainer extends AbstractContainer
      * @var string
      */
     protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/LayoutContainer.html';
+
+    /**
+     * @var array
+     */
+    protected $partialRootPaths = ['EXT:grid/Resources/Private/Partials/Form/Node/LayoutContainer/'];
 
     /**
      * @var string
@@ -46,13 +51,11 @@ class LayoutContainer extends AbstractContainer
         $result = $this->initializeResultArray();
         $view = $this->initializeView();
 
-        foreach ($this->data['customData']['tx_grid']['items']['children'] as &$item) {
-            if (!$this->filterItem($item)) {
-                $this->prepareItem($item);
+        foreach ($this->items() as &$item) {
+            $this->prepareItem($item);
 
-                $item['renderData'] += $this->nodeFactory->create($item)->render();
-                $result = $this->mergeChildReturnIntoExistingResult($result, $item['renderData'], false);
-            }
+            $item['renderData'] += $this->nodeFactory->create($item)->render();
+            $result = $this->mergeChildReturnIntoExistingResult($result, $item['renderData'], false);
         }
 
         $this->prepareView($view);
@@ -60,6 +63,16 @@ class LayoutContainer extends AbstractContainer
         $result['html'] = $view->render();
 
         return $result;
+    }
+
+    /**
+     * Generate the items to render
+     */
+    protected function &items()
+    {
+        foreach ($this->data['customData']['tx_grid']['items']['children'] as &$item) {
+            yield $item;
+        }
     }
 
     /**
@@ -71,46 +84,41 @@ class LayoutContainer extends AbstractContainer
         $item['renderType'] = $this->itemRenderType;
         $item['renderData'] = [
             'contentTemplatePathAndFilename' => $item['customData']['tx_grid']['previewTemplate'],
-            'showFlag' => $item['customData']['tx_grid']['languageUid'] > 0,
+            'showFlag' => $item['customData']['tx_grid']['language']['uid'] > 0,
             'returnUrl' => $this->data['returnUrl'],
-            'hasErrors' => !$item['customData']['tx_grid']['hasTranslations'] &&
-                $item['customData']['tx_grid']['languageUid'] > 0 &&
-                !$this->data['allowInconsistentLanguageHandling'],
+            'hasErrors' => $item['customData']['tx_grid']['localization']['status'] === 'unbound' &&
+                $this->data['customData']['tx_grid']['localization']['mode'] === 'strict',
+            'hasWarnings' => $item['customData']['tx_grid']['area'] === null,
             'displayLegacyActions' => $this->data['displayLegacyActions']
         ];
-    }
-
-    /**
-     * Filter the item from being rendered
-     *
-     * @param array $item
-     * @return bool
-     */
-    protected function filterItem(array &$item) {
-        return $item['customData']['tx_grid']['languageUid'] != $this->data['renderData']['languageUid'];
     }
 
     /**
      * Prepare the view
      *
      * @param ViewInterface $view
-     * @todo Full support for `inline` fields
      */
     protected function prepareView(ViewInterface $view)
     {
         $view->assignMultiple([
-            'language' => $this->data['systemLanguageRows'][$this->data['renderData']['languageUid'] ?? 0],
+            'language' => $this->data['customData']['tx_grid']['language'],
             'areas' => $this->data['customData']['tx_grid']['template']['areas'],
             'columns' => array_fill(
                 0,
                 $this->data['customData']['tx_grid']['template']['columns'], 100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
             ),
+            'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
+                return !$item['customData']['tx_grid']['visible'];
+            }),
+            'unused' => $this->data['customData']['tx_grid']['template']['unused'],
             'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
             'uid' => $this->data['vanillaUid'],
             'pid' => $this->data['effectivePid'],
+            'settings' => $this->getUserConfiguration(),
             'tca' => [
                 'container' => [
                     'table' => $this->data['tableName'],
+                    'field' => $this->data['customData']['tx_grid']['columnToProcess']
                 ],
                 'element' => [
                     'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table'],
@@ -128,6 +136,16 @@ class LayoutContainer extends AbstractContainer
     }
 
     /**
+     * @return ViewInterface
+     */
+    protected function initializeView(): \TYPO3\CMS\Extbase\Mvc\View\ViewInterface
+    {
+        $view = parent::initializeView();
+        $view->setPartialRootPaths($this->getPartialRootPaths());
+        return $view;
+    }
+
+    /**
      * @return array
      */
     protected function initializeResultArray(): array
@@ -137,13 +155,14 @@ class LayoutContainer extends AbstractContainer
             [
                 'requireJsModules' => [
                     'TYPO3/CMS/Backend/Tooltip',
-                    'TYPO3/CMS/Backend/ClickMenu',
+                    'TYPO3/CMS/Backend/ContextMenu',
                     'TYPO3/CMS/Backend/Modal',
-                    'TYPO3/CMS/Grid/DragDrop'
+                    'TYPO3/CMS/Grid/DragDrop',
+                    'TYPO3/CMS/Grid/Actions'
                 ],
                 'stylesheetFiles' => [
                     'EXT:grid/Resources/Public/Css/DragDrop.css',
-                    'EXT:grid/Resources/Public/Css/BackendLayout.css'
+                    'EXT:grid/Resources/Public/Css/Layout.css'
                 ]
             ]
         );
@@ -158,5 +177,36 @@ class LayoutContainer extends AbstractContainer
     {
         $templatePathAndFilename = $this->data['renderData']['templatePathAndFilename'] ?? $this->templatePathAndFileName;
         return GeneralUtility::getFileAbsFileName($templatePathAndFilename);
+    }
+
+    /**
+     * Get the partial root paths
+     *
+     * @return array
+     */
+    protected function getPartialRootPaths()
+    {
+        return $this->data['renderData']['partialRootPaths'] ?? $this->partialRootPaths;
+    }
+
+    /**
+     * Returns the user configuration
+     *
+     * @return array
+     * @todo Is this the right API?
+     */
+    protected function getUserConfiguration()
+    {
+        return $this->getBackendUserAuthentication()->uc['tx_grid'][$this->data['tableName']][$this->data['customData']['tx_grid']['columnToProcess']] ?? [];
+    }
+
+    /**
+     * Returns the current backend user
+     *
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
     }
 }

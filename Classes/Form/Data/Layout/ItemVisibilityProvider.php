@@ -32,13 +32,9 @@ class ItemVisibilityProvider implements FormDataProviderInterface
     {
         foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if (!empty($item['processedTca']['ctrl']['enablecolumns']['disabled'])) {
-                $field = $item['processedTca']['ctrl']['enablecolumns']['disabled'];
-
-                if ($field && $item['databaseRow'][$field]) {
-                    $item['customData']['tx_grid']['visibility'] = (bool)$item['databaseRow'][$field] ? 'visible' : 'hidden';
-                }
+                $item['customData']['tx_grid']['visible'] = !$item['databaseRow'][$item['processedTca']['ctrl']['enablecolumns']['disabled']];
             } else {
-                $item['customData']['tx_grid']['visibility'] = 'visible';
+                $item['customData']['tx_grid']['visible'] = true;
             }
         }
 

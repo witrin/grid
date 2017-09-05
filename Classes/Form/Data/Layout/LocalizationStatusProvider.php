@@ -16,6 +16,9 @@ namespace TYPO3\CMS\Grid\Form\Data\Layout;
  */
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Determines the localization status for the given grid areas
@@ -30,31 +33,63 @@ class LocalizationStatusProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-            $originalItems = [];
-            $translatedItems = [];
+        if ($result['customData']['tx_grid']['language']['uid'] > 0) {
 
-            foreach ((array)$area['items'] as $item) {
-                $languageUid = (int)$item['customData']['tx_grid']['languageUid'];
+            $status = [];
 
-                if ($languageUid == 0) {
-                    $originalItems[$item['databaseRow']['uid']] = &$item;
-                } else {
-                    $translatedItems[$languageUid][] = (int)$item['databaseRow'][$item['processedTca']['ctrl']['transOrigPointerField']][0];
-                    $translatedItems[$languageUid][] = (int)$item['databaseRow'][$item['processedTca']['ctrl']['translationSource']];
-                }
+            foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
+                $item['customData']['tx_grid']['localization']['status'] = $item['defaultLanguageRow'] === null ? 'unbound' : 'bound';
+                $status[$item['customData']['tx_grid']['localization']['status']] = true;
             }
 
-            foreach ((array)$result['systemLanguageRows'] as $language) {
-                if ($language['uid'] > 0) {
-                    $area['localization']['status'][$language['uid']]['nonTranslated'] = array_diff_key(
-                        $originalItems,
-                        array_flip(isset($translatedItems[$language['uid']]) ? $translatedItems[$language['uid']] : [])
-                    );
-                }
+            if (empty($status)) {
+                $status['unknown'] = true;
+            }
+
+            $result['customData']['tx_grid']['localization']['status'] = count($status) > 1 ? 'mixed' : key($status);
+
+            if (
+                $result['customData']['tx_grid']['localization']['status'] !== 'unknown' &&
+                $result['customData']['tx_grid']['localization']['status'] !== 'bound' &&
+                $result['customData']['tx_grid']['localization']['mode'] === 'strict'
+            ) {
+                $this->getFlashMessageQueue($result)->addMessage(
+                    GeneralUtility::makeInstance(
+                        FlashMessage::class,
+                        sprintf(
+                            $this->getLanguageService()->getLL('staleTranslationWarning'),
+                            $result['systemLanguageRows'][$result['customData']['tx_grid']['language']['uid']]['title']
+                        ),
+                        sprintf(
+                            $this->getLanguageService()->getLL('staleTranslationWarningTitle'),
+                            $result['systemLanguageRows'][$result['customData']['tx_grid']['language']['uid']]['title']
+                        ),
+                        FlashMessage::WARNING
+                    )
+                );
             }
         }
-
         return $result;
+    }
+
+    /**
+     * Returns LanguageService
+     *
+     * @return \TYPO3\CMS\Lang\LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
+     * Returns FlashMessageQueue
+     *
+     * @param array $data
+     * @return \TYPO3\CMS\Core\Messaging\FlashMessageQueue
+     */
+    protected function getFlashMessageQueue(array $data = null)
+    {
+        return GeneralUtility::makeInstance(FlashMessageService::class)->getMessageQueueByIdentifier();
     }
 }

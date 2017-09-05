@@ -1,0 +1,9 @@
+<html data-namespace-typo3-fluid="true">
+<f:section name="InfoBox">
+    <f:if condition="{info}">
+        <f:be.infobox title="{info.title}" state="{info.state}">
+            {info.message -> f:format.raw()}
+        </f:be.infobox>
+    </f:if>
+</f:section>
+</html>

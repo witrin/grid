@@ -1,0 +1,31 @@
+<html data-namespace-typo3-fluid="true">
+<div class="t3-content-area-header{class}">
+    <f:if condition="{actions ->f:count()} > 0">
+        <div class="t3-content-area-header-icons">
+            <f:for each="{actions}" as="action">
+                <f:if condition="{action.icon}">
+                    <g:record.action action="{action}" title="{action.title}">
+                        {g:icon(identifier: action.icon, size: 'small')}
+                    </g:record.action>
+                </f:if>
+            </f:for>
+        </div>
+    </f:if>
+    <div class="t3-content-area-header-label">{title}</div>
+</div>
+<div class="t3-content-area-body">
+    <f:if condition="{actions.insert}">
+        <f:render partial="Action" section="Insert" arguments="{action: actions.insert, language: language}" />
+        <div class="t3js-content-element-drop-zone" data-target="{uid}"></div>
+    </f:if>
+    <f:for each="{items}" as="item">
+        <f:render partial="Item" section="Wrapper" arguments="{html: item.renderData.html, settings: settings, actions: item.customData.tx_grid.actions, language: language}"/>
+        <f:if condition="{actions.insert}">
+            <div class="t3js-content-element-drop-zone" data-target="-{item.vanillaUid}"></div>
+        </f:if>
+    </f:for>
+    <f:if condition="{language.uid} > 0 && {actions.localize}">
+        <f:render partial="Action" section="Localize" arguments="{action: actions.localize}" />
+    </f:if>
+</div>
+</html>

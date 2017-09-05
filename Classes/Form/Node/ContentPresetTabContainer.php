@@ -121,7 +121,7 @@ class ContentPresetTabContainer extends AbstractContainer
             [
                 'requireJsModules' => [
                     'TYPO3/CMS/Backend/Tabs',
-                    'TYPO3/CMS/Backend/ClickMenu',
+                    'TYPO3/CMS/Backend/ContextMenu',
                     'TYPO3/CMS/Grid/Wizard'
                 ],
                 'stylesheetFiles' => [

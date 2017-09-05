@@ -7,16 +7,6 @@ $GLOBALS['TCA']['pages']['columns']['content'] = [
         'type' => 'inline',
         'foreign_table' => 'tt_content',
         'foreign_field' => 'pid',
-        'grid_area_field' => 'colPos',
-        'appearance' => [
-            'collapse' => 0,
-            'useSortable' => true,
-            'levelLinksPosition' => 'top',
-            'showSynchronizationLink' => 1,
-            'showPossibleLocalizationRecords' => 1,
-            'showAllLocalizationLink' => 1,
-        ]
+        'grid_area_field' => 'colPos'
     ]
 ];
-
-$GLOBALS['TCA']['pages']['types'][(string)\TYPO3\CMS\Frontend\Page\PageRepository::DOKTYPE_DEFAULT]['showitem'] .= ',content';

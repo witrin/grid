@@ -1,8 +1,10 @@
+/* Patches module partially */
 body {
-    overflow-y: hidden;
+    overflow: hidden;
 }
 .module {
-    overflow-y: auto;
+    overflow: auto;
+    height: 100%;
 }
 .t3-sidebar {
     background-color: #292929;
