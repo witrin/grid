@@ -93,8 +93,8 @@ class ItemEditActionProvider implements FormDataProviderInterface
                     'returnUrl' => $parameters['item']['returnUrl']
                 ]
             ],
-            'title' => $this->getLanguageService()->sl('EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open'
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
         ];
     }
 }

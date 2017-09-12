@@ -104,10 +104,10 @@ class ItemVisibilityActionProvider implements FormDataProviderInterface
                     'redirect' => $result['returnUrl']
                 ]
             ],
-            'title' => $this->getLanguageService()->sl(
+            'title' => $this->getLanguageService()->sL(
                 $parameters['item']['databaseRow'][$enableField] ?
-                    'EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide' :
-                    'EXT:backend/Resources/Private/Language/locallang_layout.xlf:hide'
+                    'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide' :
+                    'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:hide'
             ),
             'icon' => $parameters['item']['databaseRow'][$enableField] ? 'actions-edit-unhide' : 'actions-edit-hide'
         ];

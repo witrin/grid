@@ -98,13 +98,12 @@ class ItemDeleteActionProvider implements FormDataProviderInterface
                 ]
             ],
             'class' => 't3js-modal-trigger',
-            'title' => $this->getLanguageService()->sl('EXT:backend/Resources/Private/Language/locallang_layout.xlf:delete'),
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:deleteItem'),
             'icon' => 'actions-edit-delete',
             'data' => [
                 'severity' => 'warning',
-                'title' => $this->getLanguageService()->sl('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title'),
-                'button-close-text' => $this->getLanguageService()->sl('LLL:EXT:lang/locallang_common.xlf:cancel')
-            ]
+                'title' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title'),
+                'button-close-text' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_common.xlf:cancel')
         ];
     }
 }
