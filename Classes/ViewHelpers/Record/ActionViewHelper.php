@@ -70,6 +70,10 @@ class ActionViewHelper extends AbstractViewHelper
             $tag->addAttribute('on' . $key, $value);
         }
 
+        if ($arguments['title']) {
+            $tag->addAttribute('title', $action['title']);
+        }
+
         $tag->setContent($renderChildrenClosure());
 
         return $tag->render();

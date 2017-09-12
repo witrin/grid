@@ -82,6 +82,14 @@ class LocalizeActionProvider implements FormDataProviderInterface
     }
 
     /**
+     * @return \TYPO3\CMS\Lang\LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
      * @param array $result
      * @param array $parameters
      * @return bool

@@ -97,7 +97,8 @@ class EditActionProvider implements FormDataProviderInterface
                 ]
             ],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
-            'icon' => 'actions-open'
+            'icon' => 'actions-open',
+            'priority' => 20
         ];
     }
 }

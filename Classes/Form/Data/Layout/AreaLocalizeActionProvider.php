@@ -82,7 +82,12 @@ class AreaLocalizeActionProvider implements FormDataProviderInterface
                 'language-title' => $result['customData']['tx_grid']['language']['title'],
                 'area-title' => $parameters['area']['title'],
                 'container-uid' => $result['vanillaUid']
-            ]
+            ],
+            'icon' => 'actions-localize',
+            'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:localize'),
+            'section' => 'header',
+            'class' => 't3js-localize',
+            'priority' => 10
         ];
     }
 
@@ -92,5 +97,13 @@ class AreaLocalizeActionProvider implements FormDataProviderInterface
     protected function getBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Lang\LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 }

@@ -104,6 +104,9 @@ class ItemDeleteActionProvider implements FormDataProviderInterface
                 'severity' => 'warning',
                 'title' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title'),
                 'button-close-text' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_common.xlf:cancel')
+            ],
+            'section' => 'header',
+            'priority' => 30
         ];
     }
 }

@@ -44,7 +44,11 @@ class AreaLocalizeActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\AreaLo
                 'language-title' => $result['customData']['tx_grid']['language']['title'],
                 'area-title' => $parameters['area']['title'],
                 'container-uid' => $result['defaultLanguageRow']['uid']
-            ]
+            ],
+            'icon' => 'actions-localize',
+            'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:localize'),
+            'section' => 'header',
+            'class' => 't3js-localize'
         ];
     }
 }

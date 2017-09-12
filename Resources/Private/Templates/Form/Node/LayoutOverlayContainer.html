@@ -14,12 +14,10 @@
         <tr>
             <td class="t3-content-overlay nowrap">
                 <div class="btn-group">
-                    <f:for each="{actions}" as="action">
-                        <f:if condition="{action.icon}">
-                            <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
-                                {g:icon(identifier: action.icon, size: 'small')}
-                            </g:record.action>
-                        </f:if>
+                    <f:for each="{actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+                        <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                            {g:icon(identifier: action.icon, size: 'small')}
+                        </g:record.action>
                     </f:for>
                 </div>
                 {g:record.icon(table: '{tca.container.table}', row: '{row}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
@@ -28,12 +26,10 @@
             <f:for each="{overlays}" as="overlay">
                 <td class="t3-content-overlay nowrap">
                     <div class="btn-group">
-                        <f:for each="{overlay.customData.tx_grid.actions}" as="action">
-                            <f:if condition="{action.icon}">
-                                <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
-                                    {g:icon(identifier: action.icon, size: 'small')}
-                                </g:record.action>
-                            </f:if>
+                        <f:for each="{overlay.customData.tx_grid.actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+                            <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                                {g:icon(identifier: action.icon, size: 'small')}
+                            </g:record.action>
                         </f:for>
                     </div>
                     {g:record.icon(table: '{overlay.tableName}', row: '{overlay.databaseRow}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}

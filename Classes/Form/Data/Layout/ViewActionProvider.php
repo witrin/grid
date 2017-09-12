@@ -71,7 +71,8 @@ class ViewActionProvider implements FormDataProviderInterface
                 'click' => BackendUtility::viewOnClick($result['vanillaUid'], '', BackendUtility::BEgetRootLine($result['vanillaUid']))
             ],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:view'),
-            'icon' => 'actions-view'
+            'icon' => 'actions-view',
+            'priority' => 10
         ];
     }
 }

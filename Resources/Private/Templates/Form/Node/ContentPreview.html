@@ -15,12 +15,10 @@
             <div class="t3-content-element-header-icons-right">
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-sm" role="group">
-                        <f:for each="{actions}" as="action">
-                            <f:if condition="{action.icon}">
-                                <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
-                                    {g:icon(identifier: action.icon, size: 'small')}
-                                </g:record.action>
-                            </f:if>
+                        <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'header') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+                            <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
+                                {g:icon(identifier: action.icon, size: 'small')}
+                            </g:record.action>
                         </f:for>
                     </div>
                 </div>

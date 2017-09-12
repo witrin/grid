@@ -105,8 +105,10 @@ class AreaEditActionProvider implements FormDataProviderInterface
                     'returnUrl' => $result['returnUrl']
                 ]
             ],
-            'icon' => 'actions-document-open'
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editColumn'),
+            'icon' => 'actions-document-open',
+            'section' => 'header',
+            'priority' => 20
         ];
     }
 }

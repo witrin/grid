@@ -57,6 +57,14 @@ class AreaInsertActionProvider implements FormDataProviderInterface
     }
 
     /**
+     * @return \TYPO3\CMS\Lang\LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
      * @param array $result
      * @return bool
      */
@@ -133,6 +141,11 @@ class AreaInsertActionProvider implements FormDataProviderInterface
             ];
         }
 
-        return ['url' => $url];
+        return [
+            'url' => $url,
+            'icon' => 'actions-add',
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newContentElement'),
+            'section' => 'body'
+        ];
     }
 }

@@ -109,7 +109,9 @@ class ItemVisibilityActionProvider implements FormDataProviderInterface
                     'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide' :
                     'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:hide'
             ),
-            'icon' => $parameters['item']['databaseRow'][$enableField] ? 'actions-edit-unhide' : 'actions-edit-hide'
+            'icon' => $parameters['item']['databaseRow'][$enableField] ? 'actions-edit-unhide' : 'actions-edit-hide',
+            'section' => 'header',
+            'priority' => 20
         ];
     }
 }

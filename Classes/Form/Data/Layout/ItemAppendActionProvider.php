@@ -64,6 +64,8 @@ class ItemAppendActionProvider extends AreaInsertActionProvider
             ];
         }
 
+        $attributes['section'] = 'after';
+
         return $attributes;
     }
 }

@@ -1,21 +1,4 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
-<f:section name="Insert">
-    <div class="t3js-sortable t3js-sortable-lang t3js-sortable-lang-{language.uid}">
-        <div class="t3js-new-content-element">
-            <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
-                {g:icon(identifier: 'actions-add', size: 'small')}
-                {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:content')}
-            </g:record.action>
-        </div>
-    </div>
-</f:section>
-<f:section name="Localize">
-    <div class="t3-page-lang-copyce">
-        <g:record.action action="{action}" class="btn btn-default t3js-localize" title="{action.title}">
-            {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newPageContent_translate')}
-        </g:record.action>
-    </div>
-</f:section>
 <f:section name="ShowHiddenContent">
     <f:if condition="{count} > 0">
         <div class="checkbox">
