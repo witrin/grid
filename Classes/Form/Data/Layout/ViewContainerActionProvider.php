@@ -68,7 +68,7 @@ class ViewContainerActionProvider implements FormDataProviderInterface
     {
         return [
             'handler' => [
-                'click' => BackendUtility::viewOnClick($result['vanillaUid'], '', BackendUtility::BEgetRootLine($result['vanillaUid']))
+                'click' => BackendUtility::viewOnClick($result['effectivePid'], '', BackendUtility::BEgetRootLine($result['effectivePid']))
             ],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:view'),
             'icon' => 'actions-view',
