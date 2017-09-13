@@ -177,7 +177,8 @@ class LayoutContainer extends AbstractContainer
                     'TYPO3/CMS/Backend/Modal',
                     'TYPO3/CMS/Grid/DragDrop',
                     'TYPO3/CMS/Grid/Actions',
-                    'TYPO3/CMS/Grid/Localization'
+                    'TYPO3/CMS/Grid/Localization',
+                    'TYPO3/CMS/Grid/Paste'
                 ],
                 'stylesheetFiles' => [
                     'EXT:grid/Resources/Public/Css/DragDrop.css',

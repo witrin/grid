@@ -198,24 +198,29 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\AreaEditActionProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\Layout\PasteItemActionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseParentPageRow::class,
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaRecordTitle::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationModeProvider::class
+            ]
+        ],
         \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeAreaActionProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\AreaLocalizeActionProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\Layout\EditAreaActionProvider::class => [
             'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseParentPageRow::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaRecordTitle::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStrategyProvider::class
+                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class => [
