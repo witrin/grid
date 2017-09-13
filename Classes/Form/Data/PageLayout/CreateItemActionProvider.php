@@ -16,9 +16,9 @@ namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
  */
 
 /**
- * Add insert after action for content elements of a page
+ * Add insert action for backend layout column of a page
  */
-class AppendItemActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\AppendItemActionProvider
+class CreateItemActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider
 {
     /**
      * @param array $result

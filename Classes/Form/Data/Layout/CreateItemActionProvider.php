@@ -23,7 +23,7 @@ use TYPO3\CMS\Grid\Utility\TcaUtility;
 /**
  * Add insert action for grid template areas of a grid container
  */
-class AreaInsertActionProvider implements FormDataProviderInterface
+class CreateItemActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -35,13 +35,36 @@ class AreaInsertActionProvider implements FormDataProviderInterface
     {
         foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
             if ($this->isAvailable($result, ['area' => $area])) {
-                $attributes = $this->getAttributes($result, ['area' => $area]);
+                $attributes = $this->getAttributes(
+                    $result,
+                    [
+                        'area' => $area,
+                        'section' => 'body'
+                    ]
+                );
                 $area['actions']['insert'] = array_merge(
                     $attributes,
                     [
                         'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
                     ]
                 );
+
+                foreach ($area['items'] as &$item) {
+                    $attributes = $this->getAttributes(
+                        $result,
+                        [
+                            'area' => $area,
+                            'item' => $item,
+                            'section' => 'after'
+                        ]
+                    );
+                    $item['customData']['tx_grid']['actions']['append'] = array_merge(
+                        $attributes,
+                        [
+                            'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
+                        ]
+                    );
+                }
             }
         }
 
@@ -107,6 +130,10 @@ class AreaInsertActionProvider implements FormDataProviderInterface
                     'returnUrl' => $result['returnUrl']
                 ]
             ];
+
+            if ($parameters['item']) {
+                $url['parameters']['ancestorUid'] = $parameters['item']['vanillaUid'];
+            }
         } else {
             $defaultValues = array_merge([
                 $result['processedTca']['ctrl']['EXT']['grid']['areaField'] => $parameters['area']['uid'],
@@ -118,7 +145,7 @@ class AreaInsertActionProvider implements FormDataProviderInterface
                 'parameters' => [
                     'edit' => [
                         $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
-                            $result['effectivePid'] => 'new'
+                            ($parameters['item'] ? -(int)$parameters['item']['vanillaUid'] : $result['effectivePid']) => 'new'
                         ]
                     ],
                     'defVals' => [
@@ -145,7 +172,7 @@ class AreaInsertActionProvider implements FormDataProviderInterface
             'url' => $url,
             'icon' => 'actions-add',
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newContentElement'),
-            'section' => 'body'
+            'section' => $parameters['section']
         ];
     }
 }
