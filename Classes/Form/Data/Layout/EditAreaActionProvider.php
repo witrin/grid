@@ -20,9 +20,9 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
- * Resolve edit action URL for the grid container
+ * Add action URLs for the content element
  */
-class EditActionProvider implements FormDataProviderInterface
+class EditAreaActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -33,14 +33,16 @@ class EditActionProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        if ($this->isAvailable($result)) {
-            $attributes = $this->getAttributes($result);
-            $result['customData']['tx_grid']['actions']['edit'] = array_merge(
-                $attributes,
-                [
-                    'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']),
-                ]
-            );
+        foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
+            if ($this->isAvailable($result, ['area' => $area])) {
+                $attributes = $this->getAttributes($result, ['area' => $area]);
+                $area['actions']['edit'] = array_merge(
+                    $attributes,
+                    [
+                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
+                    ]
+                );
+            }
         }
 
         return $result;
@@ -69,11 +71,9 @@ class EditActionProvider implements FormDataProviderInterface
      * @param array $parameters
      * @return bool
      */
-    protected function isAvailable(array $result, array $parameters = []) : bool
+    protected function isAvailable(array $result, array $parameters) : bool
     {
-        return $this->getBackendUserAuthentication()->isAdmin() ||
-            (($this->getBackendUserAuthentication()->calcPerms($result['databaseRow']) & Permission::PAGE_EDIT) === Permission::PAGE_EDIT &&
-            !$result['databaseRow']['editlock']) &&
+        return !empty($parameters['area']['items']) &&
             $this->getBackendUserAuthentication()->checkLanguageAccess($result['customData']['tx_grid']['language']['uid']);
     }
 
@@ -82,22 +82,32 @@ class EditActionProvider implements FormDataProviderInterface
      * @param array $parameters
      * @return array
      */
-    protected function getAttributes(array $result, array $parameters = []) : array
+    protected function getAttributes(array $result, array $parameters) : array
     {
         return [
             'url' => [
                 'module' => 'record_edit',
                 'parameters' => [
                     'edit' => [
-                        $result['tableName'] => [
-                            $result['vanillaUid'] => 'edit'
+                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
+                            implode(
+                                ',',
+                                array_map(
+                                    function($item) {
+                                        return $item['vanillaUid'];
+                                    },
+                                    $parameters['area']['items']
+                                )
+                            ) => 'edit'
                         ]
                     ],
+                    'recTitle' => $result['recordTitle'],
                     'returnUrl' => $result['returnUrl']
                 ]
             ],
-            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
-            'icon' => 'actions-open',
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editColumn'),
+            'icon' => 'actions-document-open',
+            'section' => 'header',
             'priority' => 20
         ];
     }

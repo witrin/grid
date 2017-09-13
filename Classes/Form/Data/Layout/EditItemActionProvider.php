@@ -20,9 +20,9 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
- * Add delete action for grid items
+ * Add action URLs for the content element
  */
-class ItemDeleteActionProvider implements FormDataProviderInterface
+class EditItemActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
@@ -36,10 +36,10 @@ class ItemDeleteActionProvider implements FormDataProviderInterface
         foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
             if ($this->isAvailable($result, ['item' => $item])) {
                 $attributes = $this->getAttributes($result, ['item' => $item]);
-                $item['customData']['tx_grid']['actions']['delete'] = array_merge(
+                $item['customData']['tx_grid']['actions']['edit'] = array_merge(
                     $attributes,
                     [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
+                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']) . '#element-' . $item['tableName'] . '-' . $item['vanillaUid']
                     ]
                 );
             }
@@ -83,30 +83,20 @@ class ItemDeleteActionProvider implements FormDataProviderInterface
     {
         return [
             'url' => [
-                'module' => 'tce_db',
+                'module' => 'record_edit',
                 'parameters' => [
-                    'prErr' => 1,
-                    'uPt' => 1,
-                    'cmd' => [
+                    'edit' => [
                         $parameters['item']['tableName'] => [
-                            $parameters['item']['vanillaUid'] => [
-                                'delete' => 1
-                            ]
+                            $parameters['item']['vanillaUid'] => 'edit'
                         ]
                     ],
-                    'redirect' => $result['returnUrl']
+                    'returnUrl' => $parameters['item']['returnUrl']
                 ]
             ],
-            'class' => 't3js-modal-trigger',
-            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:deleteItem'),
-            'icon' => 'actions-edit-delete',
-            'data' => [
-                'severity' => 'warning',
-                'title' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title'),
-                'button-close-text' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_common.xlf:cancel')
-            ],
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
+            'icon' => 'actions-open',
             'section' => 'header',
-            'priority' => 30
+            'priority' => 10
         ];
     }
 }

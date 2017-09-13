@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Versioning\VersionState;
 /**
  * Resolve view action URL for the grid container
  */
-class ViewActionProvider implements FormDataProviderInterface
+class ViewContainerActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data

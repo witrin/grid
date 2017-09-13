@@ -21,7 +21,7 @@ namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
  * @deprecated
  * @see https://review.typo3.org/51272
  */
-class AreaLocalizeActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\AreaLocalizeActionProvider
+class LocalizeAreaActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeAreaActionProvider
 {
     /**
      * @param array $result

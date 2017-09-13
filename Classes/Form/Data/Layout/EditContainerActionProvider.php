@@ -20,29 +20,27 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
- * Add action URLs for the content element
+ * Resolve edit action URL for the grid container
  */
-class ItemEditActionProvider implements FormDataProviderInterface
+class EditContainerActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
      *
      * @param array $result
      * @return array
-     * @todo PageTsConfig
+     * @todo Check condition when accessible
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
-            if ($this->isAvailable($result, ['item' => $item])) {
-                $attributes = $this->getAttributes($result, ['item' => $item]);
-                $item['customData']['tx_grid']['actions']['edit'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']) . '#element-' . $item['tableName'] . '-' . $item['vanillaUid']
-                    ]
-                );
-            }
+        if ($this->isAvailable($result)) {
+            $attributes = $this->getAttributes($result);
+            $result['customData']['tx_grid']['actions']['edit'] = array_merge(
+                $attributes,
+                [
+                    'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']),
+                ]
+            );
         }
 
         return $result;
@@ -57,6 +55,8 @@ class ItemEditActionProvider implements FormDataProviderInterface
     }
 
     /**
+     * Returns LanguageService
+     *
      * @return \TYPO3\CMS\Lang\LanguageService
      */
     protected function getLanguageService()
@@ -69,9 +69,12 @@ class ItemEditActionProvider implements FormDataProviderInterface
      * @param array $parameters
      * @return bool
      */
-    protected function isAvailable(array $result, array $parameters) : bool
+    protected function isAvailable(array $result, array $parameters = []) : bool
     {
-        return true;
+        return $this->getBackendUserAuthentication()->isAdmin() ||
+            (($this->getBackendUserAuthentication()->calcPerms($result['databaseRow']) & Permission::PAGE_EDIT) === Permission::PAGE_EDIT &&
+            !$result['databaseRow']['editlock']) &&
+            $this->getBackendUserAuthentication()->checkLanguageAccess($result['customData']['tx_grid']['language']['uid']);
     }
 
     /**
@@ -79,24 +82,23 @@ class ItemEditActionProvider implements FormDataProviderInterface
      * @param array $parameters
      * @return array
      */
-    protected function getAttributes(array $result, array $parameters) : array
+    protected function getAttributes(array $result, array $parameters = []) : array
     {
         return [
             'url' => [
                 'module' => 'record_edit',
                 'parameters' => [
                     'edit' => [
-                        $parameters['item']['tableName'] => [
-                            $parameters['item']['vanillaUid'] => 'edit'
+                        $result['tableName'] => [
+                            $result['vanillaUid'] => 'edit'
                         ]
                     ],
-                    'returnUrl' => $parameters['item']['returnUrl']
+                    'returnUrl' => $result['returnUrl']
                 ]
             ],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open',
-            'section' => 'header',
-            'priority' => 10
+            'priority' => 20
         ];
     }
 }

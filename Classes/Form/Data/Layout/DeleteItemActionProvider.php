@@ -20,23 +20,23 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
- * Add action URLs for the content element
+ * Add delete action for grid items
  */
-class AreaEditActionProvider implements FormDataProviderInterface
+class DeleteItemActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data
      *
      * @param array $result
      * @return array
-     * @todo Check condition when accessible
+     * @todo PageTsConfig
      */
     public function addData(array $result)
     {
-        foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-            if ($this->isAvailable($result, ['area' => $area])) {
-                $attributes = $this->getAttributes($result, ['area' => $area]);
-                $area['actions']['edit'] = array_merge(
+        foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
+            if ($this->isAvailable($result, ['item' => $item])) {
+                $attributes = $this->getAttributes($result, ['item' => $item]);
+                $item['customData']['tx_grid']['actions']['delete'] = array_merge(
                     $attributes,
                     [
                         'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
@@ -57,8 +57,6 @@ class AreaEditActionProvider implements FormDataProviderInterface
     }
 
     /**
-     * Returns LanguageService
-     *
      * @return \TYPO3\CMS\Lang\LanguageService
      */
     protected function getLanguageService()
@@ -73,8 +71,7 @@ class AreaEditActionProvider implements FormDataProviderInterface
      */
     protected function isAvailable(array $result, array $parameters) : bool
     {
-        return !empty($parameters['area']['items']) &&
-            $this->getBackendUserAuthentication()->checkLanguageAccess($result['customData']['tx_grid']['language']['uid']);
+        return true;
     }
 
     /**
@@ -86,29 +83,30 @@ class AreaEditActionProvider implements FormDataProviderInterface
     {
         return [
             'url' => [
-                'module' => 'record_edit',
+                'module' => 'tce_db',
                 'parameters' => [
-                    'edit' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
-                            implode(
-                                ',',
-                                array_map(
-                                    function($item) {
-                                        return $item['vanillaUid'];
-                                    },
-                                    $parameters['area']['items']
-                                )
-                            ) => 'edit'
+                    'prErr' => 1,
+                    'uPt' => 1,
+                    'cmd' => [
+                        $parameters['item']['tableName'] => [
+                            $parameters['item']['vanillaUid'] => [
+                                'delete' => 1
+                            ]
                         ]
                     ],
-                    'recTitle' => $result['recordTitle'],
-                    'returnUrl' => $result['returnUrl']
+                    'redirect' => $result['returnUrl']
                 ]
             ],
-            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editColumn'),
-            'icon' => 'actions-document-open',
+            'class' => 't3js-modal-trigger',
+            'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:deleteItem'),
+            'icon' => 'actions-edit-delete',
+            'data' => [
+                'severity' => 'warning',
+                'title' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_alt_doc.xlf:label.confirm.delete_record.title'),
+                'button-close-text' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_common.xlf:cancel')
+            ],
             'section' => 'header',
-            'priority' => 20
+            'priority' => 30
         ];
     }
 }

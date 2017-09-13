@@ -23,7 +23,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
  *
  * @todo Support localize action without overlays
  */
-class AreaLocalizeActionProvider implements FormDataProviderInterface
+class LocalizeAreaActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data

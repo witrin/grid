@@ -28,7 +28,7 @@ use TYPO3\CMS\Grid\Utility\TcaUtility;
  * @deprecated
  * @see https://review.typo3.org/51272
  */
-class LocalizeActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeActionProvider
+class LocalizeContainerActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeContainerActionProvider
 {
     /**
      * @param array $result

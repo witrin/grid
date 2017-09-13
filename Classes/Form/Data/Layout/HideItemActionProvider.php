@@ -22,7 +22,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 /**
  * Add action URLs for the content element
  */
-class ItemVisibilityActionProvider implements FormDataProviderInterface
+class HideItemActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data

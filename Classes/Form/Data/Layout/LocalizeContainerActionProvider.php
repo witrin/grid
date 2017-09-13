@@ -25,7 +25,7 @@ use TYPO3\CMS\Grid\Utility\TcaUtility;
 /**
  * Add localize actions for grid container
  */
-class LocalizeActionProvider implements FormDataProviderInterface
+class LocalizeContainerActionProvider implements FormDataProviderInterface
 {
     /**
      * Add data

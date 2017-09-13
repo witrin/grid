@@ -20,7 +20,7 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 /**
  * Add insert after action for grid items of a grid container
  */
-class ItemAppendActionProvider extends AreaInsertActionProvider
+class AppendItemActionProvider extends AreaInsertActionProvider
 {
     /**
      * Add data
