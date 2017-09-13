@@ -168,12 +168,16 @@ class LayoutContainer extends AbstractContainer
         return array_merge(
             parent::initializeResultArray(),
             [
+                'additionalInlineLanguageLabelFiles' => [
+                    'EXT:backend/Resources/Private/Language/locallang_layout.xlf'
+                ],
                 'requireJsModules' => [
                     'TYPO3/CMS/Backend/Tooltip',
                     'TYPO3/CMS/Backend/ContextMenu',
                     'TYPO3/CMS/Backend/Modal',
                     'TYPO3/CMS/Grid/DragDrop',
-                    'TYPO3/CMS/Grid/Actions'
+                    'TYPO3/CMS/Grid/Actions',
+                    'TYPO3/CMS/Grid/Localization'
                 ],
                 'stylesheetFiles' => [
                     'EXT:grid/Resources/Public/Css/DragDrop.css',

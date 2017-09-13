@@ -68,17 +68,4 @@ class LayoutOverlayContainer extends LayoutContainer
             }
         }
     }
-
-    /**
-     * @return array
-     */
-    protected function initializeResultArray(): array
-    {
-        return array_merge_recursive(
-            parent::initializeResultArray(),
-            [
-                'requireJsModules' => ['TYPO3/CMS/Grid/Localization']
-            ]
-        );
-    }
 }
