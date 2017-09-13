@@ -7,7 +7,7 @@
     <div class="t3-content-element-drag-item">
         <div class="t3-content-element-header t3-content-element-header-draggable t3js-content-element-drag-handle">
             <div class="t3-content-element-header-icons-left">
-                {g:record.icon(table: '{table}', row: '{data}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
+                {g:record.icon(table: '{table}', data: '{data}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
                 <f:if condition="{flag}">
                     {g:icon(identifier: '{flag}', size: 'small')}
                 </f:if>

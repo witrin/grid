@@ -16,6 +16,7 @@ namespace TYPO3\CMS\Grid\ViewHelpers\Record;
  */
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,18 +40,18 @@ class IconViewHelper extends AbstractViewHelper
      * Generate the markup.
      *
      * @param string $table Name of the record table
-     * @param array $row Data of an record to the the icon for
+     * @param array $data Data of an record to the the icon for
      * @param string $size Size of the icon
      * @param bool $contextMenu Enables the context menu if allowed
      * @param bool $toolTip Add a tool tip to the icon
      * @return string
      */
-    public function render($table, array $row, $size = Icon::SIZE_DEFAULT, $contextMenu = false, $toolTip = false)
+    public function render($table, array $data, $size = Icon::SIZE_DEFAULT, $contextMenu = false, $toolTip = false)
     {
         return static::renderStatic(
             [
                 'table' => $table,
-                'row' => $row,
+                'data' => $data,
                 'size' => $size,
                 'contextMenu' => $contextMenu,
                 'toolTip' => $toolTip
@@ -71,15 +72,15 @@ class IconViewHelper extends AbstractViewHelper
     public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext)
     {
         $html = GeneralUtility::makeInstance(IconFactory::class)
-            ->getIconForRecord($arguments['table'], $arguments['row'], $arguments['size'])
+            ->getIconForRecord($arguments['table'], $arguments['data'], $arguments['size'])
             ->render();
 
         if ($arguments['toolTip']) {
-            $html = '<span ' . BackendUtility::getRecordToolTip($arguments['row'], $arguments['table']) . '>' . $html . '</span>';
+            $html = '<span ' . BackendUtility::getRecordToolTip($arguments['data'], $arguments['table']) . '>' . $html . '</span>';
         }
 
         if ($arguments['contextMenu']) {
-            $html = BackendUtility::wrapClickMenuOnIcon($html, $arguments['table'], $arguments['row']['uid'], true, '', true);
+            $html = BackendUtility::wrapClickMenuOnIcon($html, $arguments['table'], $arguments['data']['uid'], true, '', true);
         }
 
         return $html;

@@ -34,43 +34,23 @@ class LayoutOverlayContainer extends LayoutContainer
      */
     protected function prepareView(ViewInterface $view)
     {
-        $view->assignMultiple([
-            'language' => $this->data['customData']['tx_grid']['language'],
-            'areas' => $this->data['customData']['tx_grid']['template']['areas'],
-            'uid' => $this->data['vanillaUid'],
-            'pid' => $this->data['effectivePid'],
-            'actions' => $this->data['customData']['tx_grid']['actions'],
-            'overlays' => $this->data['customData']['tx_grid']['overlays'],
-            'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
-                return !$item['customData']['tx_grid']['visible'];
-            }),
-            'unused' => array_merge(
-                $this->data['customData']['tx_grid']['template']['unused'],
-                array_reduce($this->data['customData']['tx_grid']['overlays'], function ($carry, $overlay) {
-                    return array_merge($carry, $overlay['customData']['tx_grid']['template']['unused']);
-                }, [])
-            ),
-            'title' => $this->data['recordTitle'],
-            'row' => $this->data['databaseRow'],
-            'settings' => $this->getUserConfiguration(),
-            'tca' => [
-                'container' => [
-                    'table' => $this->data['tableName'],
-                    'field' => $this->data['customData']['tx_grid']['columnToProcess']
-                ],
-                'element' => [
-                    'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table'],
-                    'fields' => [
-                        'area' => $this->data['customData']['tx_grid']['items']['config']['grid_area_field'],
-                        'language' => $this->data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
-                        'foreign' => [
-                            'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table_field'],
-                            'field' => $this->data['customData']['tx_grid']['items']['config']['foreign_field']
-                        ]
-                    ]
-                ]
+        $view->assignMultiple(
+            $this->mapData($this->data) + [
+                'overlays' => array_map(function($overlay) {
+                    return $this->mapData($overlay);
+                }, $this->data['customData']['tx_grid']['overlays']),
+                'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
+                    return !$item['customData']['tx_grid']['visible'];
+                }),
+                'unused' => array_merge(
+                    $this->data['customData']['tx_grid']['template']['unused'],
+                    array_reduce($this->data['customData']['tx_grid']['overlays'], function ($carry, $overlay) {
+                        return array_merge($carry, $overlay['customData']['tx_grid']['template']['unused']);
+                    }, [])
+                ),
+                'settings' => $this->getUserConfiguration()
             ]
-        ]);
+        );
     }
 
     /**

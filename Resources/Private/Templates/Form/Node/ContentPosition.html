@@ -20,7 +20,7 @@
                         </li>
                         <f:for each="{cell.elements}" as="element">
                             <li>
-                                {g:record.icon(table: '{element.table}', row: '{element.data}', size: 'small') -> f:format.html()}
+                                {g:record.icon(table: '{element.table}', data: '{element.data}', size: 'small') -> f:format.html()}
                                 {element.title}
                             </li>
                             <li>

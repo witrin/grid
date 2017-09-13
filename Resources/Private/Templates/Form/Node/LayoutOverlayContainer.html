@@ -7,7 +7,7 @@
             </td>
             <f:for each="{overlays}" as="overlay">
                 <td class="t3-content-overlay">
-                    <h2>{overlay.customData.tx_grid.language.title}</h2>
+                    <h2>{overlay.language.title}</h2>
                 </td>
             </f:for>
         </tr>
@@ -20,20 +20,20 @@
                         </g:record.action>
                     </f:for>
                 </div>
-                {g:record.icon(table: '{tca.container.table}', row: '{row}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
+                {g:record.icon(table: tca.container.table, data: '{record}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
                 {title -> f:format.crop(maxCharacters: 20)}
             </td>
             <f:for each="{overlays}" as="overlay">
                 <td class="t3-content-overlay nowrap">
                     <div class="btn-group">
-                        <f:for each="{overlay.customData.tx_grid.actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+                        <f:for each="{overlay.actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
                                 {g:icon(identifier: action.icon, size: 'small')}
                             </g:record.action>
                         </f:for>
                     </div>
-                    {g:record.icon(table: '{overlay.tableName}', row: '{overlay.databaseRow}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
-                    {overlay.recordTitle -> f:format.crop(maxCharacters: 20)}
+                    {g:record.icon(table: tca.container.table, data: '{overlay.record}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
+                    {overlay.title -> f:format.crop(maxCharacters: 20)}
                 </td>
             </f:for>
         </tr>
@@ -48,7 +48,7 @@
                     <td data-uid="{area.uid}"
                         data-language="{language.uid}"
                         class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                        <f:render partial="Area" arguments="{overlay.customData.tx_grid.template.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first()}" />
+                        <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first()}" />
                     </td>
                 </f:for>
             </tr>

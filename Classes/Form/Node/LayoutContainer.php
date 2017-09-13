@@ -100,39 +100,54 @@ class LayoutContainer extends AbstractContainer
      */
     protected function prepareView(ViewInterface $view)
     {
-        $view->assignMultiple([
-            'language' => $this->data['customData']['tx_grid']['language'],
-            'areas' => $this->data['customData']['tx_grid']['template']['areas'],
-            'columns' => array_fill(
-                0,
-                $this->data['customData']['tx_grid']['template']['columns'], 100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
-            ),
-            'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
-                return !$item['customData']['tx_grid']['visible'];
-            }),
-            'unused' => $this->data['customData']['tx_grid']['template']['unused'],
-            'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
-            'uid' => $this->data['vanillaUid'],
-            'pid' => $this->data['effectivePid'],
-            'settings' => $this->getUserConfiguration(),
+        $view->assignMultiple(
+            $this->mapData($this->data) + [
+                'columns' => array_fill(
+                    0,
+                    $this->data['customData']['tx_grid']['template']['columns'], 100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
+                ),
+                'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
+                'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
+                    return !$item['customData']['tx_grid']['visible'];
+                }),
+                'unused' => $this->data['customData']['tx_grid']['template']['unused'],
+                'settings' => $this->getUserConfiguration()
+            ]
+        );
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function mapData($data)
+    {
+        return [
+            'language' => $data['customData']['tx_grid']['language'],
+            'areas' => $data['customData']['tx_grid']['template']['areas'],
+            'uid' => $data['vanillaUid'],
+            'pid' => $data['effectivePid'],
+            'actions' => $data['customData']['tx_grid']['actions'],
+            'title' => $data['recordTitle'],
+            'record' => $this->data['databaseRow'],
             'tca' => [
                 'container' => [
-                    'table' => $this->data['tableName'],
-                    'field' => $this->data['customData']['tx_grid']['columnToProcess']
+                    'table' => $data['tableName'],
+                    'field' => $data['customData']['tx_grid']['columnToProcess']
                 ],
                 'element' => [
-                    'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table'],
+                    'table' => $data['customData']['tx_grid']['items']['config']['foreign_table'],
                     'fields' => [
-                        'area' => $this->data['customData']['tx_grid']['items']['config']['grid_area_field'],
-                        'language' => $this->data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
+                        'area' => $data['customData']['tx_grid']['items']['config']['grid_area_field'],
+                        'language' => $data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
                         'foreign' => [
-                            'table' => $this->data['customData']['tx_grid']['items']['config']['foreign_table_field'],
-                            'field' => $this->data['customData']['tx_grid']['items']['config']['foreign_field']
+                            'table' => $data['customData']['tx_grid']['items']['config']['foreign_table_field'],
+                            'field' => $data['customData']['tx_grid']['items']['config']['foreign_field']
                         ]
                     ]
                 ]
             ]
-        ]);
+        ];
     }
 
     /**
