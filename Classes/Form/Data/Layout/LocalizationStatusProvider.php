@@ -57,11 +57,11 @@ class LocalizationStatusProvider implements FormDataProviderInterface
                     GeneralUtility::makeInstance(
                         FlashMessage::class,
                         sprintf(
-                            $this->getLanguageService()->getLL('staleTranslationWarning'),
+                            $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleTranslationWarning'),
                             $result['systemLanguageRows'][$result['customData']['tx_grid']['language']['uid']]['title']
                         ),
                         sprintf(
-                            $this->getLanguageService()->getLL('staleTranslationWarningTitle'),
+                            $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleTranslationWarningTitle'),
                             $result['systemLanguageRows'][$result['customData']['tx_grid']['language']['uid']]['title']
                         ),
                         FlashMessage::WARNING

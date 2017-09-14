@@ -49,8 +49,8 @@ class UnusedItemsProvider implements FormDataProviderInterface
             $this->getFlashMessageQueue($result)->addMessage(
                 GeneralUtility::makeInstance(
                     FlashMessage::class,
-                    $this->getLanguageService()->getLL('staleUnusedElementsWarning'),
-                    $this->getLanguageService()->getLL('staleUnusedElementsWarningTitle'),
+                    $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleUnusedElementsWarning'),
+                    $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleUnusedElementsWarningTitle'),
                     FlashMessage::WARNING
                 )
             );
