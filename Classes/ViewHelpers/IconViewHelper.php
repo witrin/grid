@@ -19,13 +19,17 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Get an icon
  */
-class IconViewHelper extends AbstractViewHelper
+class IconViewHelper extends AbstractViewHelper implements CompilableInterface
 {
+
+    use CompileWithRenderStatic;
 
     /**
      * As this ViewHelper renders HTML, the output must not be escaped.
@@ -35,22 +39,14 @@ class IconViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * Generate the markup.
-     *
-     * @param string $identifier Identifier of the icon
-     * @param string $size Size of the icon
-     * @return string
+     * Initializes the arguments
      */
-    public function render($identifier, $size = Icon::SIZE_DEFAULT)
+    public function initializeArguments()
     {
-        return static::renderStatic(
-            [
-                'identifier' => $identifier,
-                'size' => $size
-            ],
-            $this->buildRenderChildrenClosure(),
-            $this->renderingContext
-        );
+        parent::initializeArguments();
+
+        $this->registerArgument('identifier', 'string', 'Identifier of the icon');
+        $this->registerArgument('size', 'string', 'Size of the icon', false, Icon::SIZE_DEFAULT);
     }
 
     /**

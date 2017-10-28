@@ -16,6 +16,7 @@ namespace TYPO3\CMS\Grid\ViewHelpers\Record;
  */
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -23,7 +24,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 /**
  * Renders an action using a link element
  */
-class ActionViewHelper extends AbstractViewHelper
+class ActionViewHelper extends AbstractViewHelper implements CompilableInterface
 {
     use CompileWithRenderStatic;
 

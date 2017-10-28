@@ -21,13 +21,17 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Get an icon for a record
  */
-class IconViewHelper extends AbstractViewHelper
+class IconViewHelper extends AbstractViewHelper implements CompilableInterface
 {
+
+    use CompileWithRenderStatic;
 
     /**
      * As this ViewHelper renders HTML, the output must not be escaped.
@@ -37,28 +41,17 @@ class IconViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * Generate the markup.
-     *
-     * @param string $table Name of the record table
-     * @param array $data Data of an record to the the icon for
-     * @param string $size Size of the icon
-     * @param bool $contextMenu Enables the context menu if allowed
-     * @param bool $toolTip Add a tool tip to the icon
-     * @return string
+     * Initializes the arguments
      */
-    public function render($table, array $data, $size = Icon::SIZE_DEFAULT, $contextMenu = false, $toolTip = false)
+    public function initializeArguments()
     {
-        return static::renderStatic(
-            [
-                'table' => $table,
-                'data' => $data,
-                'size' => $size,
-                'contextMenu' => $contextMenu,
-                'toolTip' => $toolTip
-            ],
-            $this->buildRenderChildrenClosure(),
-            $this->renderingContext
-        );
+        parent::initializeArguments();
+
+        $this->registerArgument('table', 'string', 'Name of the record table');
+        $this->registerArgument('data', 'array', 'Record data');
+        $this->registerArgument('size', 'string', 'Size of the icon', false, Icon::SIZE_DEFAULT);
+        $this->registerArgument('contextMenu', 'bool', 'Enables the context menu if allowed', false, false);
+        $this->registerArgument('toolTip', 'bool', 'Add a tool tip to the icon', false, false);
     }
 
     /**
