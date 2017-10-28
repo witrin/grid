@@ -403,12 +403,11 @@ class PageLayoutController extends AbstractController
     protected function getActionUrl($action, $parameters = [])
     {
         $parameters += [
-            'action' => $action,
-            'M' => GeneralUtility::_GP('M')
+            'action' => $action
         ] + $this->request->getQueryParams();
 
         return GeneralUtility::makeInstance(UriBuilder::class)
-            ->buildUriFromModule($parameters['M'], array_filter($parameters, function($value) {
+            ->buildUriFromRoutePath($parameters['route'], array_filter($parameters, function($value) {
                 return !empty($value) || $value === 0;
             }));
     }
@@ -518,7 +517,7 @@ class PageLayoutController extends AbstractController
             $buttonBar->makeShortcutButton()
                 ->setModuleName(self::MODULE_NAMESPACE . '_' . self::MODULE_NAME)
                 ->setGetVariables([
-                    'M',
+                    'route',
                     'id',
                     'action',
                     'page',
