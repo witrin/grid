@@ -21,7 +21,6 @@ use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormResultCompiler;
 use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Backend\Module\AbstractModule;
 use TYPO3\CMS\Backend\Module\ModuleLoader;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -41,7 +40,7 @@ use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
 /**
  * Controller for Web > Page module
  */
-class PageLayoutController extends AbstractModule
+class PageLayoutController extends AbstractController
 {
     /**
      * @var string

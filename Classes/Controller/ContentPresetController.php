@@ -19,7 +19,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormResultCompiler;
 use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Backend\Module\AbstractModule;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -30,7 +29,7 @@ use TYPO3\CMS\Grid\Utility\TcaUtility;
 /**
  * Controller for content element wizard
  */
-class ContentPresetController extends AbstractModule
+class ContentPresetController extends AbstractController
 {
     /**
      * Legacy interface
