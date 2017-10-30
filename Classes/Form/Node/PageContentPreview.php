@@ -185,7 +185,7 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
 
         if (is_array($hooks)) {
             foreach ($hooks as $hookClass) {
-                $hookObject = GeneralUtility::getUserObj($hookClass);
+                $hookObject = GeneralUtility::makeInstance($hookClass);
                 if (!$hookObject instanceof PageLayoutViewDrawItemHookInterface) {
                     throw new \UnexpectedValueException(
                         $hookClass . ' must implement interface ' . PageLayoutViewDrawItemHookInterface::class,
