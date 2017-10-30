@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Generates the preview of a page content element
@@ -35,6 +36,7 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
 {
     /**
      * @var PageLayoutView
+     * @deprecated
      */
     protected static $pageLayoutView = null;
 
@@ -101,12 +103,32 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
     }
 
     /**
+     * Returns the language service
+     * @return LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
+    }
+
+    /**
      * @return PageLayoutView
+     * @deprecated
      */
     protected function getPageLayoutView()
     {
         if (self::$pageLayoutView === null) {
             self::$pageLayoutView = GeneralUtility::makeInstance(PageLayoutView::class);
+
+            // pretty nasty legacy stuff
+            self::$pageLayoutView->CType_labels = [];
+            foreach ($GLOBALS['TCA']['tt_content']['columns']['CType']['config']['items'] as $val) {
+                self::$pageLayoutView->CType_labels[$val[1]] = $this->getLanguageService()->sL($val[0]);
+            }
+            self::$pageLayoutView->itemLabels = [];
+            foreach ($GLOBALS['TCA']['tt_content']['columns'] as $name => $val) {
+                self::$pageLayoutView->itemLabels[$name] = $this->getLanguageService()->sL($val['label']);
+            }
         }
 
         return self::$pageLayoutView;
