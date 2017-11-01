@@ -10,7 +10,13 @@
             </f:for>
         </div>
     </f:if>
-    <div class="t3-content-area-header-label">{title}</div>
+    <div class="t3-content-area-header-label">
+        <f:if condition="{title}">{title}</f:if>
+        <f:if condition="{restricted}">
+            <f:then>({f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout:noAccess')})</f:then>
+            <f:else if="!{assigned}">({f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout:notAssigned')})</f:else>
+        </f:if>
+    </div>
 </div>
 <div class="t3-content-area-body">
     <div class="t3js-new-content-element">

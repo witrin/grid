@@ -39,18 +39,20 @@
         </tr>
         <f:for each="{areas}" as="area">
             <tr>
-                <td data-uid="{area.uid}"
-                    data-language="{language.uid}"
-                    class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                    <f:render partial="Area" arguments="{area}" />
-                </td>
-                <f:for each="{overlays}" as="overlay">
+                <f:if condition="{area.assigned} && !{area.restricted}">
                     <td data-uid="{area.uid}"
                         data-language="{language.uid}"
                         class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                        <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first()}" />
+                        <f:render partial="Area" arguments="{area}" />
                     </td>
-                </f:for>
+                    <f:for each="{overlays}" as="overlay">
+                        <td data-uid="{area.uid}"
+                            data-language="{language.uid}"
+                            class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                            <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first()}" />
+                        </td>
+                    </f:for>
+                </f:if>
             </tr>
         </f:for>
         <f:if condition="{unused -> f:count()} > 0">
