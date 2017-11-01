@@ -40,8 +40,7 @@ class AreaAccessProvider implements FormDataProviderInterface
                 isset($result['databaseRow']['editlock']) && $result['databaseRow']['editlock']);
 
         foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-            $area['locked'] = $locked;
-            $area['restricted'] = !$area['assigned'] || $area['locked'];
+            $area['restricted'] = $area['restricted'] || $locked;
         }
 
         return $result;

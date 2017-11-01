@@ -43,7 +43,7 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
 
         if ($layout !== null) {
             $allowedAreas = trim($result['pageTsConfig']['mod']['SHARED']['properties']['colPos_list'] ?? '');
-            $allowedAreas = array_flip(GeneralUtility::intExplode(',', $allowedAreas));
+            $allowedAreas = empty($allowedAreas) ? [] : array_flip(GeneralUtility::intExplode(',', $allowedAreas));
 
             $parsedPositionItems = GeneralUtility::makeInstance(BackendLayoutView::class)
                 ->getColPosListItemsParsed($result['tableName'] === 'pages' ? $result['databaseRow']['uid'] : $result['databaseRow']['pid']);
@@ -86,7 +86,7 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
                             'start' => $y + 1,
                             'end' => $y + ($column['colspan'] ?? 1)
                         ],
-                        'restricted' => $allowedAreas && !isset($allowedAreas[$column['colPos']])
+                        'restricted' => !empty($allowedAreas) && !isset($allowedAreas[$column['colPos']])
                     ];
                 }
             }
