@@ -103,9 +103,10 @@ class CreateItemActionProvider implements FormDataProviderInterface
      */
     protected function isAvailable(array $result, array $parameters) : bool
     {
-        return $result['customData']['tx_grid']['localization']['mode'] !== 'strict' ||
+        return ($result['customData']['tx_grid']['localization']['mode'] !== 'strict' ||
             empty($result['customData']['tx_grid']['items']['children']) ||
-            $result['customData']['tx_grid']['language']['uid'] <= 0;
+            $result['customData']['tx_grid']['language']['uid'] <= 0) &&
+            !$parameters['area']['restricted'] && $parameters['area']['assigned'];
     }
 
     /**
