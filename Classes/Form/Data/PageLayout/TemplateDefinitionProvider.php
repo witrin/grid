@@ -69,7 +69,7 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
 
                     $column['name'] = array_reduce($parsedPositionItems, function($label, $item) use ($column) {
                         return $label = ($item[1] == $column['colPos'] ? $this->getLanguageService()->sL($item[0]) : $label);
-                    }, '') ?? $column['name'];
+                    }, $column['name']);
 
                     $previous = end($result['customData']['tx_grid']['template']['areas']);
                     $y = $y > 0 ? $previous['column']['end'] : 0;
