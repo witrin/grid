@@ -14,7 +14,7 @@
                         colspan="{cell.column.end - cell.column.start + 1}"
                         data-uid="{cell.uid}"
                         class="t3js-content-area t3-content-area{f:if(condition: '!{cell.assigned}', then: ' t3-content-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-content-area-restricted')}">
-                        <f:render partial="Area" arguments="{items: cell.items, title: cell.title, actions: cell.actions, assigned: cell.assigned, restricted: cell.restricted, language: language}" />
+                        <f:render partial="Area" arguments="{items: cell.items, title: cell.title, actions: cell.actions, assigned: cell.assigned, restricted: cell.restricted, language: language, pid: pid}" />
                     </td>
                 </f:for>
             </tr>
@@ -22,7 +22,7 @@
         <f:if condition="{unused -> f:count()} > 0">
             <tr>
                 <td class="t3js-content-area t3-content-area" colspan="{columns -> f:count()}">
-                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning', assigned: 1, restricted: 0}" />
+                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning', assigned: 1, restricted: 0, pid: pid}" />
                 </td>
             </tr>
         </f:if>

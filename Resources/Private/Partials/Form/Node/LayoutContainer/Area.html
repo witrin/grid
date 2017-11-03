@@ -26,8 +26,8 @@
             </g:record.action>
         </f:for>
     </div>
-    <f:if condition="{actions.insert}">
-        <div class="t3js-content-element-drop-zone" data-target="{uid}"></div>
+    <f:if condition="{actions.insert} && {pid}">
+        <div class="t3js-content-element-drop-zone" data-target="{pid}"></div>
     </f:if>
     <f:for each="{items}" as="item">
         <f:render partial="Item" section="Wrapper" arguments="{html: item.renderData.html, settings: settings, actions: item.customData.tx_grid.actions, uid: item.vanillaUid, visible: item.customData.tx_grid.visible}"/>

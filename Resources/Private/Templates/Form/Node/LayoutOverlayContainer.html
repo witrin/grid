@@ -42,14 +42,14 @@
                 <f:if condition="{area.assigned} && !{area.restricted}">
                     <td data-uid="{area.uid}"
                         data-language="{language.uid}"
-                        class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                        <f:render partial="Area" arguments="{area}" />
+                        class="t3js-content-area t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                        <f:render partial="Area" arguments="{area -> g:iterator.merge(b: '{pid: pid}')}" />
                     </td>
                     <f:for each="{overlays}" as="overlay">
                         <td data-uid="{area.uid}"
                             data-language="{language.uid}"
-                            class="t3js-content-area t3-content-area t3-content-area-{area.uid} {f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                            <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first()}" />
+                            class="t3js-content-area t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                            <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first() -> g:iterator.merge(b: '{pid: pid}')}" />
                         </td>
                     </f:for>
                 </f:if>
