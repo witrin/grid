@@ -36,8 +36,9 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
         $areas = array_column($result['customData']['tx_grid']['template']['areas'], null, 'uid');
 
         foreach ($result['customData']['tx_grid']['overlays'] as &$overlay) {
+            $translated = array_column(array_column((array)$overlay['customData']['tx_grid']['items']['children'], 'defaultLanguageRow'), 'uid');
             foreach ($overlay['customData']['tx_grid']['template']['areas'] as &$area) {
-                if ($this->isAvailable($result, ['area' => $areas[$area['uid']], 'overlay' => $area])) {
+                if ($this->isAvailable($result, ['area' => $areas[$area['uid']], 'translated' => $translated])) {
                     $area['actions']['localize'] = $this->getAttributes($overlay, ['overlay' => $areas[$area['uid']], 'area' => $area]);
                 }
             }
@@ -55,10 +56,7 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
     {
         return $result['customData']['tx_grid']['language']['uid'] <= 0 &&
             !empty($result['customData']['tx_grid']['overlays']) &&
-            !empty(array_diff(
-                array_column((array)$parameters['area']['items'], 'vanillaUid'),
-                array_column(array_column((array)$parameters['overlay']['items'], 'defaultLanguageRow'), 'uid')
-            ));
+            !empty(array_diff(array_column((array)$parameters['area']['items'], 'vanillaUid'), $parameters['translated']));
     }
 
     /**
