@@ -138,7 +138,7 @@ class LayoutContainer extends AbstractContainer
                 'element' => [
                     'table' => $data['customData']['tx_grid']['items']['config']['foreign_table'],
                     'fields' => [
-                        'area' => $data['customData']['tx_grid']['items']['config']['grid_area_field'],
+                        'area' => $data['customData']['tx_grid']['items']['config']['foreign_area_field'],
                         'language' => $data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
                         'foreign' => [
                             'table' => $data['customData']['tx_grid']['items']['config']['foreign_table_field'],

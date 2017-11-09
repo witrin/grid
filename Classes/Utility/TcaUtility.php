@@ -36,4 +36,20 @@ class TcaUtility
             ARRAY_FILTER_USE_KEY
         );
     }
+    
+    /**
+     * Get language uid
+     *
+     * @param array $tca The TCA for the record
+     * @param array $record The record
+     * @return number
+     */
+    static public function getLanguageUid(array $tca, array $record)
+    {
+        if (!empty($tca['ctrl']['languageField'])) {
+            return (int)$record[$tca['ctrl']['languageField']][0];
+        } else {
+            return 0;
+        }
+    }
 }

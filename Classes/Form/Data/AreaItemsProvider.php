@@ -32,14 +32,14 @@ class AreaItemsProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        if (empty($result['customData']['tx_grid']['items']['config']['grid_area_field'])) {
+        if (empty($result['customData']['tx_grid']['items']['config']['foreign_area_field'])) {
             throw new \UnexpectedValueException(
-                'Missing grid_area_field in items configuration.',
+                'Missing foreign_area_field in items configuration.',
                 1496148555
             );
         }
 
-        $areaField = $result['customData']['tx_grid']['items']['config']['grid_area_field'];
+        $areaField = $result['customData']['tx_grid']['items']['config']['foreign_area_field'];
 
         if (!isset($result['customData']['tx_grid']['items']['vanillaTca']['columns'][$areaField])) {
             throw new \UnexpectedValueException(

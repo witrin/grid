@@ -283,7 +283,7 @@ class LocalizationRepository
                 $queryBuilder->createNamedParameter($languageUid, \PDO::PARAM_INT)
             ),
             $queryBuilder->expr()->eq(
-                $itemsTable . '.' . $itemsConfiguration['grid_area_field'],
+                $itemsTable . '.' . $itemsConfiguration['foreign_area_field'],
                 $queryBuilder->createNamedParameter($areaUid, \PDO::PARAM_INT)
             ),
             $queryBuilder->expr()->eq(
@@ -330,7 +330,7 @@ class LocalizationRepository
             throw new \UnexpectedValueException('Foreign table ' . $itemTable . ' does not exist.', 1492886421);
         }
 
-        if (!isset($GLOBALS['TCA'][$containerTable]['columns'][$itemsField]['config']['grid_area_field'])) {
+        if (!isset($GLOBALS['TCA'][$containerTable]['columns'][$itemsField]['config']['foreign_area_field'])) {
             throw new \UnexpectedValueException('Grid area field is not configured for ' . $itemTable . '.', 1492855178);
         }
 

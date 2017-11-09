@@ -107,7 +107,7 @@ class ContentPresetController extends AbstractController
         $vanillaItemsTca = $formData['customData']['tx_grid']['items']['vanillaTca'];
 
         $values = array_merge([
-            $itemsConfig['grid_area_field'] => $areaUid,
+            $itemsConfig['foreign_area_field'] => $areaUid,
             $vanillaItemsTca['ctrl']['languageField'] => $languageUid
         ], $formData['customData']['tx_grid']['items']['defaultValues']);
         $pageUid = isset($pageUid) ? $pageUid : $formData['effectivePid'];

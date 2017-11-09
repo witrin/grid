@@ -1,6 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
+namespace TYPO3\CMS\Grid\Form\Data\Traits;
+
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Grid\Form\Data\Utility\FlashMessageUtility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -15,28 +19,21 @@ namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Grid\Controller\PageLayoutController;
-
 /**
- * Determines the localization status for the given grid areas
- *
- * @deprecated
- * @see https://review.typo3.org/51272
+ * Resolve all unused items.
  */
-class UnusedItemsProvider extends \TYPO3\CMS\Grid\Form\Data\UnusedItemsProvider
+trait FlashMessageProvider
 {
     /**
      * Returns FlashMessageQueue
      *
-     * @param array $data
+     * @param array $result
      * @return \TYPO3\CMS\Core\Messaging\FlashMessageQueue
      */
-    protected function getFlashMessageQueue(array $data = null)
+    protected function getFlashMessageQueue($tableName = null, $fieldName = null, $languageUid = -1)
     {
         return GeneralUtility::makeInstance(FlashMessageService::class)->getMessageQueueByIdentifier(
-            sprintf(PageLayoutController::OVERLAY_FLASH_MESSAGE_QUEUE, $data['customData']['tx_grid']['language']['uid'])
+            sprintf(FlashMessageUtility::QUEUE_IDENTIFIER, $tableName, $fieldName, $languageUid)
         );
     }
 }

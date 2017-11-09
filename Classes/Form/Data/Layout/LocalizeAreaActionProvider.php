@@ -79,7 +79,7 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
                 'language-uid' => $result['customData']['tx_grid']['language']['uid'],
                 'language-title' => $result['customData']['tx_grid']['language']['title'],
                 'area-title' => $parameters['area']['title'],
-                'container-uid' => $result['vanillaUid']
+                'container-uid' => $result['customData']['tx_grid']['items']['config']['effectiveParentUid']
             ],
             'icon' => 'actions-localize',
             'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:localize'),

@@ -125,7 +125,7 @@ class CreateItemActionProvider implements FormDataProviderInterface
                     'action' => 'indexAction',
                     'containerTable' => $result['tableName'],
                     'containerField' => $result['customData']['tx_grid']['columnToProcess'],
-                    'containerUid' => $result['vanillaUid'],
+                    'containerUid' => $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
                     'areaUid' => $parameters['area']['uid'],
                     'languageUid' => $result['customData']['tx_grid']['language']['uid'],
                     'returnUrl' => $result['returnUrl']
@@ -137,7 +137,7 @@ class CreateItemActionProvider implements FormDataProviderInterface
             }
         } else {
             $defaultValues = array_merge([
-                $result['customData']['tx_grid']['items']['config']['grid_area_field'] => $parameters['area']['uid'],
+                $result['customData']['tx_grid']['items']['config']['foreign_area_field'] => $parameters['area']['uid'],
                 $result['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'] => $result['customData']['tx_grid']['language']['uid']
             ], $result['customData']['tx_grid']['items']['defaultValues']);
 

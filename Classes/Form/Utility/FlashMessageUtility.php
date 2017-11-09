@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
+namespace TYPO3\CMS\Grid\Form\Data\Utility;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -16,16 +16,9 @@ namespace TYPO3\CMS\Grid\Form\Data\PageLayout;
  */
 
 /**
- * Add insert action for backend layout column of a page
+ * Resolve all unused items.
  */
-class CreateItemActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider
+class FlashMessageUtility
 {
-    /**
-     * @param array $result
-     * @return bool
-     */
-    protected function useWizard(array $result)
-    {
-        return (bool)$result['pageTsConfig']['mod.']['web_layout.']['disableNewContentElementWizard'];
-    }
+    const QUEUE_IDENTIFIER = 'grid.%s.%s.%s.flashMessages';
 }

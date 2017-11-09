@@ -30,10 +30,10 @@ $TCA['tx_my_domain_model_container'] = [
     'items' => [
       // ... ,
       'config' => [
-        'type' => 'inline' ,
+        'type' => 'grid' ,
         'foreign_table' => 'tx_my_domain_model_item',
         'foreign_field' => 'container',
-        'grid_area_field' => 'area'
+        'foreign_area_field' => 'area'
       ]
     ]
   ]

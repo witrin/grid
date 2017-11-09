@@ -44,13 +44,15 @@ class LanguageOverlayProvider implements FormDataProviderInterface
 
             foreach ($languages as $language) {
                 $translationInfo = $this->getTranslationProvider()->translationInfo($result['tableName'], $result['vanillaUid'], $language['uid']);
-                $translationTable = $this->getTranslationProvider()->getTranslationTable($result['tableName']);
-                $formDataCompilerInput = $this->getFormDataCompilerInput(
-                    $translationTable,
-                    (int)$translationInfo['translations'][$language['uid']]['uid'],
-                    $result
-                );
-                $result['customData']['tx_grid']['overlays'][] = $this->getFormDataCompiler()->compile($formDataCompilerInput);
+                
+                if (isset($translationInfo['translations'][$language['uid']])) {
+                    $formDataCompilerInput = $this->getFormDataCompilerInput(
+                        $result['tableName'],
+                        (int)$translationInfo['translations'][$language['uid']]['uid'],
+                        $result
+                    );
+                    $result['customData']['tx_grid']['overlays'][] = $this->getFormDataCompiler()->compile($formDataCompilerInput);
+                }
             }
         }
 

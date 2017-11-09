@@ -62,7 +62,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class => [
@@ -70,19 +70,20 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider::class => [
@@ -92,7 +93,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEffectivePid::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
@@ -140,7 +141,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeContainerActionProvider::class => [
@@ -189,7 +190,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationModeProvider::class
             ]
@@ -206,7 +207,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaRecordTitle::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class => [
@@ -247,39 +248,19 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
     array_diff_key(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContainer'],
         array_flip([
-            \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class,
             \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
-            \TYPO3\CMS\Grid\Form\Data\UnusedItemsProvider::class,
             \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider::class,
             \TYPO3\CMS\Grid\Form\Data\Layout\ItemPreviewTemplateProvider::class,
-            \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeAreaActionProvider::class,
-            \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class,
-            \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeContainerActionProvider::class
+            \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class
         ])
     ),
     [
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizeContainerActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
-                \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfigMerged::class,
-                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEffectivePid::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizationStatusProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizationModeProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\LanguageOverlayProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\TemplateDefinitionProvider::class => [
@@ -296,7 +277,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfigMerged::class,
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEffectivePid::class,
                 \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
@@ -304,8 +285,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationModeProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizationStatusProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\PageLayout\LanguageOverlayProvider::class
+                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\ItemPreviewTemplateProvider::class => [
@@ -331,13 +312,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\UnusedItemsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\TemplateDimensionsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\PageLayout\LanguageOverlayProvider::class
-            ]
-        ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\ItemPresetsProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
@@ -355,12 +329,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
             ]
         ],
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\LocalizeAreaActionProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class
-            ]
-        ],
         \TYPO3\CMS\Grid\Form\Data\PageLayout\PageInfoProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
@@ -373,7 +341,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreation'] = array_merge(
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
     [
-        \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class => [
+        \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
             ],
@@ -383,7 +351,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreati
         ],
         \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class => [
             'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigProvider::class
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
             ],
             'before' => [
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class

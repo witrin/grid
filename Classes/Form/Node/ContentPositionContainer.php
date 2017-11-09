@@ -114,7 +114,7 @@ class ContentPositionContainer extends AbstractContainer
                     ]
                 ],
                 'defVals' => [
-                    $this->data['customData']['tx_grid']['items']['config']['grid_area_field'] => $areaUid
+                    $this->data['customData']['tx_grid']['items']['config']['foreign_area_field'] => $areaUid
                 ]
             ],
             '',

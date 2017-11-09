@@ -36,6 +36,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
+use TYPO3\CMS\Grid\Form\Data\Utility\FlashMessageUtility;
 
 /**
  * Controller for Web > Page module
@@ -51,11 +52,6 @@ class PageLayoutController extends AbstractController
      * @var string
      */
     const MODULE_NAME = 'pageLayout';
-
-    /**
-     * @deprecated
-     */
-    const OVERLAY_FLASH_MESSAGE_QUEUE = 'page.layout.%s.flashMessages';
 
     /**
      * @var TranslationConfigurationProvider
@@ -628,15 +624,15 @@ class PageLayoutController extends AbstractController
 
     /**
      * @param array $languages
-     * @deprecated
-     * @see https://review.typo3.org/51272
      */
     protected function collectOverlayFlashMessages(array $languages)
     {
         $service = GeneralUtility::makeInstance(FlashMessageService::class);
 
         foreach ($languages as $language) {
-            $messages = $service->getMessageQueueByIdentifier(sprintf(self::OVERLAY_FLASH_MESSAGE_QUEUE, $language))->getAllMessagesAndFlush();
+            $messages = $service->getMessageQueueByIdentifier(
+                sprintf(FlashMessageUtility::QUEUE_IDENTIFIER, 'pages', 'content', $language)
+            )->getAllMessagesAndFlush();
             foreach ($messages as $message) {
                 $service->getMessageQueueByIdentifier()->addMessage($message);
             }

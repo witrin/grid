@@ -33,7 +33,7 @@ class ItemDefaultValuesProvider implements FormDataProviderInterface
         if (!empty($result['customData']['tx_grid']['items']['config'])) {
             $result['customData']['tx_grid']['items']['defaultValues'] = $this->getDefaultValues(
                 $result['customData']['tx_grid']['items']['config'],
-                $result['vanillaUid'],
+                $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
                 $result['tableName']
             );
         }

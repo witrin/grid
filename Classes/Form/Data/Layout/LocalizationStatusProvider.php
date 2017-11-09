@@ -17,14 +17,16 @@ namespace TYPO3\CMS\Grid\Form\Data\Layout;
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Grid\Form\Data\Traits\FlashMessageProvider;
 
 /**
  * Determines the localization status for the given grid areas
  */
 class LocalizationStatusProvider implements FormDataProviderInterface
 {
+    use FlashMessageProvider;
+
     /**
      * Add data
      *
@@ -53,7 +55,11 @@ class LocalizationStatusProvider implements FormDataProviderInterface
                 $result['customData']['tx_grid']['localization']['status'] !== 'bound' &&
                 $result['customData']['tx_grid']['localization']['mode'] === 'strict'
             ) {
-                $this->getFlashMessageQueue($result)->addMessage(
+                $this->getFlashMessageQueue(
+                    $result['tableName'],
+                    $result['customData']['tx_grid']['columnToProcess'],
+                    $result['customData']['tx_grid']['language']['uid']
+                )->addMessage(
                     GeneralUtility::makeInstance(
                         FlashMessage::class,
                         sprintf(
@@ -80,16 +86,5 @@ class LocalizationStatusProvider implements FormDataProviderInterface
     protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
-    }
-
-    /**
-     * Returns FlashMessageQueue
-     *
-     * @param array $data
-     * @return \TYPO3\CMS\Core\Messaging\FlashMessageQueue
-     */
-    protected function getFlashMessageQueue(array $data = null)
-    {
-        return GeneralUtility::makeInstance(FlashMessageService::class)->getMessageQueueByIdentifier();
     }
 }

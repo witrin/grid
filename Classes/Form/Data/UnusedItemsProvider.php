@@ -17,14 +17,16 @@ namespace TYPO3\CMS\Grid\Form\Data;
 
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Grid\Form\Data\Traits\FlashMessageProvider;
 
 /**
  * Resolve all unused items.
  */
 class UnusedItemsProvider implements FormDataProviderInterface
 {
+    use FlashMessageProvider;
+
     /**
      * Add data
      *
@@ -33,7 +35,7 @@ class UnusedItemsProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        $areaField = $result['customData']['tx_grid']['items']['config']['grid_area_field'];
+        $areaField = $result['customData']['tx_grid']['items']['config']['foreign_area_field'];
         $areas = array_flip(array_column((array)$result['customData']['tx_grid']['template']['areas'], 'uid'));
         $result['customData']['tx_grid']['template']['unused'] = [];
 
@@ -46,7 +48,11 @@ class UnusedItemsProvider implements FormDataProviderInterface
         }
 
         if (!empty($result['customData']['tx_grid']['template']['unused'])) {
-            $this->getFlashMessageQueue($result)->addMessage(
+            $this->getFlashMessageQueue(
+                $result['tableName'],
+                $result['customData']['tx_grid']['columnToProcess'],
+                $result['customData']['tx_grid']['language']['uid']
+            )->addMessage(
                 GeneralUtility::makeInstance(
                     FlashMessage::class,
                     $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:staleUnusedElementsWarning'),
@@ -72,16 +78,5 @@ class UnusedItemsProvider implements FormDataProviderInterface
     protected function getLanguageService()
     {
         return $GLOBALS['LANG'];
-    }
-
-    /**
-     * Returns FlashMessageQueue
-     *
-     * @param array $data
-     * @return \TYPO3\CMS\Core\Messaging\FlashMessageQueue
-     */
-    protected function getFlashMessageQueue(array $data = null)
-    {
-        return GeneralUtility::makeInstance(FlashMessageService::class)->getMessageQueueByIdentifier();
     }
 }
