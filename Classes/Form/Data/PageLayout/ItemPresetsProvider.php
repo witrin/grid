@@ -19,7 +19,7 @@ use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Process content types configuration in PageTsConfig `mod.wizards.newContentElement.wizardItems`
+ * Map `mod.wizards.newContentElement.wizardItems` into `tx_grid.pages.content.presets`
  */
 class ItemPresetsProvider implements FormDataProviderInterface
 {
@@ -42,15 +42,15 @@ class ItemPresetsProvider implements FormDataProviderInterface
             array_walk($group['elements.'], function(&$element) {
                 // map config entry `tt_content_defValues` to `defaultValues`
                 if (isset($element['tt_content_defValues.'])) {
-                    $element['defaultValues.'] = $element['tt_content_defValues.'];
+                    $element['defaults.'] = $element['tt_content_defValues.'];
                     unset($element['tt_content_defValues.']);
                 }
                 // extract additional default values from parameter string (old style)
                 if ($element['params']) {
                     $parameters = GeneralUtility::explodeUrl2Array($element['params'], true);
 
-                    $element['defaultValues.'] = array_merge(
-                        (array)$element['defaultValues'],
+                    $element['defaults.'] = array_merge(
+                        (array)$element['defaults'],
                         (array)$parameters['defVals']['tt_content']
                     );
 

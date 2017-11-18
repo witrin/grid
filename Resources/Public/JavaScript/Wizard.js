@@ -16,41 +16,46 @@
  * this JS code does the form logic for the content element wizard
  * based on jQuery UI
  */
-define(['jquery'], function($) {
+define(['jquery', 'TYPO3/CMS/Backend/Modal', 'TYPO3/CMS/Backend/Severity'], function($, Modal, Severity) {
     'use strict';
 
     var Wizard = {
-        advancedContainerIdentifier: '.t3js-content-element-wizard-advanced',
-        defaultContainerIdentifier: '.t3js-content-element-wizard-default',
-        itemIdentifier: '.t3js-content-element-wizard-item',
-        positionContainerIdentifier: '.t3js-content-element-wizard-positions',
-        itemContainerIdentifier: '.t3js-content-element-wizard-items'
+        identifier: {
+            container: '.t3js-content-wizard-container',
+            item: '[data-parameters]'
+        }
     };
 
     Wizard.initialize = function() {
-        $(Wizard.advancedContainerIdentifier).each(function() {
-            $(this).find(Wizard.itemIdentifier).on('click', function(event) {
+        $(this).find(Wizard.identifier.container).each(function() {
+            let url = $(this).attr('data-url');
+            let parameters = JSON.parse($(this).attr('data-parameters'));
+
+            $(this).find(Wizard.identifier.item).on('click', function(event) {
                 event.preventDefault();
 
-                $(this).find('input').prop('checked', true);
-                $(this).parents(Wizard.advancedContainerIdentifier).find(Wizard.positionContainerIdentifier)[0].scrollIntoView();
-            });
+                parameters = $.extend(true, parameters, JSON.parse($(this).attr('data-parameters')));
 
-            $(this).find(Wizard.positionContainerIdentifier).find('a').on('click', function(event) {
-                event.preventDefault();
-
-                window.location.href = $(this).parents('form').attr('action') +
-                    $(this).parents(Wizard.advancedContainerIdentifier).find(Wizard.itemContainerIdentifier).find('input:checked').parents('[data-parameters]').attr('data-parameters') +
-                    $(this).attr('data-parameters');
+                if (!$(this).is('[data-slide=next]')) {
+                    window.location.href = url + (url.indexOf('?') > -1 ? '&' : '?') + $.param(parameters);
+                }
             });
         });
-
-        $(Wizard.defaultContainerIdentifier).each(function() {
-            $(this).find(Wizard.itemIdentifier).on('click', function(event) {
-                event.preventDefault();
-
-                window.location.href = $(this).parents('form').attr('action') + $(this).attr('data-parameters');
-            });
+    };
+    
+    Wizard.show = function(url, title) {
+        Modal.advanced({
+            callback: function(currentModal) {
+                currentModal.find('.t3js-modal-body').addClass('t3-content-wizard-window');
+                currentModal.on('modal-loaded', function() {
+                    $.proxy(Wizard.initialize, this)();
+                });
+            },
+            content: url,
+            severity: Severity.notice,
+            size: Modal.sizes.large,
+            title: title,
+            type: Modal.types.ajax,
         });
     };
 

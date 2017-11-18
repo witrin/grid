@@ -31,10 +31,14 @@ class ItemDefaultValuesProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         if (!empty($result['customData']['tx_grid']['items']['config'])) {
-            $result['customData']['tx_grid']['items']['defaultValues'] = $this->getDefaultValues(
-                $result['customData']['tx_grid']['items']['config'],
-                $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
-                $result['tableName']
+            $result['customData']['tx_grid']['items']['defaultValues'] = array_merge(
+                $this->getDefaultValues(
+                    $result['customData']['tx_grid']['items']['config'],
+                    $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
+                    $result['tableName']
+                ),
+                // allows overwriting through the caller
+                array_filter((array)$result['customData']['tx_grid']['items']['defaultValues'])
             );
         }
 

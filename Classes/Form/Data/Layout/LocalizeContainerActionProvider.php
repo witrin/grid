@@ -60,13 +60,7 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
             $result['customData']['tx_grid']['actions']['localize'] = [];
 
             foreach ($languages as $language) {
-                $attributes = $this->getAttributes($result, ['language' => $language]);
-                $result['customData']['tx_grid']['actions']['localize'][] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                    ]
-                );
+                $result['customData']['tx_grid']['actions']['localize'][] = $this->getAttributes($result, ['language' => $language]);
             }
         }
 
@@ -93,6 +87,7 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
      * @param array $result
      * @param array $parameters
      * @return bool
+     * @todo Check if this is needed anymore
      */
     protected function isAvailable(array $result, array $parameters) : bool
     {
@@ -119,9 +114,9 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
         }
 
         return [
-            'url' => [
-                'module' => 'record_edit',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'record_edit',
+                [
                     'edit' => [
                         $result['tableName'] => [
                             $result['effectivePid'] => 'new'
@@ -144,7 +139,7 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
                     ],
                     'returnUrl' => $result['returnUrl']
                 ]
-            ],
+            ),
             'title' => $parameters['language']['title']
         ];
     }

@@ -45,7 +45,7 @@ class PasteItemActionProvider implements FormDataProviderInterface
                 $title = BackendUtility::getRecordTitle($table, $record);
 
                 foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-                    $attributes = $this->getAttributes(
+                    $area['actions']['paste'] = $this->getAttributes(
                         $result,
                         [
                             'area' => $area,
@@ -56,11 +56,10 @@ class PasteItemActionProvider implements FormDataProviderInterface
                             'section' => 'body'
                         ]
                     );
-                    $area['actions']['paste'] = $attributes;
                 }
 
                 foreach ($result['customData']['tx_grid']['items']['children'] as &$child) {
-                    $attributes = $this->getAttributes(
+                    $child['customData']['tx_grid']['actions']['paste'] = $this->getAttributes(
                         $result,
                         [
                             'child' => $child,
@@ -71,7 +70,6 @@ class PasteItemActionProvider implements FormDataProviderInterface
                             'section' => 'after'
                         ]
                     );
-                    $child['customData']['tx_grid']['actions']['paste'] = $attributes;
                 }
             }
         }

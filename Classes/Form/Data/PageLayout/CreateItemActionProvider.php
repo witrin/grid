@@ -26,6 +26,6 @@ class CreateItemActionProvider extends \TYPO3\CMS\Grid\Form\Data\Layout\CreateIt
      */
     protected function useWizard(array $result)
     {
-        return (bool)$result['pageTsConfig']['mod.']['web_layout.']['disableNewContentElementWizard'];
+        return !(bool)$result['pageTsConfig']['mod.']['web_layout.']['disableNewContentElementWizard'];
     }
 }

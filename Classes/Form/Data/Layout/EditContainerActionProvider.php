@@ -35,13 +35,7 @@ class EditContainerActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         if ($this->isAvailable($result)) {
-            $attributes = $this->getAttributes($result);
-            $result['customData']['tx_grid']['actions']['edit'] = array_merge(
-                $attributes,
-                [
-                    'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']),
-                ]
-            );
+            $result['customData']['tx_grid']['actions']['edit'] = $this->getAttributes($result);
         }
 
         return $result;
@@ -86,9 +80,9 @@ class EditContainerActionProvider implements FormDataProviderInterface
     protected function getAttributes(array $result, array $parameters = []) : array
     {
         return [
-            'url' => [
-                'module' => 'record_edit',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'record_edit',
+                [
                     'edit' => [
                         $result['tableName'] => [
                             $result['vanillaUid'] => 'edit'
@@ -96,7 +90,7 @@ class EditContainerActionProvider implements FormDataProviderInterface
                     ],
                     'returnUrl' => $result['returnUrl']
                 ]
-            ],
+            ),
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open',
             'priority' => 20

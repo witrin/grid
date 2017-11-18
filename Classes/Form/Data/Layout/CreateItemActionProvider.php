@@ -34,37 +34,27 @@ class CreateItemActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-            if ($this->isAvailable($result, ['area' => $area])) {
-                $attributes = $this->getAttributes(
+            if (!$this->isAvailable($result, ['area' => $area])) {
+                continue;
+            }
+
+            $area['actions']['insert'] = $this->getAttributes(
+                $result,
+                [
+                    'area' => $area,
+                    'section' => 'body'
+                ]
+            );
+
+            foreach ($area['items'] as &$item) {
+                $item['customData']['tx_grid']['actions']['append'] = $this->getAttributes(
                     $result,
                     [
                         'area' => $area,
-                        'section' => 'body'
+                        'item' => $item,
+                        'section' => 'after'
                     ]
                 );
-                $area['actions']['insert'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                    ]
-                );
-
-                foreach ($area['items'] as &$item) {
-                    $attributes = $this->getAttributes(
-                        $result,
-                        [
-                            'area' => $area,
-                            'item' => $item,
-                            'section' => 'after'
-                        ]
-                    );
-                    $item['customData']['tx_grid']['actions']['append'] = array_merge(
-                        $attributes,
-                        [
-                            'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                        ]
-                    );
-                }
             }
         }
 
@@ -116,61 +106,64 @@ class CreateItemActionProvider implements FormDataProviderInterface
      */
     protected function getAttributes(array $result, array $parameters) : array
     {
-        $url = null;
+        $attributes = null;
 
         if ($this->useWizard($result)) {
-            $url = [
-                'module' => 'content_preset',
-                'parameters' => [
-                    'action' => 'indexAction',
-                    'containerTable' => $result['tableName'],
-                    'containerField' => $result['customData']['tx_grid']['columnToProcess'],
-                    'containerUid' => $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
-                    'areaUid' => $parameters['area']['uid'],
-                    'languageUid' => $result['customData']['tx_grid']['language']['uid'],
-                    'returnUrl' => $result['returnUrl']
-                ]
+            $attributes = [
+                'data' => [
+                    'url' => BackendUtility::getModuleUrl(
+                        'content_preset',
+                        [
+                            'action' => 'indexAction',
+                            'containerTable' => $result['tableName'],
+                            'containerField' => $result['customData']['tx_grid']['columnToProcess'],
+                            'containerUid' => $result['customData']['tx_grid']['items']['config']['effectiveParentUid'],
+                            'areaUid' => $parameters['area']['uid'],
+                            'languageUid' => $result['customData']['tx_grid']['language']['uid'],
+                            'returnUrl' => $result['returnUrl']
+                        ] + (isset($parameters['item']['vanillaUid']) ? ['ancestorUid' => $parameters['item']['vanillaUid']] : [])
+                    ),
+                    'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:newContentElement')
+                ],
+                'class' => 't3js-content-wizard-show'
             ];
-
-            if ($parameters['item']) {
-                $url['parameters']['ancestorUid'] = $parameters['item']['vanillaUid'];
-            }
         } else {
-            $defaultValues = array_merge([
+            $defaults = array_merge([
                 $result['customData']['tx_grid']['items']['config']['foreign_area_field'] => $parameters['area']['uid'],
                 $result['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'] => $result['customData']['tx_grid']['language']['uid']
             ], $result['customData']['tx_grid']['items']['defaultValues']);
 
-            $url = [
-                'module' => 'record_edit',
-                'parameters' => [
-                    'edit' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
-                            ($parameters['item'] ? -(int)$parameters['item']['vanillaUid'] : $result['effectivePid']) => 'new'
-                        ]
-                    ],
-                    'defVals' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => TcaUtility::filterHiddenFields(
-                            $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
-                            $defaultValues
-                        )
-                    ],
-                    'overrideVals' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => array_diff_key(
-                            $defaultValues,
-                            TcaUtility::filterHiddenFields(
+            $attributes = [
+                'url' => BackendUtility::getModuleUrl(
+                    'record_edit',
+                    [
+                        'edit' => [
+                            $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
+                                ($parameters['item'] ? -(int)$parameters['item']['vanillaUid'] : $result['effectivePid']) => 'new'
+                            ]
+                        ],
+                        'defVals' => [
+                            $result['customData']['tx_grid']['items']['config']['foreign_table'] => TcaUtility::filterHiddenFields(
                                 $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
-                                $defaultValues
+                                $defaults
                             )
-                        )
-                    ],
-                    'returnUrl' => $result['returnUrl']
-                ]
+                        ],
+                        'overrideVals' => [
+                            $result['customData']['tx_grid']['items']['config']['foreign_table'] => array_diff_key(
+                                $defaults,
+                                TcaUtility::filterHiddenFields(
+                                    $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
+                                    $defaults
+                                )
+                            )
+                        ],
+                        'returnUrl' => $result['returnUrl']
+                    ]
+                )
             ];
         }
 
-        return [
-            'url' => $url,
+        return $attributes + [
             'icon' => 'actions-add',
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newContentElement'),
             'section' => $parameters['section']

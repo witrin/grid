@@ -1,0 +1,11 @@
+<html data-namespace-typo3-fluid="true">
+<f:if condition="{infoBox.message}">
+    <f:be.infobox title="{infoBox.title}">
+        {infoBox.message}
+    </f:be.infobox>
+</f:if>
+<form id="ContentWizardController" action="{form.action}" method="post">
+    <f:format.raw>{form.content}</f:format.raw>
+</form>
+<f:format.raw>{form.after}</f:format.raw>
+</html>

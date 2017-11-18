@@ -1,0 +1,32 @@
+<html data-namespace-typo3-fluid="true">
+<f:if condition="{steps.presets} && {steps.positions}">
+    <f:then>
+        <div id="content-wizard-container" class="t3-content-wizard-container t3js-content-wizard-container carousel slide"
+             data-url="{url}" data-parameters="{parameters -> f:format.json()}" data-ride="carousel" data-interval="false">
+            <div class="carousel-inner" role="listbox">
+                <div class="item active" data-slide="next">
+                    <div class="t3-content-wizard-title">
+                        <h2>{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:1_selectType')}</h2>
+                    </div>
+                    <div class="t3-content-wizard-body">
+                        {steps.presets -> f:format.raw()}
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="t3-content-wizard-title">
+                        <h2>{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:2_selectPosition')}</h2>
+                    </div>
+                    <div class="t3-content-wizard-body">
+                        {steps.positions -> f:format.raw()}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </f:then>
+    <f:else if="{steps.presets}">
+        <div class="t3-content-wizard-container t3js-content-wizard-container" data-url="{url}" data-parameters="{parameters -> f:format.json()}">
+            {steps.presets -> f:format.raw()}
+        </div>
+    </f:else>
+</f:if>
+</html>

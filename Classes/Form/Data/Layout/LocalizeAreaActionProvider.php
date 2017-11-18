@@ -36,11 +36,20 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
         $areas = array_column($result['customData']['tx_grid']['template']['areas'], null, 'uid');
 
         foreach ($result['customData']['tx_grid']['overlays'] as &$overlay) {
-            $translated = array_column(array_column((array)$overlay['customData']['tx_grid']['items']['children'], 'defaultLanguageRow'), 'uid');
+            $translated = array_column(
+                array_column(
+                    (array)$overlay['customData']['tx_grid']['items']['children'],
+                    'defaultLanguageRow'
+                ),
+                'uid'
+            );
+
             foreach ($overlay['customData']['tx_grid']['template']['areas'] as &$area) {
-                if ($this->isAvailable($result, ['area' => $areas[$area['uid']], 'translated' => $translated])) {
-                    $area['actions']['localize'] = $this->getAttributes($overlay, ['overlay' => $areas[$area['uid']], 'area' => $area]);
+                if (!$this->isAvailable($result, ['area' => $areas[$area['uid']], 'translated' => $translated])) {
+                    continue;
                 }
+
+                $area['actions']['localize'] = $this->getAttributes($overlay, ['overlay' => $areas[$area['uid']], 'area' => $area]);
             }
         }
 

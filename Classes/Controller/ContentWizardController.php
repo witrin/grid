@@ -25,11 +25,12 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
 use TYPO3\CMS\Grid\Utility\TcaUtility;
+use TYPO3\CMS\Grid\Controller\AbstractController;
 
 /**
- * Controller for content element wizard
+ * Wizard controller for new content
  */
-class ContentPresetController extends AbstractController
+class ContentWizardController extends AbstractController
 {
     /**
      * Legacy interface
@@ -49,8 +50,7 @@ class ContentPresetController extends AbstractController
             'containerField' => 'content',
             'returnUrl' => $params['returnUrl'],
             'areaUid' => $params['colPos'],
-            'ancestorUid' => $params['uid_pid'] < 0 ? abs((int)$params['uid_pid']) : null,
-            'pageUid' => $params['uid_pid'] > 0 ? (int)$params['uid_pid'] : null
+            'ancestorUid' => $params['uid_pid'] < 0 ? abs((int)$params['uid_pid']) : null
         ]);
 
         return $this->indexAction($request, $response);
@@ -63,56 +63,66 @@ class ContentPresetController extends AbstractController
      * @param ResponseInterface $response
      * @return ResponseInterface
      * @throws \TYPO3\CMS\Backend\Form\Exception
-     * @todo Deprecate `pageUid`
      */
     public function indexAction(ServerRequestInterface $request, ResponseInterface $response)
     {
         $parameters = $request->getQueryParams();
-
-        $containerUid = (int)$parameters['containerUid'];
-        $languageUid = isset($parameters['languageUid']) ? (int)$parameters['languageUid'] : 0;
-        $ancestorUid = isset($parameters['ancestorUid']) ? (int)$parameters['ancestorUid'] : null;
-        $areaUid = isset($parameters['areaUid']) ? (int)$parameters['areaUid'] : null;
-        $returnUrl = GeneralUtility::sanitizeLocalUrl($parameters['returnUrl']);
-        $pageUid = isset($parameters['pageUid']) ? (int)$parameters['pageUid'] : null;
+        $parameters['returnUrl'] = GeneralUtility::sanitizeLocalUrl($parameters['returnUrl']);
+        $parameters['context'] = in_array($parameters['context'], ['modal', 'module']) ? $parameters['context'] : 'modal';
+        
+        $itemsConfiguration = $GLOBALS['TCA'][(string)$parameters['containerTable']]['columns'][(string)$parameters['containerField']];
 
         $formDataGroup = GeneralUtility::makeInstance(ContainerGroup::class);
         $formDataCompiler = GeneralUtility::makeInstance(FormDataCompiler::class, $formDataGroup);
         $formDataCompilerInput = [
             'tableName' => (string)$parameters['containerTable'],
-            'vanillaUid' => $containerUid,
+            'vanillaUid' => (int)$parameters['containerUid'],
             'command' => 'edit',
-            'returnUrl' => $returnUrl,
+            'returnUrl' => $parameters['returnUrl'],
             'columnsToProcess' => [(string)$parameters['containerField']],
             'customData' => [
                 'tx_grid' => [
                     'columnToProcess' => (string)$parameters['containerField'],
-                        'containerProviderList' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup'][((string)$parameters['containerTable'] === 'pages'
-                            ? 'pageContentCreation' : 'contentCreation')]
+                    'containerProviderList' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup'][
+                        ((string)$parameters['containerTable'] === 'pages' ? 'pageLayout' : 'contentContainer')
+                    ],
+                    'items' => [
+                        'defaultValues' => [
+                            $GLOBALS['TCA'][$itemsConfiguration['foreign_table']]['ctrl']['languageField'] => (int)$parameters['languageUid'] ?? 0
+                        ] + ($parameters['areaUid'] ? [$itemsConfiguration['config']['foreign_area_field'] => (int)$parameters['areaUid']] : [])
+                    ]
                 ]
             ]
         ];
-        $formData = array_merge([
-            'languageUid' => $languageUid
-        ], $formDataCompiler->compile($formDataCompilerInput));
+        $formData = $formDataCompiler->compile($formDataCompilerInput);
 
         $formResultCompiler = GeneralUtility::makeInstance(FormResultCompiler::class);
-        $formResult = GeneralUtility::makeInstance(NodeFactory::class)->create(array_merge(
-            ['renderType' => 'contentPresetTabContainer'],
+        $formResult = GeneralUtility::makeInstance(NodeFactory::class)->create(array_merge_recursive(
+            [
+                'renderType' => 'contentWizardContainer',
+                'renderData' => [
+                    'context' => $parameters['context'],
+                    'steps' => array_merge(['presets'], ($parameters['areaUid'] ? [] : ['positions'])),
+                    'url' => BackendUtility::getModuleUrl(
+                        'record_edit',
+                        [
+                            'returnUrl' => $parameters['returnUrl']
+                        ]
+                    ),
+                    'parameters' => [
+                        'edit' => [
+                            $formData['customData']['tx_grid']['items']['config']['foreign_table'] => [
+                                $parameters['ancestorUid'] ? '-' . (int)$parameters['ancestorUid'] : $formData['effectivePid'] => 'new'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             $formData
         ))->render();
         $formResultCompiler->mergeResult($formResult);
 
-        $itemsConfig = $formData['customData']['tx_grid']['items']['config'];
-        $vanillaItemsTca = $formData['customData']['tx_grid']['items']['vanillaTca'];
-
-        $values = array_merge([
-            $itemsConfig['foreign_area_field'] => $areaUid,
-            $vanillaItemsTca['ctrl']['languageField'] => $languageUid
-        ], $formData['customData']['tx_grid']['items']['defaultValues']);
-        $pageUid = isset($pageUid) ? $pageUid : $formData['effectivePid'];
-
-        if ($returnUrl) {
+        if ($parameters['context'] === 'module' && $returnUrl) {
             $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
             $buttonBar->addButton(
                 $buttonBar->makeLinkButton()
@@ -123,36 +133,24 @@ class ContentPresetController extends AbstractController
         }
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename('EXT:grid/Resources/Private/Templates/ContentPreset/Index.html');
+        $view->setTemplatePathAndFilename('EXT:grid/Resources/Private/Templates/ContentWizard/Index.html');
 
         $view->assignMultiple([
             'form' => [
                 'content' => $formResult['html'],
                 'after' => $formResultCompiler->printNeededJSFunctions(),
-                'action' => BackendUtility::getModuleUrl(
-                    'record_edit',
-                    [
-                        'edit' => [
-                            $itemsConfig['foreign_table'] => [
-                                $ancestorUid !== null ? '-' . $ancestorUid : $pageUid => 'new'
-                            ]
-                        ],
-                        'defVals' => [
-                            $itemsConfig['foreign_table'] => TcaUtility::filterHiddenFields($vanillaItemsTca['columns'], $values)
-                        ],
-                        'overrideVals' => [
-                            $itemsConfig['foreign_table'] => array_diff_key($values, TcaUtility::filterHiddenFields($vanillaItemsTca['columns'], $values))
-                        ],
-                        'returnUrl' => $returnUrl
-                    ]
-                )
+                'action' => '#'
             ]
         ]);
 
         $formResultCompiler->addCssFiles();
-        $this->moduleTemplate->setContent($view->render());
 
-        $response->getBody()->write($this->moduleTemplate->renderContent());
+        if ($parameters['context'] === 'module') {
+            $this->moduleTemplate->setContent($view->render());
+            $response->getBody()->write($this->moduleTemplate->renderContent());
+        } else {
+            $response->getBody()->write($view->render());
+        }
 
         return $response;
     }

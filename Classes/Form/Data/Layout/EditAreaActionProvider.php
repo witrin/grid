@@ -34,15 +34,11 @@ class EditAreaActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-            if ($this->isAvailable($result, ['area' => $area])) {
-                $attributes = $this->getAttributes($result, ['area' => $area]);
-                $area['actions']['edit'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                    ]
-                );
+            if (!$this->isAvailable($result, ['area' => $area])) {
+                continue;
             }
+
+            $area['actions']['edit'] = $this->getAttributes($result, ['area' => $area]);
         }
 
         return $result;
@@ -85,9 +81,9 @@ class EditAreaActionProvider implements FormDataProviderInterface
     protected function getAttributes(array $result, array $parameters) : array
     {
         return [
-            'url' => [
-                'module' => 'record_edit',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'record_edit',
+                [
                     'edit' => [
                         $result['customData']['tx_grid']['items']['config']['foreign_table'] => [
                             implode(
@@ -104,7 +100,7 @@ class EditAreaActionProvider implements FormDataProviderInterface
                     'recTitle' => $result['recordTitle'],
                     'returnUrl' => $result['returnUrl']
                 ]
-            ],
+            ),
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editColumn'),
             'icon' => 'actions-document-open',
             'section' => 'header',

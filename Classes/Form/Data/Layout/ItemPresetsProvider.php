@@ -18,6 +18,7 @@ namespace TYPO3\CMS\Grid\Form\Data\Layout;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Core\Service\DependencyOrderingService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Grid\Utility\TcaUtility;
 
 /**
  * Add content type groups from PageTsConfig `tx_grid.<table>.<column>.presets`
@@ -54,6 +55,7 @@ class ItemPresetsProvider implements FormDataProviderInterface
                 'elements' => $this->processGroup(
                     $group,
                     $result['customData']['tx_grid']['items']['config']['foreign_table'],
+                    $result['customData']['tx_grid']['items']['defaultValues'],
                     $result['pageTsConfig']
                 )
             ];
@@ -76,7 +78,7 @@ class ItemPresetsProvider implements FormDataProviderInterface
      * @param array $pageTsConfig
      * @return array
      */
-    protected function processGroup(array &$group, $table, array &$pageTsConfig)
+    protected function processGroup(array $group, $table, array $defaults, array $pageTsConfig)
     {
         $filter = $group['show'] === '*' ? true : GeneralUtility::trimExplode(',', $group['show'], true);
         $result = [];
@@ -91,14 +93,16 @@ class ItemPresetsProvider implements FormDataProviderInterface
                 if ($this->isValidElement($element, $table, $pageTsConfig)) {
                     $element['key'] = $key;
 
-                    // @todo default values for the relationship needs to be merged here
-                    foreach ((array)$element['defaultValues.'] as $column => $value) {
-                        $element['parameters'] .= is_array($GLOBALS['TCA'][$table]['columns'][$column]) ?
-                            '&defVals[' . $table . '][' . $column . ']=' . rawurlencode($value) : '';
-                    }
+                    $parameters = array_merge((array)$element['defaults.'], $defaults);
 
-                    $element['defaultValues'] = $element['defaultValues.'];
-                    unset($element['defaultValues.']);
+                    $element['parameters'] = [
+                        'defVals' => [
+                            $table => TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters)
+                        ],
+                        'overrideVals' => [
+                            $table => array_diff_key($parameters, TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters))
+                        ],
+                    ];
 
                     $result[$key] = $element;
                 }
@@ -114,12 +118,12 @@ class ItemPresetsProvider implements FormDataProviderInterface
      * @param array $pageTsConfig
      * @return bool
      */
-    protected function isValidElement(array &$element, $table, array &$pageTsConfig)
+    protected function isValidElement(array $element, $table, array $pageTsConfig)
     {
         $tceForm = &$pageTsConfig['TCEFORM.']['table.'][$table . '.'];
         $tca = &$GLOBALS['TCA'][$table];
 
-        foreach ((array)$element['defaultValues'] as $column => $value) {
+        foreach ((array)$element['defaults.'] as $column => $value) {
             if (is_array($tca['columns'][$column])) {
                 // get information about if the field value is OK
                 $config = &$tca['columns'][$column]['config'];
@@ -168,7 +172,7 @@ class ItemPresetsProvider implements FormDataProviderInterface
      * @param string $key
      * @return void
      */
-    protected function prepareDependencyOrdering(&$configuration, $key)
+    protected function prepareDependencyOrdering($configuration, $key)
     {
         if (isset($configuration[$key])) {
             $configuration[$key] = GeneralUtility::trimExplode(',', $configuration[$key]);

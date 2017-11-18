@@ -34,15 +34,11 @@ class DeleteItemActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
-            if ($this->isAvailable($result, ['item' => $item])) {
-                $attributes = $this->getAttributes($result, ['item' => $item]);
-                $item['customData']['tx_grid']['actions']['delete'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                    ]
-                );
+            if (!$this->isAvailable($result, ['item' => $item])) {
+                continue;
             }
+
+            $item['customData']['tx_grid']['actions']['delete'] =  $this->getAttributes($result, ['item' => $item]);
         }
 
         return $result;
@@ -82,9 +78,9 @@ class DeleteItemActionProvider implements FormDataProviderInterface
     protected function getAttributes(array $result, array $parameters) : array
     {
         return [
-            'url' => [
-                'module' => 'tce_db',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'tce_db',
+                [
                     'prErr' => 1,
                     'uPt' => 1,
                     'cmd' => [
@@ -96,7 +92,7 @@ class DeleteItemActionProvider implements FormDataProviderInterface
                     ],
                     'redirect' => $result['returnUrl']
                 ]
-            ],
+            ),
             'class' => 't3js-modal-trigger',
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:deleteItem'),
             'icon' => 'actions-edit-delete',

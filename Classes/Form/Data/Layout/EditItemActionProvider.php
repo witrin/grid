@@ -34,15 +34,11 @@ class EditItemActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
-            if ($this->isAvailable($result, ['item' => $item])) {
-                $attributes = $this->getAttributes($result, ['item' => $item]);
-                $item['customData']['tx_grid']['actions']['edit'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters']) . '#element-' . $item['tableName'] . '-' . $item['vanillaUid']
-                    ]
-                );
+            if (!$this->isAvailable($result, ['item' => $item])) {
+                continue;
             }
+                
+            $item['customData']['tx_grid']['actions']['edit'] = $this->getAttributes($result, ['item' => $item]);
         }
 
         return $result;
@@ -82,9 +78,9 @@ class EditItemActionProvider implements FormDataProviderInterface
     protected function getAttributes(array $result, array $parameters) : array
     {
         return [
-            'url' => [
-                'module' => 'record_edit',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'record_edit',
+                [
                     'edit' => [
                         $parameters['item']['tableName'] => [
                             $parameters['item']['vanillaUid'] => 'edit'
@@ -92,7 +88,7 @@ class EditItemActionProvider implements FormDataProviderInterface
                     ],
                     'returnUrl' => $parameters['item']['returnUrl']
                 ]
-            ],
+            ). '#element-' . $parameters['item']['tableName'] . '-' . $parameters['item']['vanillaUid'],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open',
             'section' => 'header',

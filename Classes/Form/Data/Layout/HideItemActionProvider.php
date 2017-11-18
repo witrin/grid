@@ -33,16 +33,11 @@ class HideItemActionProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {
-            if ($this->isAvailable($result, ['item' => $item])) {
-                $enableField = $item['processedTca']['ctrl']['enablecolumns']['disabled'];
-                $attributes = $this->getAttributes($result, ['item' => $item]);
-                $item['customData']['tx_grid']['actions'][$item['databaseRow'][$enableField] ? 'enable' : 'disable'] = array_merge(
-                    $attributes,
-                    [
-                        'url' => BackendUtility::getModuleUrl($attributes['url']['module'], $attributes['url']['parameters'])
-                    ]
-                );
+            if (!$this->isAvailable($result, ['item' => $item])) {
+                continue;
             }
+            $enableField = $item['processedTca']['ctrl']['enablecolumns']['disabled'];
+            $item['customData']['tx_grid']['actions'][$item['databaseRow'][$enableField] ? 'enable' : 'disable'] = $this->getAttributes($result, ['item' => $item]);
         }
 
         return $result;
@@ -89,9 +84,9 @@ class HideItemActionProvider implements FormDataProviderInterface
         $enableField = $parameters['item']['processedTca']['ctrl']['enablecolumns']['disabled'];
 
         return [
-            'url' => [
-                'module' => 'tce_db',
-                'parameters' => [
+            'url' => BackendUtility::getModuleUrl(
+                'tce_db',
+                [
                     'prErr' => 1,
                     'uPt' => 1,
                     'data' => [
@@ -103,7 +98,7 @@ class HideItemActionProvider implements FormDataProviderInterface
                     ],
                     'redirect' => $result['returnUrl']
                 ]
-            ],
+            ),
             'title' => $this->getLanguageService()->sL(
                 $parameters['item']['databaseRow'][$enableField] ?
                     'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide' :

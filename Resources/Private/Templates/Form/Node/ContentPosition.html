@@ -1,38 +1,42 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
-<table class="table table-condensed table-bordered table-vertical-top">
-    <colgroup>
-        <f:for each="{columns}" as="column">
-            <col style="width: {column.width}%"></col>
-        </f:for>
-    </colgroup>
-    <f:for each="{rows}" as="row">
-        <tr>
-            <f:for each="{row.cells}" as="cell">
-                <td class="col-nowrap col-min"">
-                    <p>
-                        <strong>{cell.title}</strong>
-                    </p>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#" data-parameters="{cell.parameters}">
-                                <i class="t3-icon fa fa-long-arrow-left" title="Insert new record here"></i>
-                            </a>
-                        </li>
-                        <f:for each="{cell.elements}" as="element">
+<div class="container-fluid">
+    <table class="table table-condensed table-bordered table-vertical-top">
+        <colgroup>
+            <f:for each="{columns}" as="column">
+                <col style="width: {column}%"></col>
+            </f:for>
+        </colgroup>
+        <f:for each="{rows}" as="row">
+            <tr>
+                <f:for each="{row}" as="cell">
+                    <td class="col-nowrap col-min" valign="top"
+                        rowspan="{cell.row.end - cell.row.start + 1}"
+                        colspan="{cell.column.end - cell.column.start + 1}">
+                        <p>
+                            <strong>{cell.title}</strong>
+                        </p>
+                        <ul class="list-unstyled">
                             <li>
-                                {g:record.icon(table: '{element.table}', data: '{element.data}', size: 'small') -> f:format.html()}
-                                {element.title}
-                            </li>
-                            <li>
-                                <a href="#" data-parameters="{element.parameters}">
-                                    <i class="t3-icon fa fa-long-arrow-left" title="Insert new record here"></i>
+                                <a href="#" data-parameters="{cell.position.parameters -> f:format.json()}">
+                                    <i class="t3-icon fa fa-long-arrow-left" title="{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:insertNewRecordHere')}"></i>
                                 </a>
                             </li>
-                        </f:for>
-                    </ul>
-                </td>
-            </f:for>
-        </tr>
-    </f:for>
-</table>
+                            <f:for each="{cell.items}" as="item">
+                                <li>
+                                    {g:record.icon(table: '{item.tableName}', data: '{item.databaseRow}', size: 'small')}
+                                    <span>{item.recordTitle}</span>
+                                </li>
+                                <li>
+                                    <a href="#" data-parameters="{item.customData.tx_grid.position.parameters -> f:format.json()}">
+                                        <i class="t3-icon fa fa-long-arrow-left" title="{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:insertNewRecordHere')}"></i>
+                                    </a>
+                                </li>
+                            </f:for>
+                        </ul>
+                    </td>
+                </f:for>
+            </tr>
+        </f:for>
+    </table>
+</div>
 </html>

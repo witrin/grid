@@ -23,12 +23,12 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  *
  * This is an entry container called from controllers.
  */
-class ContentPresetTabContainer extends AbstractContainer
+class ContentWizardContainer extends AbstractContainer
 {
     /**
      * @var string
      */
-    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/ContentPresetTabContainer.html';
+    protected $templatePathAndFileName = 'EXT:grid/Resources/Private/Templates/Form/Node/ContentWizardContainer.html';
 
     /**
      * Entry method
@@ -39,11 +39,17 @@ class ContentPresetTabContainer extends AbstractContainer
     {
         $result = $this->initializeResultArray();
         $view = $this->initializeView();
+        $steps = [];
+
+        foreach ((array)$this->data['renderData']['steps'] as $step) {
+            $steps[$step] = $this->{'render' . ucfirst($step)}();
+        }
 
         $view->assignMultiple([
-            'presets' => $this->renderPresets(),
-            'areas' => $this->renderAreas(),
-            'tca' => $this->data['customData']['tx_grid']['items']['config']
+            'steps' => $steps,
+            'context' => $this->data['renderData']['context'],
+            'url' => $this->data['renderData']['url'],
+            'parameters' => $this->data['renderData']['parameters']
         ]);
 
         $result['html'] = $view->render();
@@ -52,8 +58,9 @@ class ContentPresetTabContainer extends AbstractContainer
     }
 
     /**
+     * Render the presets for selection
+     *
      * @return string
-     * @throws \TYPO3\CMS\Backend\Form\Exception
      */
     protected function renderPresets()
     {
@@ -65,7 +72,7 @@ class ContentPresetTabContainer extends AbstractContainer
             foreach ($group['elements'] as $element) {
                 $formResult = $this->nodeFactory->create([
                     'renderType' => 'contentPreset',
-                    'renderData' => $element
+                    'renderData' => $this->data['renderData'] + ['preset' => $element]
                 ])->render();
 
                 $content .= $formResult['html'];
@@ -78,9 +85,11 @@ class ContentPresetTabContainer extends AbstractContainer
         }
 
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Templates/DocumentTemplate/Tabs.html'));
+        $view->setTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Templates/DocumentTemplate/Tabs.html')
+        );
         $view->assignMultiple(array(
-            'id' => 'DTM-' . GeneralUtility::shortMD5('content-element-wizard'),
+            'id' => 'DTM-' . GeneralUtility::shortMD5('content-presets-tab-container'),
             'items' => $tabs,
             'defaultTabIndex' => 1,
             'wrapContent' => true,
@@ -90,20 +99,23 @@ class ContentPresetTabContainer extends AbstractContainer
         return $view->render();
     }
 
-    protected function renderAreas()
+    /**
+     * Render the areas for selection
+     *
+     * @return string
+     */
+    protected function renderPositions()
     {
-        if ($this->data['processedTca']['backendLayout']) {
-            $formResult = $this->nodeFactory->create(array_merge($this->data, [
-                'renderType' => 'backendLayoutPositionContainer'
-            ]))->render();
+        $formResult = $this->nodeFactory->create(array_merge($this->data, [
+            'renderType' => 'contentPositionContainer'
+        ]))->render();
 
-            return $formResult['html'];
-        }
-
-        return null;
+        return $formResult['html'];
     }
 
     /**
+     * Get the template path
+     *
      * @return string
      */
     protected function getTemplatePathAndFilename()
@@ -112,6 +124,8 @@ class ContentPresetTabContainer extends AbstractContainer
     }
 
     /**
+     * Initialize the resulkt array
+     *
      * @return array
      */
     protected function initializeResultArray(): array

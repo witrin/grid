@@ -1,17 +1,16 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
 <div class="media">
-    <a href="#" class="t3-content-element-wizard-item t3js-content-element-wizard-item" data-parameters="{element.parameters}">
-        <div class="t3-content-element-wizard-item-select media-left">
-            <input type="radio" name="element" />
-        </div>
-        <div class="t3-content-element-wizard-item-icon media-left">
-            {g:icon(identifier: '{element.iconIdentifier}')}
-        </div>
-        <div class="t3-content-element-wizard-item-body media-body">
-            <strong>{element.title}</strong>
+    <div class="t3-content-wizard-preset-icon media-left">
+        <g:tag name="a" additionalAttributes="{href: '#content-wizard-container'}" data="{data}">
+            {g:icon(identifier: '{preset.iconIdentifier}')}
+        </g:tag>
+    </div>
+    <div class="t3-content-wizard-preset-body media-body">
+        <g:tag name="a" additionalAttributes="{href: '#content-wizard-container'}" data="{data}">
+            <strong>{preset.title}</strong>
             <br />
-            {element.description}
-        </div>
-    </a>
+            {preset.description}
+        </g:tag>
+    </div>
 </div>
 </html>

@@ -15,7 +15,7 @@
  * Module: TYPO3/CMS/Grid/Actions
  * JavaScript implementations for page actions
  */
-define(['jquery', 'TYPO3/CMS/Backend/Storage'], function($, Storage) {
+define(['jquery', 'TYPO3/CMS/Backend/Storage', 'TYPO3/CMS/Grid/Wizard'], function($, Storage, Wizard) {
 	'use strict';
 
 	/**
@@ -28,12 +28,13 @@ define(['jquery', 'TYPO3/CMS/Backend/Storage'], function($, Storage) {
 		},
 		identifier: {
 			gridContainer: '.t3js-content-container',
-			showHiddenContent: '.t3js-hidden-content-toggle',
+			toggleContentVisibility: '.t3js-content-visibility-toggle',
 			hiddenContent: '.t3js-hidden-content',
-
+			showContentWizard: '.t3js-content-wizard-show'
 		},
 		elements: {
-			$showHiddenContentCheckbox: null
+			$toggleContentVisibilityCheckbox: null,
+			$showContentWizardButton: null
 		},
 		documentIsReady: false
 	};
@@ -43,20 +44,22 @@ define(['jquery', 'TYPO3/CMS/Backend/Storage'], function($, Storage) {
 	 */
 	Actions.initializeElements = function() {
 		Actions.elements.$gridContainer = $(Actions.identifier.gridContainer);
-		Actions.elements.$showHiddenContentCheckbox = $(Actions.identifier.showHiddenContent);
+		Actions.elements.$toggleContentVisibilityCheckbox = $(Actions.identifier.toggleContentVisibility);
+		Actions.elements.$showContentWizardButton = $(Actions.identifier.showContentWizard);
 	};
 
 	/**
 	 * Initialize events
 	 */
 	Actions.initializeEvents = function() {
-		Actions.elements.$showHiddenContentCheckbox.on('change', Actions.toggleContentElementVisibility);
+		Actions.elements.$toggleContentVisibilityCheckbox.on('change', Actions.toggleContentVisibility);
+		Actions.elements.$showContentWizardButton.on('click', Actions.showContentWizard);
 	};
 
 	/**
-	 * Toggles the "Show hidden content" checkbox
+	 * Toggle visibility of hidden content
 	 */
-	Actions.toggleContentElementVisibility = function() {
+	Actions.toggleContentVisibility = function() {
 		var $me = $(this),
 			$hiddenContent = $(Actions.identifier.hiddenContent),
 			tca = JSON.parse(Actions.elements.$gridContainer.attr('data-tca'));
@@ -72,12 +75,19 @@ define(['jquery', 'TYPO3/CMS/Backend/Storage'], function($, Storage) {
 		}
 
 		Storage.Persistent.set(
-			'tx_grid.' + tca.container.table + '.' + tca.container.field + '.showHiddenContent',
+			'tx_grid.' + tca.container.table + '.' + tca.container.field + '.toggleContentVisibility',
 			$me.prop('checked') ? 1 : 0
 		).done(function() {
 			$spinner.remove();
 			$me.show();
 		});
+	};
+	
+	/**
+	 * Show the content wizard
+	 */
+	Actions.showContentWizard = function() {
+		Wizard.show($(this).data('url'), $(this).data('title'));
 	};
 
 	$(function() {

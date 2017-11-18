@@ -32,9 +32,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1466746112] = [
 ];
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1466746113] = [
-    'nodeName' => 'contentPresetTabContainer',
+    'nodeName' => 'contentWizardContainer',
     'priority' => 40,
-    'class' => \TYPO3\CMS\Grid\Form\Node\ContentPresetTabContainer::class
+    'class' => \TYPO3\CMS\Grid\Form\Node\ContentWizardContainer::class
 ];
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1466746108] = [
@@ -87,6 +87,23 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
             ]
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\CreateItemActionProvider::class => [
+            'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfigMerged::class,
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEffectivePid::class,
+                \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationModeProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationStatusProvider::class
+            ]
+        ],
+        \TYPO3\CMS\Grid\Form\Data\Layout\InsertItemActionProvider::class => [
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\InitializeProcessedTca::class,
                 \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfigMerged::class,
@@ -333,54 +350,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageLayout'] 
             'depends' => [
                 \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseEditRow::class,
                 \TYPO3\CMS\Backend\Form\FormDataProvider\TcaSelectItems::class
-            ]
-        ]
-    ]
-);
-
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreation'] = array_merge(
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'],
-    [
-        \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\ItemDefaultValuesProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class
-            ]
-        ],
-        \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\PageTsConfig::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemTcaProvider::class
-            ]
-        ]
-    ]
-);
-
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['pageContentCreation'] = array_merge(
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentCreation'],
-    [
-        \TYPO3\CMS\Grid\Form\Data\PageLayout\ItemPresetsProvider::class => [
-            'depends' => [
-                \TYPO3\CMS\Backend\Form\FormDataProvider\TcaInline::class
-            ],
-            'before' => [
-                \TYPO3\CMS\Grid\Form\Data\Layout\ItemPresetsProvider::class,
-                \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class
             ]
         ]
     ]
