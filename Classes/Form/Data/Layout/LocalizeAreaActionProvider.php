@@ -93,6 +93,7 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
             'icon' => 'actions-localize',
             'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:localize'),
             'section' => 'header',
+            'category' => 'ui',
             'class' => 't3js-localize',
             'priority' => 10
         ];

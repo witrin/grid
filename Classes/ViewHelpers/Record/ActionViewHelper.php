@@ -64,7 +64,7 @@ class ActionViewHelper extends AbstractViewHelper implements CompilableInterface
         $tag->addAttribute('class', trim(implode(' ', [(string)$arguments['class'], (string)$action['class']])));
 
         foreach ((array)$action['data'] as $key => $value) {
-            $tag->addAttribute('data-' . $key, $value);
+            $tag->addAttribute('data-' . $key, is_array($value) || is_object($value) ? json_encode($value) : $value);
         }
 
         foreach ((array)$action['handler'] as $key => $value) {

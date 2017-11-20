@@ -38,7 +38,7 @@ class CreateItemActionProvider implements FormDataProviderInterface
                 continue;
             }
 
-            $area['actions']['insert'] = $this->getAttributes(
+            $area['actions']['create'] = $this->getAttributes(
                 $result,
                 [
                     'area' => $area,
@@ -47,7 +47,7 @@ class CreateItemActionProvider implements FormDataProviderInterface
             );
 
             foreach ($area['items'] as &$item) {
-                $item['customData']['tx_grid']['actions']['append'] = $this->getAttributes(
+                $item['customData']['tx_grid']['actions']['create'] = $this->getAttributes(
                     $result,
                     [
                         'area' => $area,
@@ -166,7 +166,8 @@ class CreateItemActionProvider implements FormDataProviderInterface
         return $attributes + [
             'icon' => 'actions-add',
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newContentElement'),
-            'section' => $parameters['section']
+            'section' => $parameters['section'],
+            'category' => 'ui'
         ];
     }
 }

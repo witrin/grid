@@ -39,6 +39,44 @@ class TagViewHelper extends AbstractTagBasedViewHelper
 
         $this->registerArgument('name', 'string', 'Tag name', false);
     }
+    
+    /**
+     * Sets the tag name to $this->tagName.
+     * Additionally, sets all tag attributes which were registered in
+     * $this->tagAttributes and additionalArguments.
+     *
+     * Will be invoked just before the render method.
+     *
+     * @api
+     */
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->tag->reset();
+        $this->tag->setTagName($this->tagName);
+
+        if ($this->hasArgument('additionalAttributes') && is_array($this->arguments['additionalAttributes'])) {
+            $this->tag->addAttributes($this->arguments['additionalAttributes']);
+        }
+
+        if ($this->hasArgument('data') && is_array($this->arguments['data'])) {
+            foreach ($this->arguments['data'] as $dataAttributeKey => $dataAttributeValue) {
+                $this->tag->addAttribute(
+                    'data-' . $dataAttributeKey,
+                    is_array($dataAttributeValue) || is_object($dataAttributeValue) ? json_encode($dataAttributeValue) : $dataAttributeValue
+                );
+            }
+        }
+
+        if (isset(self::$tagAttributes[static::class])) {
+            foreach (self::$tagAttributes[static::class] as $attributeName) {
+                if ($this->hasArgument($attributeName) && $this->arguments[$attributeName] !== '') {
+                    $this->tag->addAttribute($attributeName, $this->arguments[$attributeName]);
+                }
+            }
+        }
+    }
 
     /**
      * Renders the element

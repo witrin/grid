@@ -104,6 +104,7 @@ class EditAreaActionProvider implements FormDataProviderInterface
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:editColumn'),
             'icon' => 'actions-document-open',
             'section' => 'header',
+            'category' => 'ui',
             'priority' => 20
         ];
     }

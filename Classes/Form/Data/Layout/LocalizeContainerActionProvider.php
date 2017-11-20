@@ -101,16 +101,16 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
      */
     protected function getAttributes(array $result, array $parameters) : array
     {
-        $defaultValues = [
+        $defaults = [
             $result['processedTca']['ctrl']['languageField'] => $parameters['language']['uid']
         ];
 
         if (isset($result['processedTca']['ctrl']['transOrigPointerField'])) {
-            $defaultValues[$result['processedTca']['ctrl']['transOrigPointerField']] = $result['vanillaUid'];
+            $defaults[$result['processedTca']['ctrl']['transOrigPointerField']] = $result['vanillaUid'];
         }
 
         if (isset($result['processedTca']['ctrl']['translationSource'])) {
-            $defaultValues[$result['processedTca']['ctrl']['translationSource']] = $result['vanillaUid'];
+            $defaults[$result['processedTca']['ctrl']['translationSource']] = $result['vanillaUid'];
         }
 
         return [
@@ -125,22 +125,23 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
                     'defVals' => [
                         $result['tableName'] => TcaUtility::filterHiddenFields(
                             $result['processedTca']['columns'],
-                            $defaultValues
+                            $defaults
                         )
                     ],
                     'overrideVals' => [
                         $result['tableName'] => array_diff_key(
-                            $defaultValues,
+                            $defaults,
                             TcaUtility::filterHiddenFields(
                                 $result['processedTca']['columns'],
-                                $defaultValues
+                                $defaults
                             )
                         )
                     ],
                     'returnUrl' => $result['returnUrl']
                 ]
             ),
-            'title' => $parameters['language']['title']
+            'title' => $parameters['language']['title'],
+            'category' => 'ui'
         ];
     }
 }

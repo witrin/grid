@@ -93,6 +93,7 @@ class EditContainerActionProvider implements FormDataProviderInterface
             ),
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open',
+            'category' => 'ui',
             'priority' => 20
         ];
     }

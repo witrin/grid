@@ -3,7 +3,7 @@
 <div class="t3-content-area-header{class}">
     <f:if condition="{actions -> f:count()} > 0">
         <div class="t3-content-area-header-icons">
-            <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'header') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+            <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'header') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                 <g:record.action action="{action}" title="{action.title}">
                     {g:icon(identifier: action.icon, size: 'small')}
                 </g:record.action>
@@ -20,7 +20,7 @@
 </div>
 <div class="t3-content-area-body">
     <div class="t3js-new-content-element">
-        <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'body') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+        <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'body') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
                 {g:icon(identifier: action.icon, size: 'small')}
             </g:record.action>

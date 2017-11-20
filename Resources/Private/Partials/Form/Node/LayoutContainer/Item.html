@@ -4,7 +4,7 @@
          style="{f:if(condition: '!{visible} && !{settings.showHiddenContent}', then: 'display:none')}">
         {html -> f:format.raw()}
         <div class="t3js-new-content-element">
-            <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'after') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
+            <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'after') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                 <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
                     {g:icon(identifier: action.icon, size: 'small')}
                 </g:record.action>

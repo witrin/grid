@@ -17,7 +17,7 @@
                         </p>
                         <ul class="list-unstyled">
                             <li>
-                                <a href="#" data-parameters="{cell.position.parameters -> f:format.json()}">
+                                <a href="#" data-parameters="{cell.actions.insert.data.parameters -> f:format.json()}">
                                     <i class="t3-icon fa fa-long-arrow-left" title="{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:insertNewRecordHere')}"></i>
                                 </a>
                             </li>
@@ -27,7 +27,7 @@
                                     <span>{item.recordTitle}</span>
                                 </li>
                                 <li>
-                                    <a href="#" data-parameters="{item.customData.tx_grid.position.parameters -> f:format.json()}">
+                                    <a href="#" data-parameters="{item.customData.tx_grid.actions.insert.data.parameters -> f:format.json()}">
                                         <i class="t3-icon fa fa-long-arrow-left" title="{f:translate(key: 'LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:insertNewRecordHere')}"></i>
                                     </a>
                                 </li>

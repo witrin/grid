@@ -106,6 +106,7 @@ class HideItemActionProvider implements FormDataProviderInterface
             ),
             'icon' => $parameters['item']['databaseRow'][$enableField] ? 'actions-edit-unhide' : 'actions-edit-hide',
             'section' => 'header',
+            'category' => 'ui',
             'priority' => 20
         ];
     }

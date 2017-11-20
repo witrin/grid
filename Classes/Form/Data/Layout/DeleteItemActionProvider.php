@@ -102,6 +102,7 @@ class DeleteItemActionProvider implements FormDataProviderInterface
                 'button-close-text' => $this->getLanguageService()->sL('LLL:EXT:lang/locallang_common.xlf:cancel')
             ],
             'section' => 'header',
+            'category' => 'ui',
             'priority' => 30
         ];
     }

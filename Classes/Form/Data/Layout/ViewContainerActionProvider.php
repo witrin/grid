@@ -72,6 +72,7 @@ class ViewContainerActionProvider implements FormDataProviderInterface
             ],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:view'),
             'icon' => 'actions-view',
+            'category' => 'ui',
             'priority' => 10
         ];
     }
