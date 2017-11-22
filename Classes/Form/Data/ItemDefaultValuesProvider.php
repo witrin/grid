@@ -53,7 +53,6 @@ class ItemDefaultValuesProvider implements FormDataProviderInterface
         return $result;
     }
 
-
     /**
      * Get default values for a record
      *
@@ -62,13 +61,14 @@ class ItemDefaultValuesProvider implements FormDataProviderInterface
      * @param $parentTableName
      * @return array
      */
-    protected function getDefaultValues(array $parentConfig, $parentUid, $parentTableName) {
+    protected function getDefaultValues(array $parentConfig, $parentUid, $parentTableName)
+    {
         return array_filter(
             array_merge([
                 $parentConfig['foreign_field'] => $parentUid,
                 $parentConfig['foreign_table_field'] => $parentTableName,
             ], (array)$parentConfig['foreign_match_fields']),
-            function($key, $value) {
+            function ($key, $value) {
                 return !empty($key) && !empty($value);
             },
             ARRAY_FILTER_USE_BOTH

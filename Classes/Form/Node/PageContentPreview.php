@@ -30,7 +30,6 @@ use TYPO3\CMS\Lang\LanguageService;
 
 /**
  * Generates the preview of a page content element
- *
  */
 class PageContentPreview extends ContentPreview implements NodeResolverInterface
 {
@@ -189,7 +188,8 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
                 if (!$hookObject instanceof PageLayoutViewDrawItemHookInterface) {
                     throw new \UnexpectedValueException(
                         $hookClass . ' must implement interface ' . PageLayoutViewDrawItemHookInterface::class,
-                        1218547409);
+                        1218547409
+                    );
                 }
                 $hookObject->preProcess($view, $draw, $header, $html, $row);
             }
@@ -238,8 +238,12 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
             case 'menu':
                 $lines[] = '<strong>' . htmlspecialchars($labels[$this->data['recordTypeValue']]) . '</strong>';
                 $menuTypeLabel = $this->getLanguageService()->sL(
-                    BackendUtility::getLabelFromItemListMerged($row['pid'], 'tt_content', 'menu_type',
-                        $row['menu_type'])
+                    BackendUtility::getLabelFromItemListMerged(
+                        $row['pid'],
+                        'tt_content',
+                        'menu_type',
+                        $row['menu_type']
+                    )
                 );
                 $lines[] = $menuTypeLabel ?: 'invalid menu type';
                 if ($row['menu_type'] !== '2' && ($row['pages'] || $row['selected_categories'])) {
@@ -287,18 +291,26 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
                 if ((string)$hookOut !== '') {
                     $lines[] = $hookOut;
                 } elseif (!empty($row['list_type'])) {
-                    $label = BackendUtility::getLabelFromItemListMerged($row['pid'], 'tt_content', 'list_type',
-                        $row['list_type']);
+                    $label = BackendUtility::getLabelFromItemListMerged(
+                        $row['pid'],
+                        'tt_content',
+                        'list_type',
+                        $row['list_type']
+                    );
                     if (!empty($label)) {
                         $lines[] = '<strong>' . htmlspecialchars($this->getLanguageService()->sL($label)) . '</strong>';
                     } else {
-                        $message = sprintf($this->getLanguageService()->sL('LLL:EXT:lang/locallang_core.xlf:labels.noMatchingValue'),
-                            $row['list_type']);
+                        $message = sprintf(
+                            $this->getLanguageService()->sL('LLL:EXT:lang/locallang_core.xlf:labels.noMatchingValue'),
+                            $row['list_type']
+                        );
                         $lines[] = '<span class="label label-warning">' . htmlspecialchars($message) . '</span>';
                     }
                 } elseif (!empty($row['select_key'])) {
-                    $lines[] = htmlspecialchars($this->getLanguageService()->sL(BackendUtility::getItemLabel('tt_content',
-                            'select_key')))
+                    $lines[] = htmlspecialchars($this->getLanguageService()->sL(BackendUtility::getItemLabel(
+                        'tt_content',
+                            'select_key'
+                    )))
                         . ' ' . $row['select_key'];
                 } else {
                     $lines[] = '<strong>' . $this->getLanguageService()->getLL('noPluginSelected') . '</strong>';

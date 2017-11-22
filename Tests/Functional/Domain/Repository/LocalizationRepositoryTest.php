@@ -14,8 +14,8 @@ namespace TYPO3\CMS\Grid\Tests\Functional\Domain\Repository;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository;
 use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository;
 
 /**
  * Test case for TYPO3\CMS\Grid\Domain\Repository\LocalizationRepository

@@ -67,7 +67,7 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
                         $column['colPos']
                     ) ?? $column['name'];
 
-                    $column['name'] = array_reduce($parsedPositionItems, function($label, $item) use ($column) {
+                    $column['name'] = array_reduce($parsedPositionItems, function ($label, $item) use ($column) {
                         return $label = ($item[1] == $column['colPos'] ? $this->getLanguageService()->sL($item[0]) : $label);
                     }, $column['name']);
 
@@ -99,7 +99,7 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
     {
         $coordinates = array_values(array_filter(
             $coordinates,
-            function($coordinate) use ($maximum) {
+            function ($coordinate) use ($maximum) {
                 return is_numeric($coordinate) && $coordinate <= $maximum;
             },
             ARRAY_FILTER_USE_KEY
@@ -134,7 +134,8 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
                 if ($selected === '-1') {
                     $selected = false;
                     break;
-                } elseif ($selected !== '' && $selected !== '0') {
+                }
+                if ($selected !== '' && $selected !== '0') {
                     break;
                 }
             }

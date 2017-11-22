@@ -15,9 +15,8 @@ namespace TYPO3\CMS\Grid\ViewHelpers;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * Renders an action using a link element
@@ -26,7 +25,7 @@ class TagViewHelper extends AbstractTagBasedViewHelper
 {
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
@@ -39,7 +38,7 @@ class TagViewHelper extends AbstractTagBasedViewHelper
 
         $this->registerArgument('name', 'string', 'Tag name', false);
     }
-    
+
     /**
      * Sets the tag name to $this->tagName.
      * Additionally, sets all tag attributes which were registered in
@@ -94,7 +93,7 @@ class TagViewHelper extends AbstractTagBasedViewHelper
         if ($name) {
             $this->tag->setTagName($name);
         }
-        
+
         if ($content) {
             $this->tag->setContent($content);
         }

@@ -15,11 +15,11 @@ namespace TYPO3\CMS\Grid\ViewHelpers\Iterator;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
+use TYPO3\CMS\Fluid\Core\ViewHelper\Facets\CompilableInterface;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 /**
  * Filter ViewHelper
@@ -34,17 +34,16 @@ class FilterViewHelper extends AbstractViewHelper implements CompilableInterface
     use CompileWithContentArgumentAndRenderStatic;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeChildren = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 
     /**
-     * @return void
      */
     public function initializeArguments()
     {
@@ -62,7 +61,10 @@ class FilterViewHelper extends AbstractViewHelper implements CompilableInterface
      * @param RenderingContextInterface $renderingContext
      * @return mixed
      */
-    public static function renderStatic(array $arguments, \Closure $renderChildrenClosure, RenderingContextInterface $renderingContext
+    public static function renderStatic(
+        array $arguments,
+        \Closure $renderChildrenClosure,
+        RenderingContextInterface $renderingContext
     ) {
         $subject = $renderChildrenClosure();
         $filter = $arguments['filter'];
@@ -97,7 +99,7 @@ class FilterViewHelper extends AbstractViewHelper implements CompilableInterface
      * @param mixed $item
      * @param mixed $filter Could be a single value or an Array. If so the function returns TRUE when $item matches with any value in it.
      * @param string $propertyName
-     * @return boolean
+     * @return bool
      */
     protected static function filter($item, $filter, $propertyName)
     {

@@ -38,8 +38,8 @@ class ItemPresetsProvider implements FormDataProviderInterface
         $this->processHook($groups);
 
         // map configuration into common format
-        array_walk($groups, function(&$group) {
-            array_walk($group['elements.'], function(&$element) {
+        array_walk($groups, function (&$group) {
+            array_walk($group['elements.'], function (&$element) {
                 // map config entry `tt_content_defValues` to `defaultValues`
                 if (isset($element['tt_content_defValues.'])) {
                     $element['defaults.'] = $element['tt_content_defValues.'];
@@ -67,7 +67,8 @@ class ItemPresetsProvider implements FormDataProviderInterface
     /**
      * @param array $groups
      */
-    protected function processHook(array &$groups) {
+    protected function processHook(array &$groups)
+    {
         $elements = [];
 
         foreach ((array)$GLOBALS['TBE_MODULES_EXT']['xMOD_db_new_content_el']['addElClasses'] as $class => $path) {

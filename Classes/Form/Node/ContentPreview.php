@@ -22,7 +22,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Generates the preview of a content element
- *
  */
 class ContentPreview extends AbstractElement
 {

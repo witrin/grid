@@ -15,15 +15,14 @@ namespace TYPO3\CMS\Grid\Form\Data;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Database\RelationHandler;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Backend\Form\FormDataProvider\AbstractDatabaseRecordProvider;
-use TYPO3\CMS\Backend\Form\InlineStackProcessor;
-use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
-use TYPO3\CMS\Grid\Utility\TcaUtility;
+use TYPO3\CMS\Backend\Form\FormDataGroup\TcaDatabaseRecord;
+use TYPO3\CMS\Backend\Form\FormDataProvider\AbstractDatabaseRecordProvider;
+use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
+use TYPO3\CMS\Backend\Form\InlineStackProcessor;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\RelationHandler;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Creates
@@ -41,7 +40,7 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
     {
         $fieldName = $result['customData']['tx_grid']['columnToProcess'];
         $fieldConfig = $result['processedTca']['columns'][$fieldName];
-        
+
         if ($this->isGridField($fieldConfig) && $this->isUserAllowedToModify($fieldConfig)) {
             $result['customData']['tx_grid']['items']['children'] = [];
             $result = $this->resolveRelatedRecords($result, $fieldName);
@@ -85,7 +84,7 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
         $tableName = $result['tableName'];
         $childTableName = $result['processedTca']['columns'][$fieldName]['config']['foreign_table'];
         $connectedUids = [];
-        
+
         if ($result['command'] === 'edit') {
             $connectedUids = $this->resolveConnectedRecordUids(
                 $result['processedTca']['columns'][$fieldName]['config'],
@@ -103,7 +102,7 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
 
         return $result;
     }
-    
+
     /**
      * Compile a full child record
      *
@@ -116,12 +115,12 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
     {
         $config = $result['processedTca']['columns'][$fieldName]['config'];
         $childTableName = $config['foreign_table'];
-        
+
         /** @var InlineStackProcessor $inlineStackProcessor */
         $inlineStackProcessor = GeneralUtility::makeInstance(InlineStackProcessor::class);
         $inlineStackProcessor->initializeByGivenStructure($result['inlineStructure']);
         $inlineTopMostParent = $inlineStackProcessor->getStructureLevel(0);
-        
+
         /** @var TcaDatabaseRecord $formDataGroup */
         $formDataGroup = GeneralUtility::makeInstance(TcaDatabaseRecord::class);
         /** @var FormDataCompiler $formDataCompiler */
@@ -139,22 +138,22 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
             'inlineExpandCollapseStateArray' => $result['inlineExpandCollapseStateArray'],
             'inlineFirstPid' => $result['inlineFirstPid'],
             'inlineParentConfig' => $config,
-            
+
             // values of the current parent element
             // it is always a string either an id or new...
             'inlineParentUid' => $config['effectiveParentUid'],
             'inlineParentTableName' => $result['tableName'],
             'inlineParentFieldName' => $fieldName,
-            
+
             // values of the top most parent element set on first level and not overridden on following levels
             'inlineTopMostParentUid' => $result['inlineTopMostParentUid'] ?: $inlineTopMostParent['uid'],
             'inlineTopMostParentTableName' => $result['inlineTopMostParentTableName'] ?: $inlineTopMostParent['table'],
             'inlineTopMostParentFieldName' => $result['inlineTopMostParentFieldName'] ?: $inlineTopMostParent['field'],
         ];
-        
+
         return $formDataCompiler->compile($formDataCompilerInput);
     }
-    
+
     /**
      * Use RelationHandler to resolve connected uids.
      *
@@ -169,11 +168,11 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
         $parentUid = $this->getLiveDefaultId($parentTableName, $parentUid);
         /** @var RelationHandler $relationHandler */
         $relationHandler = GeneralUtility::makeInstance(RelationHandler::class);
-        
+
         $relationHandler->start($parentFieldValue, $parentConfig['foreign_table'], '', $parentUid, $parentTableName, $parentConfig);
         return $relationHandler->getValueArray();
     }
-    
+
     /**
      * Gets the record uid of the live default record. If already
      * pointing to the live record, the submitted record uid is returned.
@@ -191,7 +190,7 @@ class ItemDataProvider extends AbstractDatabaseRecordProvider implements FormDat
         }
         return $liveDefaultId;
     }
-    
+
     /**
      * @return BackendUserAuthentication
      */

@@ -35,7 +35,6 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-
         $translationInfo = GeneralUtility::makeInstance(TranslationConfigurationProvider::class)
             ->translationInfo($result['tableName'], $result['vanillaUid']);
         $disabledLanguages = array_flip(GeneralUtility::trimExplode(

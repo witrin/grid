@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace TYPO3\CMS\Grid\Controller;
 
 /*
@@ -24,8 +25,6 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
-use TYPO3\CMS\Grid\Utility\TcaUtility;
-use TYPO3\CMS\Grid\Controller\AbstractController;
 
 /**
  * Wizard controller for new content
@@ -69,7 +68,7 @@ class ContentWizardController extends AbstractController
         $parameters = $request->getQueryParams();
         $parameters['returnUrl'] = GeneralUtility::sanitizeLocalUrl($parameters['returnUrl']);
         $parameters['context'] = in_array($parameters['context'], ['modal', 'module']) ? $parameters['context'] : 'modal';
-        
+
         $itemsConfiguration = $GLOBALS['TCA'][(string)$parameters['containerTable']]['columns'][(string)$parameters['containerField']];
 
         $formDataGroup = GeneralUtility::makeInstance(ContainerGroup::class);

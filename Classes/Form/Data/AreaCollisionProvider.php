@@ -45,9 +45,8 @@ class AreaCollisionProvider implements FormDataProviderInterface
                             'Grid area ' . $area['uid'] . ' collides with area ' . $grid[$i][$j] . '.',
                             1438780511
                         );
-                    } else {
-                        $grid[$i][$j] = $area['uid'];
                     }
+                    $grid[$i][$j] = $area['uid'];
                 }
             }
         }

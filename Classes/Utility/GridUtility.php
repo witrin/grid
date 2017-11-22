@@ -26,7 +26,7 @@ class GridUtility
      * @param array $template
      * @return array
      */
-    static public function transformToTable(array &$template): array
+    public static function transformToTable(array &$template): array
     {
         $rows = $template['rows'] - 1;
         $columns = $template['columns'] - 1;
@@ -43,9 +43,9 @@ class GridUtility
             }
         }
 
-        return array_map(function($row) {
+        return array_map(function ($row) {
             return array_values(
-                array_filter($row, function($cell) {
+                array_filter($row, function ($cell) {
                     return $cell !== '-';
                 })
             );

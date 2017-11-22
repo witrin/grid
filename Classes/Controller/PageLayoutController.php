@@ -21,20 +21,15 @@ use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 use TYPO3\CMS\Backend\Form\FormDataCompiler;
 use TYPO3\CMS\Backend\Form\FormResultCompiler;
 use TYPO3\CMS\Backend\Form\NodeFactory;
-use TYPO3\CMS\Backend\Module\ModuleLoader;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
-use TYPO3\CMS\Core\Type\Bitmask\Permission;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Versioning\VersionState;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\CMS\Fluid\ViewHelpers\Be\InfoboxViewHelper;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Grid\Form\Data\ContainerGroup;
 use TYPO3\CMS\Grid\Form\Data\Utility\FlashMessageUtility;
 
@@ -122,8 +117,6 @@ class PageLayoutController extends AbstractController
 
     /**
      * Shows the default layout view
-     *
-     * @return void
      */
     public function indexAction()
     {
@@ -174,8 +167,6 @@ class PageLayoutController extends AbstractController
 
     /**
      * Shows the overlay layout view
-     *
-     * @return void
      */
     public function overlayAction()
     {
@@ -229,8 +220,6 @@ class PageLayoutController extends AbstractController
 
     /**
      * Shows info about what to do
-     *
-     * @return void
      */
     public function infoAction()
     {
@@ -250,8 +239,6 @@ class PageLayoutController extends AbstractController
 
     /**
      * Initializes the request parameters
-     *
-     * @return void
      */
     protected function initializeParameters()
     {
@@ -294,8 +281,6 @@ class PageLayoutController extends AbstractController
 
         if ($queryParameters['page'] < 1) {
             $queryParameters['action'] = 'info';
-        } else {
-
         }
 
         $this->request = $this->request->withQueryParams($queryParameters);
@@ -304,7 +289,6 @@ class PageLayoutController extends AbstractController
     /**
      * Initializes the view
      *
-     * @return void
      * @todo Sidebar integration is too bloated
      * @todo Scrollbar of backend modules is partially hidden by the module header
      */
@@ -403,7 +387,7 @@ class PageLayoutController extends AbstractController
         ] + $this->request->getQueryParams();
 
         return GeneralUtility::makeInstance(UriBuilder::class)
-            ->buildUriFromRoutePath($parameters['route'], array_filter($parameters, function($value) {
+            ->buildUriFromRoutePath($parameters['route'], array_filter($parameters, function ($value) {
                 return !empty($value) || $value === 0;
             }));
     }
@@ -413,7 +397,6 @@ class PageLayoutController extends AbstractController
      *
      * @param int $page
      * @param array $formData
-     * @return void
      */
     protected function createSidebar($page, array $formData = null)
     {
@@ -437,7 +420,6 @@ class PageLayoutController extends AbstractController
      * Prepares the document header
      *
      * @param array $formData
-     * @return void
      */
     protected function prepareDocumentHeader(array $formData)
     {
@@ -465,7 +447,6 @@ class PageLayoutController extends AbstractController
      * Creates the buttons in the document header
      *
      * @param array $formData
-     * @return void
      */
     protected function createButtons(array $formData)
     {
@@ -537,7 +518,6 @@ class PageLayoutController extends AbstractController
      * Creates the menus in the document header
      *
      * @param array $formData
-     * @return void
      */
     protected function createMenus(array $formData)
     {

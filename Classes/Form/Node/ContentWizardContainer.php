@@ -88,13 +88,13 @@ class ContentWizardContainer extends AbstractContainer
         $view->setTemplatePathAndFilename(
             GeneralUtility::getFileAbsFileName('EXT:backend/Resources/Private/Templates/DocumentTemplate/Tabs.html')
         );
-        $view->assignMultiple(array(
+        $view->assignMultiple([
             'id' => 'DTM-' . GeneralUtility::shortMD5('content-presets-tab-container'),
             'items' => $tabs,
             'defaultTabIndex' => 1,
             'wrapContent' => true,
             'storeLastActiveTab' => true,
-        ));
+        ]);
 
         return $view->render();
     }

@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace TYPO3\CMS\Grid\Form\Data\Traits;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Grid\Form\Data\Utility\FlashMessageUtility;
 
 /*

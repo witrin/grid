@@ -36,7 +36,6 @@ class LocalizationStatusProvider implements FormDataProviderInterface
     public function addData(array $result)
     {
         if ($result['customData']['tx_grid']['language']['uid'] > 0) {
-
             $status = [];
 
             foreach ($result['customData']['tx_grid']['items']['children'] as &$item) {

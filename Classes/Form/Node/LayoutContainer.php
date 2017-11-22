@@ -80,7 +80,8 @@ class LayoutContainer extends AbstractContainer
      *
      * @param array $item
      */
-    protected function prepareItem(array &$item) {
+    protected function prepareItem(array &$item)
+    {
         $item['renderType'] = $this->itemRenderType;
         $item['renderData'] = [
             'contentTemplatePathAndFilename' => $item['customData']['tx_grid']['previewTemplate'],
@@ -104,10 +105,11 @@ class LayoutContainer extends AbstractContainer
             $this->mapData($this->data) + [
                 'columns' => array_fill(
                     0,
-                    $this->data['customData']['tx_grid']['template']['columns'], 100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
+                    $this->data['customData']['tx_grid']['template']['columns'],
+                    100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
                 ),
                 'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
-                'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
+                'hidden' => array_filter(iterator_to_array($this->items()), function ($item) {
                     return !$item['customData']['tx_grid']['visible'];
                 }),
                 'unused' => $this->data['customData']['tx_grid']['template']['unused'],

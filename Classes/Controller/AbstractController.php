@@ -22,7 +22,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Abstract controller
- *
  */
 abstract class AbstractController
 {

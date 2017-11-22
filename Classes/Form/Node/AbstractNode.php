@@ -51,5 +51,5 @@ abstract class AbstractNode extends \TYPO3\CMS\Backend\Form\AbstractNode
      *
      * @return string
      */
-    protected abstract function getTemplatePathAndFilename();
+    abstract protected function getTemplatePathAndFilename();
 }

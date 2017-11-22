@@ -50,7 +50,7 @@ class ItemConfigurationProvider implements FormDataProviderInterface
 
         return $result;
     }
-    
+
     /**
      * Add the effective parent uid
      *
@@ -73,7 +73,7 @@ class ItemConfigurationProvider implements FormDataProviderInterface
 
         return $result;
     }
-    
+
     /**
      * Add the foreign match fields if necessary
      *

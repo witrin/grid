@@ -43,11 +43,11 @@ class LanguageProvider implements FormDataProviderInterface
      * @param array $result
      * @return int
      */
-    protected function getLanguageUid(array $result) {
+    protected function getLanguageUid(array $result)
+    {
         if (!empty($result['processedTca']['ctrl']['languageField'])) {
             return (int)$result['databaseRow'][$result['processedTca']['ctrl']['languageField']][0];
-        } else {
-            return 0;
         }
+        return 0;
     }
 }

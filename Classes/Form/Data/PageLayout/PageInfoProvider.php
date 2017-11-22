@@ -42,7 +42,7 @@ class PageInfoProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
-        switch($result['databaseRow']['doktype'][0]) {
+        switch ($result['databaseRow']['doktype'][0]) {
             case PageRepository::DOKTYPE_SYSFOLDER:
                 $moduleLoader = GeneralUtility::makeInstance(ModuleLoader::class);
                 $moduleLoader->load($GLOBALS['TBE_MODULES']);
@@ -117,7 +117,7 @@ class PageInfoProvider implements FormDataProviderInterface
                             $result['processedTca']['columns']['shortcut_mode']['config']['items'][$result['databaseRow']['shortcut_mode'][0]][0]
                         )
                     );
-                } else if ($result['databaseRow']['shortcut_mode'][0] !== PageRepository::SHORTCUT_MODE_RANDOM_SUBPAGE) {
+                } elseif ($result['databaseRow']['shortcut_mode'][0] !== PageRepository::SHORTCUT_MODE_RANDOM_SUBPAGE) {
                     $result['customData']['tx_grid']['info'] = [
                         'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pageIsMisconfigured'),
                         'message' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pageIsMisconfiguredInternalLinkMessage'),

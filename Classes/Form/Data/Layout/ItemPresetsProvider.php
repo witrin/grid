@@ -158,7 +158,6 @@ class ItemPresetsProvider implements FormDataProviderInterface
     /**
      * @param array $labels
      * @param array $configuration
-     * @return void
      */
     protected function processLabels(array $labels, array &$configuration)
     {
@@ -170,13 +169,14 @@ class ItemPresetsProvider implements FormDataProviderInterface
     /**
      * @param array $configuration
      * @param string $key
-     * @return void
      */
     protected function prepareDependencyOrdering($configuration, $key)
     {
         if (isset($configuration[$key])) {
             $configuration[$key] = GeneralUtility::trimExplode(',', $configuration[$key]);
-            $configuration[$key] = array_map(function ($s) {return $s . '.';}, $configuration[$key]);
+            $configuration[$key] = array_map(function ($s) {
+                return $s . '.';
+            }, $configuration[$key]);
         }
     }
 

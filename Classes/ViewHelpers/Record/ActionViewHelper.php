@@ -29,7 +29,7 @@ class ActionViewHelper extends AbstractViewHelper implements CompilableInterface
     use CompileWithRenderStatic;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $escapeOutput = false;
 

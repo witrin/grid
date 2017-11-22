@@ -24,7 +24,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class PasteItemActionProvider implements FormDataProviderInterface
 {
-
     protected $clipboard;
 
     /**
@@ -124,7 +123,7 @@ class PasteItemActionProvider implements FormDataProviderInterface
                 'uid' => $parameters['record']['uid'],
                 'title' => $parameters['record']['title']
             ],
-            'class' => 't3js-paste' . ($parameters['mode'] ? '-'. $parameters['mode'] : '') . ' ' . $parameters['class'],
+            'class' => 't3js-paste' . ($parameters['mode'] ? '-' . $parameters['mode'] : '') . ' ' . $parameters['class'],
             'title' => $this->getLanguageService()->sL($parameters['title']),
             'icon' => 'actions-document-paste-into',
             'section' => $parameters['section'],

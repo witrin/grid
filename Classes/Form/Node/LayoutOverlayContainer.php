@@ -36,10 +36,10 @@ class LayoutOverlayContainer extends LayoutContainer
     {
         $view->assignMultiple(
             $this->mapData($this->data) + [
-                'overlays' => array_map(function($overlay) {
+                'overlays' => array_map(function ($overlay) {
                     return $this->mapData($overlay);
                 }, $this->data['customData']['tx_grid']['overlays']),
-                'hidden' => array_filter(iterator_to_array($this->items()), function($item) {
+                'hidden' => array_filter(iterator_to_array($this->items()), function ($item) {
                     return !$item['customData']['tx_grid']['visible'];
                 }),
                 'unused' => array_merge(

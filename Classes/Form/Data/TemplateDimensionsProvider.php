@@ -32,13 +32,13 @@ class TemplateDimensionsProvider implements FormDataProviderInterface
     {
         $max = array_reduce(
             $result['customData']['tx_grid']['template']['areas'],
-            function($max, &$area) {
+            function ($max, &$area) {
                 return [
                     max($max[0], $area['row']['end']),
                     max($max[1], $area['column']['end'])
                 ];
             },
-            [0,0]
+            [0, 0]
         );
 
         $result['customData']['tx_grid']['template']['rows'] = $max[0];

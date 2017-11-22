@@ -68,10 +68,10 @@ class HideItemActionProvider implements FormDataProviderInterface
     {
         $enableField = $parameters['item']['processedTca']['ctrl']['enablecolumns']['disabled'] ?? false;
 
-        return (
+        return
             $enableField && $parameters['item']['processedTca']['columns'][$enableField] && !$parameters['item']['processedTca']['columns'][$enableField]['exclude'] ||
             $this->getBackendUserAuthentication()->check('non_exclude_fields', $parameters['item']['tableName'] . ':' . $enableField)
-        );
+        ;
     }
 
     /**

@@ -28,7 +28,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
  */
 class IconViewHelper extends AbstractViewHelper implements CompilableInterface
 {
-
     use CompileWithRenderStatic;
 
     /**

@@ -37,7 +37,7 @@ class EditItemActionProvider implements FormDataProviderInterface
             if (!$this->isAvailable($result, ['item' => $item])) {
                 continue;
             }
-                
+
             $item['customData']['tx_grid']['actions']['edit'] = $this->getAttributes($result, ['item' => $item]);
         }
 
@@ -88,7 +88,7 @@ class EditItemActionProvider implements FormDataProviderInterface
                     ],
                     'returnUrl' => $parameters['item']['returnUrl']
                 ]
-            ). '#element-' . $parameters['item']['tableName'] . '-' . $parameters['item']['vanillaUid'],
+            ) . '#element-' . $parameters['item']['tableName'] . '-' . $parameters['item']['vanillaUid'],
             'title' => $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'),
             'icon' => 'actions-open',
             'section' => 'header',

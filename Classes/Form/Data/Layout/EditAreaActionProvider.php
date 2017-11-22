@@ -89,7 +89,7 @@ class EditAreaActionProvider implements FormDataProviderInterface
                             implode(
                                 ',',
                                 array_map(
-                                    function($item) {
+                                    function ($item) {
                                         return $item['vanillaUid'];
                                     },
                                     $parameters['area']['items']

@@ -20,7 +20,6 @@ use TYPO3\CMS\Grid\Utility\GridUtility;
 
 /**
  * Render a table with content element positions of the given grid container
- *
  */
 class ContentPositionContainer extends AbstractContainer
 {
@@ -39,7 +38,8 @@ class ContentPositionContainer extends AbstractContainer
             'rows' => GridUtility::transformToTable($this->data['customData']['tx_grid']['template']),
             'columns' => array_fill(
                 0,
-                $this->data['customData']['tx_grid']['template']['columns'], 100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
+                $this->data['customData']['tx_grid']['template']['columns'],
+                100 / ((int)$this->data['customData']['tx_grid']['template']['columns'] ?: 1)
             )
         ]);
 

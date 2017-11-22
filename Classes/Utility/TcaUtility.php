@@ -26,17 +26,17 @@ class TcaUtility
      * @param array $fields The array to filter with keys as the field names
      * @return array All entries from $fields which are not hidden through the TCA
      */
-    static public function filterHiddenFields(array $tca, array $fields)
+    public static function filterHiddenFields(array $tca, array $fields)
     {
         return array_filter(
             $fields,
-            function($field) use ($tca) {
+            function ($field) use ($tca) {
                 return isset($tca[$field]) && $tca[$field]['config']['type'] !== 'passthrough';
             },
             ARRAY_FILTER_USE_KEY
         );
     }
-    
+
     /**
      * Get language uid
      *
@@ -44,12 +44,11 @@ class TcaUtility
      * @param array $record The record
      * @return number
      */
-    static public function getLanguageUid(array $tca, array $record)
+    public static function getLanguageUid(array $tca, array $record)
     {
         if (!empty($tca['ctrl']['languageField'])) {
             return (int)$record[$tca['ctrl']['languageField']][0];
-        } else {
-            return 0;
         }
+        return 0;
     }
 }
