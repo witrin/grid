@@ -16,7 +16,7 @@ if (PHP_SAPI !== 'cli') {
 }
 $finder = PhpCsFixer\Finder::create()
     ->exclude('Build/node_modules')
-    ->in(__DIR__);
+    ->in(__DIR__ . '/../');
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
