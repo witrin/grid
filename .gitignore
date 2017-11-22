@@ -1,0 +1,24 @@
+# Ignore temporary files (left by editors and OS)
+*~
+*.bak
+*.swp
+.DS_Store
+#
+# Ignore by common IDEs used directories/files
+nbproject
+*.idea
+*.project
+.buildpath
+.settings
+.TemporaryItems
+.webprj
+#
+# Temporary files and folders
+.cache
+.php_cs.cache
+.sass-cache
+.session
+phantomjsdriver.log
+#
+# Ignore build stuff
+/Build/node_modules/*

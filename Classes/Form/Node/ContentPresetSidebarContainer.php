@@ -67,9 +67,6 @@ class ContentPresetSidebarContainer extends AbstractContainer
                 'requireJsModules' => [
                     'TYPO3/CMS/Grid/Sidebar',
                     'TYPO3/CMS/Grid/DragDrop'
-                ],
-                'stylesheetFiles' => [
-                    'EXT:grid/Resources/Public/Css/Sidebar.css'
                 ]
             ]
         );

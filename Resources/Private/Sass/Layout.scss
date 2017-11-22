@@ -1,0 +1,220 @@
+.t3-content-container {
+    margin: 0 (-$grid-gutter-width/3) 18px;
+}
+
+.t3-content-area {
+    background-color: #fafafa;
+    border-bottom: 1px solid #cdcdcd;
+}
+
+.t3-content-area,
+.t3-content-overlay {
+    min-width: 150px;
+    max-width: 300px;
+    vertical-align: top;
+}
+
+.t3-content-overlay > h2 {
+    margin-top: 0;
+}
+
+.t3-content-area-header {
+    padding: $grid-gutter-width/2 $grid-gutter-width/3 5px $grid-gutter-width/3;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    background: #fff;
+
+    &:hover {
+        .t3-content-area-header-icons,
+        .t3-content-area-title-icons {
+            opacity: 1;
+        }
+    }
+}
+
+.t3-content-area-header-icons {
+    transition: opacity 0.15s ease-in;
+    opacity: 0.3;
+    position: absolute;
+    right: $grid-gutter-width/3;
+    bottom: 5px;
+}
+
+.t3-content-area-header-label {
+    margin: 0;
+    color: #999;
+    text-align: left;
+}
+
+.t3-content-area-padded-header {
+    padding-top: 60px;
+}
+
+.t3-content-area-header-warning .t3-content-area-header-label {
+    color: #e8a33d;
+}
+
+.t3-content-area-body {
+    min-height: 2em;
+
+    &:before,
+    &:after {
+        content: '';
+        display: block;
+        margin: $grid-gutter-width/3 0 0 0;
+    }
+
+    & > * {
+        margin: $grid-gutter-width/3;
+    }
+}
+
+.t3-content-action {
+    margin: $grid-gutter-width/3;
+}
+
+.t3-content-element {
+    transition: opacity 0.15s ease-in;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+
+    &:hover {
+        .t3-content-element-header,
+        .t3-content-element-body {
+            border-color: #aaa;
+        }
+
+        .t3-content-element-header {
+            background: #d0d0d0;
+        }
+
+        .t3-content-element-body {
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .t3-content-element-header-icons-right {
+            opacity: 1;
+        }
+    }
+
+    * {
+        border-spacing: 0;
+    }
+
+    .t3-content-element-body-inner {
+        padding: $grid-gutter-width/3;
+        word-wrap: break-word;
+    }
+
+    .t3-content-element-header {
+        transition: background 0.15s ease-in;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-bottom: 0;
+        border-radius: 2px 2px 0 0;
+        background: #eaeaea;
+
+        &:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    }
+
+    .t3-content-element-header-icons-left {
+        float: left;
+
+        & > a {
+            display: inline-block;
+            padding: 4px;
+        }
+    }
+
+    .t3-content-element-header-icons-right {
+        transition: opacity 0.15s ease-in;
+        opacity: 0.3;
+        float: right;
+    }
+
+    .t3-content-element-body {
+        margin-bottom: $grid-gutter-width/3;
+        border: 1px solid #ccc;
+        border-top: 0;
+        border-radius: 0 0 $border-radius-small $border-radius-small;
+        background-color: #fff;
+    }
+
+    .t3-content-element-footer {
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-size: 11px;
+        padding: 5px $grid-gutter-width/3;
+        background: #fafafa;
+    }
+}
+
+tr:hover .t3-content-element a {
+    text-decoration: none;
+}
+
+.t3-content-element-danger {
+    &:hover {
+        .t3-content-element-header {
+            background-color: #a32e2e;
+            border-color: #a32e2e;
+        }
+
+        .t3-content-element-body {
+            border-color: #a32e2e;
+        }
+    }
+
+    .t3-content-element-header {
+        background-color: #c83c3c;
+        border-color: #c83c3c;
+
+        &:hover {
+            background-color: #a32e2e;
+            border-color: #a32e2e;
+        }
+    }
+
+    .t3-content-element-body {
+        border-color: #c83c3c;
+    }
+}
+
+.t3-content-element-warning {
+    &:hover {
+        .t3-content-element-header {
+            background-color: #d88b1a;
+            border-color: #d88b1a;
+        }
+
+        .t3-content-element-body {
+            border-color: #d88b1a;
+        }
+    }
+
+    .t3-content-element-header {
+        background-color: #e8a33d;
+        border-color: #e8a33d;
+
+        &:hover {
+            background-color: #d88b1a;
+            border-color: #d88b1a;
+        }
+    }
+
+    .t3-content-element-body {
+        border-color: #e8a33d;
+    }
+}
+
+.t3-content-element-hidden {
+    opacity: 0.4;
+    transition: opacity 0.15s ease-in;
+
+    &:hover {
+        opacity: 1;
+    }
+}

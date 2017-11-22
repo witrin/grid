@@ -180,11 +180,6 @@ class LayoutContainer extends AbstractContainer
                     'TYPO3/CMS/Grid/Localization',
                     'TYPO3/CMS/Grid/Paste',
                     'TYPO3/CMS/Grid/Wizard'
-                ],
-                'stylesheetFiles' => [
-                    'EXT:grid/Resources/Public/Css/DragDrop.css',
-                    'EXT:grid/Resources/Public/Css/Layout.css',
-                    'EXT:grid/Resources/Public/Css/Wizard.css'
                 ]
             ]
         );

@@ -1,0 +1,24 @@
+{
+  "name": "typo3-cms-grid",
+  "description": "Generic and reusable component refactoring the page module using the FormEngine and Fluid.",
+  "repository": "https://github.com/witrin/grid.git",
+  "readme": "../README.md",
+  "homepage": "https://www.typo3.org",
+  "version": "9.0.0-alpha",
+  "license": "GPL-2.0+",
+  "devDependencies": {
+    "node-sass": "*",
+    "css-node-extract": "*",
+    "sass-lint": "*",
+    "glob": "*",
+    "stylelint": "*",
+    "postcss-scss": "*"
+  },
+  "config": {
+    "root": "../../../../"
+  },
+  "scripts": {
+    "build:styles": "node ./Scripts/build-styles.js",
+    "lint:styles": "node ./Scripts/lint-styles.js"
+  }
+}

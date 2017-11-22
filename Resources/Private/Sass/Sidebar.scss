@@ -1,0 +1,179 @@
+$sidebar-bg: #292929;
+$sidebar-width-default: 100px;
+$sidebar-width-large: 300px;
+$sidebar-toggle-height: 80px;
+$sidebar-toggle-width: 14px;
+
+// @todo Find a suitable solution for `body` and `.module`
+body {
+    overflow: hidden;
+}
+
+.module {
+    overflow: auto;
+    height: 100%;
+}
+
+.t3-sidebar {
+    background-color: $sidebar-bg;
+    color: rgba($gray-lighter, 0.7);
+    width: 0;
+    position: fixed;
+    right: 0 !important;
+    top: 0;
+    bottom: 0;
+
+    &[data-toggle=expanded] {
+        width: $sidebar-width-default;
+
+        .t3-sidebar-group-header {
+            text-align: center;
+        }
+
+        .t3-sidebar-group-container-item {
+            justify-content: center;
+
+            .icon {
+                margin: 0;
+            }
+        }
+    }
+
+    &[data-toggle=full-expanded] {
+        width: $sidebar-width-large;
+
+        .t3-sidebar-group-container-item .text {
+            display: block;
+        }
+    }
+
+    &[data-expandable] .t3-sidebar-toggle:after {
+        content: '\f0d9';
+    }
+
+    &[data-resizable] .t3-sidebar-border:hover {
+        cursor: col-resize;
+    }
+}
+
+.t3-sidebar-split {
+    width: 0;
+    border: none;
+    position: relative;
+    height: 100%;
+    right: 0;
+    top: 0;
+    transform: none !important;
+}
+
+.t3-sidebar-outer {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.t3-sidebar-panel {
+    overflow: auto;
+}
+
+.t3-sidebar-toggle {
+    height: $sidebar-toggle-height;
+    width: $sidebar-toggle-width;
+    position: absolute;
+    right: 0;
+    top: calc(50% - #{$sidebar-toggle-height/2});
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $sidebar-bg;
+    border: inherit;
+    border-right: none;
+    border-radius: $border-radius-small 0 0 $border-radius-small;
+    visibility: hidden;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: block;
+        border-radius: inherit;
+        border: inherit;
+    }
+
+    &:after {
+        font-family: 'FontAwesome';
+        content: '\f0da';
+        display: block;
+        width: 100%;
+        color: inherit;
+        font-size: $font-size-base;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    &:hover {
+        cursor: pointer;
+        color: $gray-lighter;
+
+        &:before {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+.t3-sidebar-group:not(:last-child):after {
+    content: '';
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: block;
+}
+
+.t3-sidebar-group-header {
+    min-height: 40px;
+    padding: $grid-gutter-width/3;
+    text-transform: uppercase;
+}
+
+.t3-sidebar-group-container {
+    list-style: none;
+    padding: 0 0 $grid-gutter-width/3 0;
+    margin: 0;
+}
+
+.t3-sidebar-group-container-item {
+    padding: $grid-gutter-width/3;
+    display: flex;
+
+    &:hover {
+        color: $gray-lighter;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    & .icon {
+        flex-shrink: 0;
+        margin-right: $grid-gutter-width/3;
+
+        &:hover {
+            cursor: move;
+        }
+    }
+
+    & .text {
+        display: none;
+    }
+
+    & .title {
+        font-weight: bold;
+    }
+}
+
+.t3-sidebar-group-container-item-icon {
+    visibility: visible !important;
+
+    & .ui-draggable-copy-message {
+        display: none !important;
+    }
+}

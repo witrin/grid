@@ -137,9 +137,6 @@ class ContentWizardContainer extends AbstractContainer
                     'TYPO3/CMS/Backend/Tabs',
                     'TYPO3/CMS/Backend/ContextMenu',
                     'TYPO3/CMS/Grid/Wizard'
-                ],
-                'stylesheetFiles' => [
-                    'EXT:grid/Resources/Public/Css/Wizard.css'
                 ]
             ]
         );

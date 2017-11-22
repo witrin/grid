@@ -6,6 +6,7 @@
     margin: 10px;
     max-height: 225px;
 }
+
 .t3-content-element-drop-zone-hover {
     border: 1px dashed #79a548;
     border-radius: 2px;
@@ -16,21 +17,28 @@
     position: relative;
     opacity: 0.65;
 }
-.t3-content-element.ui-draggable-dragging .t3-content-element-drag-item {
-    opacity: 0.65;
-    box-shadow: 0 1px 24px rgba(0, 0, 0, 0.5);
+
+.t3-content-element {
+    &.ui-draggable-dragging .t3-content-element-drag-item {
+        opacity: 0.65;
+        box-shadow: 0 1px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    &.ui-draggable-handle {
+        height: auto !important;
+        position: relative;
+    }
+
+    &.active-drag {
+        z-index: 4500;
+    }
 }
-.t3-content-element.ui-draggable-handle {
-    height: auto!important;
-    position: relative;
-}
-.t3-content-element-drag-item .t3-content-element-header-draggable:hover {
-    cursor: move;
-}
-.t3-content-element.active-drag {
-    z-index: 4500;
-}
+
 .t3-is-dragged .t3-content-element-body {
     max-height: 225px;
     overflow: hidden;
+}
+
+.t3-content-element-drag-item .t3-content-element-header-draggable:hover {
+    cursor: move;
 }
