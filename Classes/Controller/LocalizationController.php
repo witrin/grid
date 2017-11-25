@@ -75,7 +75,7 @@ class LocalizationController
     public function getLanguages(ServerRequestInterface $request, ResponseInterface $response)
     {
         $params = $request->getQueryParams();
-        if (!isset($params['containerUid'], $params['areaUid'], $params['languageUid'], $params['containerTable'], $params['relationshipColumn'])) {
+        if (!isset($params['containerUid'], $params['areaUid'], $params['languageUid'], $params['containerTable'], $params['containerField'])) {
             $response = $response->withStatus(500);
             return $response;
         }
@@ -84,7 +84,7 @@ class LocalizationController
         $areaUid = (int)$params['areaUid'];
         $language = (int)$params['languageUid'];
         $containerTable = (string)$params['containerTable'];
-        $relationshipColumn = (string)$params['relationshipColumn'];
+        $containerField = (string)$params['containerField'];
         $containerRecord = $this->pageRepository->getRawRecord($containerTable, $containerUid, 'uid');
 
         /** @var TranslationConfigurationProvider $translationProvider */
@@ -94,10 +94,10 @@ class LocalizationController
         $availableLanguages = [];
 
         // First check whether column has localized records
-        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($containerUid, $areaUid, $language, $containerTable, $relationshipColumn);
+        $elementsInColumnCount = $this->localizationRepository->getLocalizedRecordCount($containerUid, $areaUid, $language, $containerTable, $containerField);
 
         if ($elementsInColumnCount === 0) {
-            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($containerUid, $areaUid, $language, $containerTable, $relationshipColumn);
+            $fetchedAvailableLanguages = $this->localizationRepository->fetchAvailableLanguages($containerUid, $areaUid, $language, $containerTable, $containerField);
             $availableLanguages[] = $systemLanguages[0];
 
             foreach ($fetchedAvailableLanguages as $fetchedAvailableLanguage) {
@@ -106,7 +106,7 @@ class LocalizationController
                 }
             }
         } else {
-            $result = $this->localizationRepository->fetchOriginLanguage($containerUid, $areaUid, $language, $containerTable, $relationshipColumn);
+            $result = $this->localizationRepository->fetchOriginLanguage($containerUid, $areaUid, $language, $containerTable, $containerField);
             $availableLanguages[] = $systemLanguages[$result['sys_language_uid']];
         }
 
@@ -133,12 +133,12 @@ class LocalizationController
     public function getSummary(ServerRequestInterface $request, ResponseInterface $response)
     {
         $params = $request->getQueryParams();
-        if (!isset($params['containerUid'], $params['areaUid'], $params['destinationLanguageUid'], $params['languageUid'], $params['containerTable'], $params['relationshipColumn'])) {
+        if (!isset($params['containerUid'], $params['areaUid'], $params['destinationLanguageUid'], $params['languageUid'], $params['containerTable'], $params['containerField'])) {
             $response = $response->withStatus(500);
             return $response;
         }
 
-        $itemTable = $GLOBALS['TCA'][$params['containerTable']]['columns'][$params['relationshipColumn']]['config']['foreign_table'];
+        $itemTable = $GLOBALS['TCA'][$params['containerTable']]['columns'][$params['containerField']]['config']['foreign_table'];
 
         $records = [];
         $result = $this->localizationRepository->getRecordsToCopyDatabaseResult(
@@ -148,7 +148,7 @@ class LocalizationController
             $params['languageUid'],
             '*',
             $params['containerTable'],
-            $params['relationshipColumn']
+            $params['containerField']
         );
 
         while ($row = $result->fetch()) {
@@ -171,7 +171,7 @@ class LocalizationController
     public function localizeRecords(ServerRequestInterface $request, ResponseInterface $response)
     {
         $params = $request->getQueryParams();
-        if (!isset($params['containerUid'], $params['sourceLanguageUid'], $params['areaUid'], $params['destinationLanguageUid'], $params['action'], $params['contentUids'], $params['containerTable'], $params['relationshipColumn'])) {
+        if (!isset($params['containerUid'], $params['sourceLanguageUid'], $params['areaUid'], $params['destinationLanguageUid'], $params['action'], $params['contentUids'], $params['containerTable'], $params['containerField'])) {
             $response = $response->withStatus(500);
             return $response;
         }
@@ -189,7 +189,7 @@ class LocalizationController
             (int)$params['destinationLanguageUid'],
             (int)$params['sourceLanguageUid'],
             (string)$params['containerTable'],
-            (string)$params['relationshipColumn'],
+            (string)$params['containerField'],
             $params['contentUids']
         );
 
@@ -216,7 +216,7 @@ class LocalizationController
         int $destinationLanguageUid,
         int $sourceLanguageUid,
         string $containerTable,
-        string $relationshipColumn,
+        string $containerField,
         array $transmittedContentUids
     ): array {
         // Get all valid uids that can be processed
@@ -227,7 +227,7 @@ class LocalizationController
             $sourceLanguageUid,
             'uid',
             $containerTable,
-            $relationshipColumn
+            $containerField
         );
 
         return array_intersect(array_unique($transmittedContentUids), array_column($validContentUids->fetchAll(), 'uid'));
@@ -243,8 +243,8 @@ class LocalizationController
     {
         $destinationLanguageUid = (int)$params['destinationLanguageUid'];
         $containerTable = $params['containerTable'];
-        $relationshipColumn = $params['relationshipColumn'];
-        $contentTable = $GLOBALS['TCA'][$containerTable]['columns'][$relationshipColumn]['config']['foreign_table'];
+        $containerField = $params['containerField'];
+        $contentTable = $GLOBALS['TCA'][$containerTable]['columns'][$containerField]['config']['foreign_table'];
 
         // Build command map
         $cmd = [

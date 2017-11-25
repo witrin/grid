@@ -1,19 +1,19 @@
 # Grid Component
 
-Generic and reusable component refactoring the page module using the [FormEngine](https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/FormEngine/) and [Fluid](https://github.com/TYPO3/Fluid).
+Generic and reusable replacement for the TYPO3 CMS page module build on top of the [FormEngine](https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/FormEngine/) and [Fluid](https://github.com/TYPO3/Fluid).
 
 ## Terms
 
 The terms introduced with this component reflect its independence of the underlining relations:
 
-*Grid item*  
-The matter in question which can be any [managed table](https://docs.typo3.org/typo3cms/InsideTypo3Reference/CoreArchitecture/Database/DatabaseStructure/).  
+*Grid item*
+The matter in question which can be any [managed table](https://docs.typo3.org/typo3cms/InsideTypo3Reference/CoreArchitecture/Database/DatabaseStructure/).
 
-*Grid container*  
-Any managed table which holds the grid items and thus define their boundaries.  
+*Grid container*
+Any managed table which holds the grid items and thus define their boundaries.
 
-*Grid template*  
-Divides the grid container’s space into grid areas, into which the grid items can be placed.  
+*Grid template*
+Divides the grid container’s space into grid areas, into which the grid items can be placed.
 
 ![](https://user-images.githubusercontent.com/1394346/30057918-0af65ba8-9239-11e7-8923-9bd9b0576e20.png)
 
@@ -53,7 +53,7 @@ tx_grid.tx_my_domain_model_container.items.template {
   areas {
 
     1 {
-      title = Header  
+      title = Header
       row.start = 1
       column {
         start = 1
@@ -68,7 +68,7 @@ tx_grid.tx_my_domain_model_container.items.template {
     }
 
     3 {
-      title = Aside      
+      title = Aside
       row.start = 2
       column.start = 2
     }

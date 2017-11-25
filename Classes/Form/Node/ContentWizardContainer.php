@@ -136,7 +136,7 @@ class ContentWizardContainer extends AbstractContainer
                 'requireJsModules' => [
                     'TYPO3/CMS/Backend/Tabs',
                     'TYPO3/CMS/Backend/ContextMenu',
-                    'TYPO3/CMS/Grid/Wizard'
+                    'TYPO3/CMS/Grid/Wizard/Creation'
                 ]
             ]
         );

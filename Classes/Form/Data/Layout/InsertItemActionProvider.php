@@ -29,6 +29,7 @@ class InsertItemActionProvider implements FormDataProviderInterface
      *
      * @param array $result
      * @return array
+     * @todo Streamline its usage in the templates
      */
     public function addData(array $result)
     {
@@ -104,21 +105,18 @@ class InsertItemActionProvider implements FormDataProviderInterface
         return [
             'data' => [
                 'parameters' => [
-                    'defVals' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => TcaUtility::filterHiddenFields(
+                    'table' => $result['customData']['tx_grid']['items']['config']['foreign_table'],
+                    'defaults' => TcaUtility::filterHiddenFields(
+                        $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
+                        $defaults
+                    ),
+                    'overrides' => array_diff_key(
+                        $defaults,
+                        TcaUtility::filterHiddenFields(
                             $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
                             $defaults
                         )
-                    ],
-                    'overrideVals' => [
-                        $result['customData']['tx_grid']['items']['config']['foreign_table'] => array_diff_key(
-                            $defaults,
-                            TcaUtility::filterHiddenFields(
-                                $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
-                                $defaults
-                            )
-                        )
-                    ]
+                    )
                 ]
             ],
             'section' => $parameters['section'],

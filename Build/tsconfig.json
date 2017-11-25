@@ -1,0 +1,20 @@
+{
+  "extends": "../../../../Build/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./JavaScript/",
+    "paths": {
+      "TYPO3/CMS/Grid/*": [
+        "../typo3conf/ext/grid/Resources/Private/TypeScript/*"
+      ],
+      "TYPO3/CMS/Backend/*": [
+        "../typo3/sysext/backend/Resources/Public/JavaScript/*",
+        "../typo3/sysext/backend/Resources/Private/TypeScript/*"
+      ]
+    }
+  },
+  "include": [
+    "typings/**/*.ts",
+    "../Resources/Private/TypeScript/**/*.ts",
+    "../Tests/TypeScript/**/*.ts"
+  ]
+}

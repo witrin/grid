@@ -1,5 +1,5 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
-<div class="t3-content-container t3js-content-container t3js-content-container" data-tca="{tca -> f:format.json()}" data-uid="{uid}" data-pid="{pid}">
+<div class="t3-content-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
     <table class="t3-grid-table t3-content-overlays">
         <tr>
             <td class="t3-content-overlay">
@@ -40,15 +40,11 @@
         <f:for each="{areas}" as="area">
             <tr>
                 <f:if condition="{area.assigned} && !{area.restricted}">
-                    <td data-uid="{area.uid}"
-                        data-language="{language.uid}"
-                        class="t3js-content-area t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
-                        <f:render partial="Area" arguments="{area -> g:iterator.merge(b: '{pid: pid}')}" />
+                    <td class="t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                        <f:render partial="Area" arguments="{area -> g:iterator.merge(b: '{pid: pid, table: table}')}" />
                     </td>
                     <f:for each="{overlays}" as="overlay">
-                        <td data-uid="{area.uid}"
-                            data-language="{language.uid}"
-                            class="t3js-content-area t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                        <td class="t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')} t3js-grid-drag-drop-area">
                             <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first() -> g:iterator.merge(b: '{pid: pid}')}" />
                         </td>
                     </f:for>

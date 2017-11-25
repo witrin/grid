@@ -208,6 +208,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
                 \TYPO3\CMS\Grid\Form\Data\TemplateDefinitionProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemConfigurationProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\ItemDataProvider::class,
+                \TYPO3\CMS\Grid\Form\Data\AreaItemsProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\Layout\LocalizationModeProvider::class
             ]
         ],

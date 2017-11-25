@@ -1,9 +1,9 @@
-$content-wizard-window-bg: #fafafa;
-$content-wizard-title-color: #fff;
-$content-wizard-title-bg: #292929;
+$grid-content-creation-wizard-window-bg: #fafafa;
+$grid-content-creation-wizard-title-color: #fff;
+$grid-content-creation-wizard-title-bg: #292929;
 
-.t3-content-wizard-window {
-    background-color: $content-wizard-window-bg;
+.t3-grid-content-creation-wizard-window {
+    background-color: $grid-content-creation-wizard-window-bg;
     padding: 0;
 
     .container-fluid {
@@ -33,9 +33,9 @@ $content-wizard-title-bg: #292929;
     }
 }
 
-.t3-content-wizard-title {
-    background-color: $content-wizard-title-bg;
-    color: $content-wizard-title-color;
+.t3-grid-content-creation-wizard-title {
+    background-color: $grid-content-creation-wizard-title-bg;
+    color: $grid-content-creation-wizard-title-color;
     padding: $grid-gutter-width/3 $grid-gutter-width/2;
 
     h2 {

@@ -1,9 +1,9 @@
 <html data-namespace-typo3-fluid="true">
 <f:section name="Wrapper">
-    <div class="{f:if(condition: '!{visible}', then: 't3js-hidden-content')}"
+    <div class="t3-content-wrapper{f:if(condition: '!{visible}', then: ' t3js-hidden-content')}"
          style="{f:if(condition: '!{visible} && !{settings.showHiddenContent}', then: 'display:none')}">
         {html -> f:format.raw()}
-        <div class="t3js-new-content-element">
+        <div class="t3-content-actions{f:if(condition: actions.insert, then: ' t3js-grid-drag-drop-zone')}" data-target="-{uid}" data-parameters="{actions.insert.data.parameters -> f:format.json()}">
             <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'after') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                 <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
                     {g:icon(identifier: action.icon, size: 'small')}
@@ -11,8 +11,5 @@
             </f:for>
         </div>
     </div>
-    <f:if condition="{actions.append}">
-        <div class="t3js-content-element-drop-zone" data-target="-{uid}"></div>
-    </f:if>
 </f:section>
 </html>

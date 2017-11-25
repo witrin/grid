@@ -18,17 +18,14 @@
         </f:if>
     </div>
 </div>
-<div class="t3-content-area-body">
-    <div class="t3js-new-content-element">
+<div class="t3-content-area-body{f:if(condition: uid, then: ' t3js-grid-drag-drop-area')}">
+    <div class="{f:if(condition: '{actions.insert} && {pid}', then: 't3js-grid-drag-drop-zone')}" data-target="{pid}" data-parameters="{actions.insert.data.parameters -> f:format.json()}">
         <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'body') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
                 {g:icon(identifier: action.icon, size: 'small')}
             </g:record.action>
         </f:for>
     </div>
-    <f:if condition="{actions.insert} && {pid}">
-        <div class="t3js-content-element-drop-zone" data-target="{pid}"></div>
-    </f:if>
     <f:for each="{items}" as="item">
         <f:render partial="Item" section="Wrapper" arguments="{html: item.renderData.html, settings: settings, actions: item.customData.tx_grid.actions, uid: item.vanillaUid, visible: item.customData.tx_grid.visible}"/>
     </f:for>

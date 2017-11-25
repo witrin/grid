@@ -10,90 +10,65 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-
-/**
- * Module: TYPO3/CMS/Grid/Actions
- * JavaScript implementations for page actions
- */
-define(['jquery', 'TYPO3/CMS/Backend/Storage', 'TYPO3/CMS/Grid/Wizard'], function($, Storage, Wizard) {
-	'use strict';
-
-	/**
-	 *
-	 * @type {{settings: {pageId: number, language: {pageOverlayId: number}}, identifier: {pageTitle: string, hiddenElements: string}, elements: {$pageTitle: null, $showHiddenElementsCheckbox: null}, documentIsReady: boolean}}
-	 * @exports TYPO3/CMS/Grid/Actions
-	 */
-	var Actions = {
-		settings: {
-		},
-		identifier: {
-			gridContainer: '.t3js-content-container',
-			toggleContentVisibility: '.t3js-content-visibility-toggle',
-			hiddenContent: '.t3js-hidden-content',
-			showContentWizard: '.t3js-content-wizard-show'
-		},
-		elements: {
-			$toggleContentVisibilityCheckbox: null,
-			$showContentWizardButton: null
-		},
-		documentIsReady: false
-	};
-
-	/**
-	 * Initialize elements
-	 */
-	Actions.initializeElements = function() {
-		Actions.elements.$gridContainer = $(Actions.identifier.gridContainer);
-		Actions.elements.$toggleContentVisibilityCheckbox = $(Actions.identifier.toggleContentVisibility);
-		Actions.elements.$showContentWizardButton = $(Actions.identifier.showContentWizard);
-	};
-
-	/**
-	 * Initialize events
-	 */
-	Actions.initializeEvents = function() {
-		Actions.elements.$toggleContentVisibilityCheckbox.on('change', Actions.toggleContentVisibility);
-		Actions.elements.$showContentWizardButton.on('click', Actions.showContentWizard);
-	};
-
-	/**
-	 * Toggle visibility of hidden content
-	 */
-	Actions.toggleContentVisibility = function() {
-		var $me = $(this),
-			$hiddenContent = $(Actions.identifier.hiddenContent),
-			tca = JSON.parse(Actions.elements.$gridContainer.attr('data-tca'));
-
-		// show a spinner to show activity
-		var $spinner = $('<span />', {class: 'checkbox-spinner fa fa-circle-o-notch fa-spin'});
-		$me.hide().after($spinner);
-
-		if ($me.prop('checked')) {
-			$hiddenContent.slideDown();
-		} else {
-			$hiddenContent.slideUp();
-		}
-
-		Storage.Persistent.set(
-			'tx_grid.' + tca.container.table + '.' + tca.container.field + '.toggleContentVisibility',
-			$me.prop('checked') ? 1 : 0
-		).done(function() {
-			$spinner.remove();
-			$me.show();
-		});
-	};
-	
-	/**
-	 * Show the content wizard
-	 */
-	Actions.showContentWizard = function() {
-		Wizard.show($(this).data('url'), $(this).data('title'));
-	};
-
-	$(function() {
-		Actions.initializeElements();
-		Actions.initializeEvents();
-	});
-
-	return Actions;
+define(["require", "exports", "jquery", "TYPO3/CMS/Backend/Storage/Persistent", "TYPO3/CMS/Grid/Wizard/Creation"], function (require, exports, $, PersistentStorage, ContentCreationWizard) {
+    "use strict";
+    /**
+     * Handel actions within grid container
+     *
+     * @exports TYPO3/CMS/Grid/Actions
+     * @todo Make this more generic.
+     */
+    var Actions = (function () {
+        function Actions() {
+        }
+        /**
+         * Intialize actions for grid container
+         */
+        Actions.prototype.initialize = function () {
+            var _this = this;
+            this.$container = $(Actions.identifier.container);
+            this.$toggleHiddenContentVisibilityCheckbox = $(Actions.identifier.hiddenContentVisibilityToggle);
+            this.$showContentWizardButton = $(Actions.identifier.showContentCreationWizard);
+            this.$toggleHiddenContentVisibilityCheckbox.on('change', function (event) { return _this.onToggleHiddenContentVisibilityCheckboxChanged(event); });
+            this.$showContentWizardButton.on('click', function (event) { return _this.onShowContentWizardClicked(event); });
+        };
+        /**
+         * Called when checkbox for toggling visibility of hidden content has changed
+         *
+         * @param event
+         */
+        Actions.prototype.onToggleHiddenContentVisibilityCheckboxChanged = function (event) {
+            var table = this.$container.attr('data-table');
+            var field = this.$container.attr('data-field');
+            var $hiddenContent = $(Actions.identifier.hiddenContent);
+            var $spinner = $('<span />', { class: 'checkbox-spinner fa fa-circle-o-notch fa-spin' });
+            $(event.currentTarget).hide().after($spinner);
+            if ($(event.currentTarget).prop('checked')) {
+                $hiddenContent.slideDown();
+            }
+            else {
+                $hiddenContent.slideUp();
+            }
+            PersistentStorage.set("tx_grid." + table + "." + field + ".showHiddenContent", $(event.currentTarget).prop('checked') ? '1' : '0').done(function () {
+                $spinner.remove();
+                $(event.currentTarget).show();
+            });
+        };
+        /**
+         * Called when button for showing content creation wizard is clicked
+         *
+         * @param event
+         */
+        Actions.prototype.onShowContentWizardClicked = function (event) {
+            ContentCreationWizard.show($(event.currentTarget).attr('data-url'), $(event.currentTarget).attr('data-title'));
+        };
+        Actions.identifier = {
+            container: '.t3js-grid-actions-container',
+            hiddenContent: '.t3js-hidden-content',
+            hiddenContentVisibilityToggle: '.t3js-hidden-content-visibility-toggle',
+            showContentCreationWizard: '.t3js-content-wizard-show',
+        };
+        return Actions;
+    }());
+    return new Actions();
 });

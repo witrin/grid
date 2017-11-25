@@ -1,24 +1,32 @@
 {
   "name": "typo3-cms-grid",
-  "description": "Generic and reusable component refactoring the page module using the FormEngine and Fluid.",
+  "description": "Build package for the generic and reusable replacement of the TYPO3 CMS page module. This build package is a temporary solution.",
   "repository": "https://github.com/witrin/grid.git",
   "readme": "../README.md",
-  "homepage": "https://www.typo3.org",
-  "version": "9.0.0-alpha",
+  "homepage": "https://www.typo3.org/",
+  "version": "1.0.0-alpha",
   "license": "GPL-2.0+",
   "devDependencies": {
     "node-sass": "*",
-    "css-node-extract": "*",
+    "css-node-extract": "0.1",
     "sass-lint": "*",
     "glob": "*",
     "stylelint": "*",
-    "postcss-scss": "*"
+    "postcss-scss": "*",
+    "typescript": "2.4",
+    "fs-extra": "*",
+    "tslint": "*"
   },
   "config": {
     "root": "../../../../"
   },
   "scripts": {
+    "preinstall": "cd ../../../../Build/ && npm install",
+    "build": "npm run lint && npm run build:styles && npm run build:scripts",
     "build:styles": "node ./Scripts/build-styles.js",
-    "lint:styles": "node ./Scripts/lint-styles.js"
+    "build:scripts": "node ./Scripts/build-scripts.js",
+    "lint:styles": "node ./Scripts/lint-styles.js",
+    "lint:scripts": "node ./Scripts/lint-scripts.js",
+    "lint": "npm run lint:styles && npm run lint:scripts"
   }
 }

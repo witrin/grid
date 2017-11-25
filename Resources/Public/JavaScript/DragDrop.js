@@ -10,229 +10,179 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-
-/**
- * Module: TYPO3/CMS/Grid/DragDrop
- * this JS code does the drag+drop logic for the grid layout component
- * based on jQuery UI
- */
-define(['jquery', 'jquery-ui/droppable'], function($) {
-	'use strict';
-
-	/**
-	 *
-	 * @type {{containerIdentifier: string, contentIdentifier: string, dragIdentifier: string, dragHeaderIdentifier: string, dropZoneIdentifier: string, areaIdentifier: string, validDropZoneClass: string, dropPossibleHoverClass: string, addContentIdentifier: string, originalStyles: string}}
-	 * @exports TYPO3/CMS/Grid/DragDrop
-	 */
-	var DragDrop = {
-		containerIdentifier: '.t3js-content-container',
-		contentIdentifier: '.t3js-content-element',
-		dragIdentifier: '.t3-content-element-drag-item',
-		dragHeaderIdentifier: '.t3js-content-element-drag-handle',
-		dropZoneIdentifier: '.t3js-content-element-drop-zone',
-		areaIdentifier: '.t3js-content-area',
-		dropZoneClass: 't3-content-element-drop-zone',
-		dropZoneHoverClass: 't3-content-element-drop-zone-hover',
-		addContentIdentifier: '.t3js-new-content-element',
-		clone: true
-	};
-
-	/**
-	 * initializes Drag+Drop for all content elements on the container
-	 */
-	DragDrop.initialize = function() {
-		$(DragDrop.contentIdentifier).each(function() {
-			$(this).draggable({
-				handle: this.dragHeaderIdentifier,
-				scope: $(DragDrop.containerIdentifier).data('table'),
-				cursor: 'move',
-				distance: 20,
-				addClasses: 'active-drag',
-				revert: 'invalid',
-				zIndex: 100,
-				helper : 'clone',
-				appendTo: 'body',
-				start: function (event, ui) {
-					DragDrop.onDragStart($(this), $(ui.helper));
-				},
-				stop: function (event, ui) {
-					DragDrop.onDragStop($(this), $(ui.helper));
-				}
-			})
-		});
-
-		$(DragDrop.dropZoneIdentifier).each(function() {
-			$(this).droppable({
-				accept: this.contentIdentifier,
-				scope: $(DragDrop.containerIdentifier).data('table'),
-				tolerance: 'pointer',
-				over: function (event, ui) {
-					DragDrop.onDropHoverOver($(ui.draggable), $(this));
-				},
-				out: function (event, ui) {
-					DragDrop.onDropHoverOut($(ui.draggable), $(this));
-				},
-				drop: function (event, ui) {
-					DragDrop.onDrop($(ui.draggable), $(this), event);
-				}
-			})
-		});
-	};
-
-	/**
-	 * called when a draggable is selected to be moved
-	 * @param $element a jQuery object for the draggable
-	 * @private
-	 */
-	DragDrop.onDragStart = function($element, $clone) {
-
-		// Setup the clone
-		$clone.css('width', $element.outerWidth());
-		// Hide the original
-		$element.css('visibility', 'hidden');
-
-		$clone.append('<div class="ui-draggable-copy-message">' + TYPO3.lang['dragdrop.copy.message'] + '</div>');
-
-		// Hide create new element button
-		$(DragDrop.containerIdentifier).find(DragDrop.addContentIdentifier).hide();
-
-		// Make the drop zones visible
-		$(DragDrop.dropZoneIdentifier).not('[data-relation=' + $element.data('uid') + ']').each(function () {
-			$(this).addClass(DragDrop.dropZoneClass);
-		});
-	};
-
-	/**
-	 * called when a draggable is released
-	 * @param $element a jQuery object for the draggable
-	 * @private
-	 */
-	DragDrop.onDragStop = function($element, $clone) {
-		// Show create new element button
-		$(DragDrop.containerIdentifier).find(DragDrop.addContentIdentifier).show();
-		$element.find(DragDrop.dropZoneIdentifier).show();
-		$element.find('.ui-draggable-copy-message').remove();
-
-		// Reset inline style
-		$element.attr('style', null);
-
-		$(DragDrop.dropZoneIdentifier + '.' + DragDrop.dropZoneClass).removeClass(DragDrop.dropZoneClass);
-	};
-
-	/**
-	 * adds CSS classes when hovering over a dropzone
-	 * @param $draggable
-	 * @param $droppable
-	 * @private
-	 */
-	DragDrop.onDropHoverOver = function($draggable, $droppable) {
-		if ($droppable.hasClass(DragDrop.dropZoneClass)) {
-			$droppable.addClass(DragDrop.dropZoneHoverClass);
-		}
-	};
-
-	/**
-	 * removes the CSS classes after hovering out of a dropzone again
-	 * @param $draggable
-	 * @param $droppable
-	 * @private
-	 */
-	DragDrop.onDropHoverOut = function($draggable, $droppable) {
-		$droppable.removeClass(DragDrop.dropZoneHoverClass);
-	};
-
-	/**
-	 * this method does the whole logic when a draggable is dropped on to a dropzone
-	 * sending out the request and afterwards move the HTML element in the right place.
-	 *
-	 * @param $draggable
-	 * @param $droppable
-	 * @param {Event} event the event
-	 * @private
-	 */
-	DragDrop.onDrop = function($draggable, $droppable, event) {
-		$droppable.removeClass(DragDrop.dropZoneHoverClass);
-		$('[data-relation=' + $draggable.data('uid') + ']').insertAfter($droppable);
-
-		var container = $droppable.closest(DragDrop.containerIdentifier);
-		var element = parseInt($draggable.data('uid'));
-		var tca = $droppable.closest('[data-tca]').data('tca');
-		var language = parseInt($droppable.closest('[data-language]').data('language'));
-		var area = $droppable.closest(DragDrop.areaIdentifier).data('uid');
-		var target = parseInt($droppable.attr('data-target'));
-		var data = {};
-		var parameters = {
-			cmd: {},
-			data: {}
-		};
-
-		data.pid = container.data('pid');
-		data[tca.element.fields.area] = area;
-		data[tca.element.fields.language] = language;
-		data[tca.element.fields.foreign.field] = container.data('uid');
-
-		if (tca.element.fields.foreign.table) {
-			data[tca.element.fields.foreign.table] = tca.container.table;
-		}
-
-		parameters.cmd[tca.element.table] = {};
-		parameters.data[tca.element.table] = {};
-
-		if (element > 0) {
-
-			if (event && event.originalEvent.ctrlKey) {
-				parameters.cmd[tca.element.table][element] = {
-					copy: {
-						action: 'paste',
-						target: target, // @todo not sure about this regarding foreign_field
-						update: {}
-					}
-				};
-				parameters.cmd[tca.element.table][element].copy.update = data;
-			} else {
-				parameters.data[tca.element.table][element] = {};
-				parameters.data[tca.element.table][element] = data;
-				parameters.cmd[tca.element.table][element] = {move: target};
-			}
-		} else {
-			// @todo What about `rootLevel !== 0`?
-			parameters.data[tca.element.table].NEW = $draggable.data('values');
-			$.extend(parameters.data[tca.element.table].NEW, data);
-		}
-		console.log(parameters);
-		// fire the request, and show a message if it has failed
-		DragDrop.ajaxAction($droppable, $draggable, parameters);
-	};
-
-	/**
-	 * this method does the actual AJAX request for both, the  move and the copy action.
-	 *
-	 * @param $droppable
-	 * @param $draggable
-	 * @param parameters
-	 * @param copyAction
-	 * @private
-	 */
-	DragDrop.ajaxAction = function($droppable, $draggable, parameters) {
-		require(['TYPO3/CMS/Backend/AjaxDataHandler'], function (DataHandler) {
-			DataHandler.process(parameters).done(function (result) {
-				if (!result.hasErrors) {
-					// insert draggable on the new position
-					if (!$droppable.parent().hasClass(DragDrop.contentIdentifier.substring(1))) {
-						$draggable.detach().css({top: 0, left: 0})
-							.insertAfter($droppable.closest(DragDrop.dropZoneIdentifier));
-					} else {
-						$draggable.detach().css({top: 0, left: 0})
-							.insertAfter($droppable.closest(DragDrop.contentIdentifier));
-					}
-					// @todo Update without page refresh by using Ajax for the content preview rendering
-					// should be always reloaded otherwise the history back of the browser doesn't work correctly
-					self.location.reload(true);
-				}
-			});
-		});
-	};
-
-	$(DragDrop.initialize);
-	return DragDrop;
+define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jquery-ui/draggable", "jquery-ui/droppable"], function (require, exports, $, AjaxDataHandler) {
+    "use strict";
+    /**
+     * Drag type
+     */
+    var DragType;
+    (function (DragType) {
+        DragType[DragType["Record"] = 0] = "Record";
+        DragType[DragType["Preset"] = 1] = "Preset";
+    })(DragType || (DragType = {}));
+    /**
+     * Handle drag and drop of records and presets within a grid container
+     *
+     * @exports TYPO3/CMS/Grid/DragDrop
+     * @todo Support multiple grid container
+     */
+    var DragDrop = (function () {
+        function DragDrop() {
+        }
+        /**
+         * Initialize drag and drop for all records and presets on the grid container
+         */
+        DragDrop.prototype.initialize = function () {
+            var _this = this;
+            var table = 'pages';
+            // wire draggables
+            $(DragDrop.identifier.item).each(function (index, element) {
+                $(element).draggable({
+                    addClasses: true,
+                    appendTo: 'body',
+                    cursor: 'move',
+                    distance: 20,
+                    handle: DragDrop.identifier.handle,
+                    helper: 'clone',
+                    revert: 'invalid',
+                    scope: table,
+                    start: function (event, ui) { return _this.onDragStart(element, ui.helper); },
+                    stop: function (event, ui) { return _this.onDragStop(element, ui.helper); },
+                    zIndex: 100,
+                });
+            });
+            // wire droppables
+            $(DragDrop.identifier.zone).each(function (index, element) {
+                $(element).droppable({
+                    accept: function ($draggable) { return _this.isDropAllowed(element, $draggable.get(0)); },
+                    activeClass: DragDrop.styles.zone.active,
+                    drop: function (event, ui) { return _this.onDrop(ui.draggable, element, event); },
+                    hoverClass: DragDrop.styles.zone.hover,
+                    scope: table,
+                    tolerance: 'pointer',
+                });
+            });
+        };
+        /**
+         * Check if draggable can be dropped on given droppable
+         *
+         * @param droppable
+         * @param draggable
+         */
+        DragDrop.prototype.isDropAllowed = function (zone, item) {
+            var target = Math.abs(Number($(zone).attr('data-target')));
+            var $area = $(zone).closest(DragDrop.identifier.area);
+            var $content = $area.find(DragDrop.identifier.item + "[data-uid=" + target + "]");
+            var $siblings = $area.find(DragDrop.identifier.item);
+            // only allowed if item is not a record or zone is not a direct sibling of the item
+            return this.getDragType(item) === DragType.Preset ||
+                $siblings.index($(item)) < 0 ||
+                $siblings.index($(item)) - 1 !== $siblings.index($content) &&
+                    $siblings.index($(item)) !== $siblings.index($content);
+        };
+        /**
+         * Called when draggable is selected to be moved
+         *
+         * @param item Draggable element
+         * @param clone Draggable element clone
+         */
+        DragDrop.prototype.onDragStart = function (item, clone) {
+            // update container status
+            $(DragDrop.identifier.container).addClass(DragDrop.styles.container.active);
+            // prepare if item is a record
+            if (this.getDragType(item) === DragType.Record) {
+                $(clone).css('width', $(item).outerWidth());
+                $(item).css('visibility', 'hidden');
+                $(clone).append("<div class=\"ui-draggable-copy-message\">" + TYPO3.lang['dragdrop.copy.message'] + "</div>");
+            }
+        };
+        /**
+         * Called when a draggable is released
+         *
+         * @param item Draggable element
+         * @param clone Draggable element clone
+         */
+        DragDrop.prototype.onDragStop = function (item, clone) {
+            // update container status
+            $(DragDrop.identifier.container).removeClass(DragDrop.styles.container.active);
+            // prepare if item is a record
+            if (this.getDragType(item) === DragType.Record) {
+                $(item).attr('style', null);
+            }
+        };
+        /**
+         * Called when a draggable is dropped
+         *
+         * @param item Draggable element
+         * @param zone Droppable element
+         * @param event Drop event
+         * @todo Handle exceptions
+         */
+        DragDrop.prototype.onDrop = function (item, zone, event) {
+            var _this = this;
+            var uid = parseInt($(item).attr('data-uid'), 10);
+            var target = parseInt($(zone).attr('data-target'), 10);
+            var parameters = JSON.parse($(zone).attr('data-parameters'));
+            var data = $.extend(true, {}, parameters.defaults, parameters.overrides);
+            var query;
+            if (this.getDragType(item) === DragType.Record) {
+                // check requested action
+                if (event && event.originalEvent.ctrlKey) {
+                    query = {
+                        cmd: (_a = {}, _a[parameters.table] = (_b = {}, _b[uid] = { copy: { action: 'paste', target: target, update: data } }, _b), _a),
+                    };
+                }
+                else {
+                    query = {
+                        cmd: (_c = {}, _c[parameters.table] = (_d = {}, _d[uid] = { move: target }, _d), _c),
+                        data: (_e = {}, _e[parameters.table] = (_f = {}, _f[uid] = data, _f), _e),
+                    };
+                }
+            }
+            else {
+                // @todo What about `rootLevel !== 0`?
+                var values = JSON.parse($(item).attr('data-values'));
+                data = $.extend(true, {}, data, values.defaults, values.overrides);
+                query = { data: (_g = {}, _g[parameters.table] = { NEW: data }, _g) };
+            }
+            AjaxDataHandler.process(query).then(function (result) {
+                if (_this.getDragType(item) === DragType.Record) {
+                    $(item).parent().detach().insertAfter($(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0));
+                }
+                else {
+                    $(item).clone().wrap('<div class="t3-content-wrapper"></div>').insertAfter($(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0));
+                }
+                self.location.reload(true);
+            }).catch(function (error) {
+                console.log(error);
+            });
+            var _a, _b, _c, _d, _e, _f, _g;
+        };
+        /**
+         * Get type of draggable
+         *
+         * @param item Draggable element
+         */
+        DragDrop.prototype.getDragType = function (item) {
+            return $(item).is('[data-uid]') ? DragType.Record : DragType.Preset;
+        };
+        DragDrop.identifier = {
+            area: '.t3js-grid-drag-drop-area',
+            container: '.t3js-grid-drag-drop-container',
+            handle: '.t3js-grid-drag-drop-handle',
+            item: '.t3js-grid-drag-drop-item',
+            zone: '.t3js-grid-drag-drop-zone',
+        };
+        DragDrop.styles = {
+            container: {
+                active: 't3-grid-drag-drop-active',
+            },
+            zone: {
+                active: 't3-grid-drag-drop-zone-active',
+                hover: 't3-grid-drag-drop-zone-hover',
+            },
+        };
+        return DragDrop;
+    }());
+    return new DragDrop();
 });

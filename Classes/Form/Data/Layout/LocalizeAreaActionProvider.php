@@ -83,7 +83,7 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
                 'allow-translate' => (int)($result['customData']['tx_grid']['localization']['strategy'] === 'bound' ||
                     $result['customData']['tx_grid']['localization']['strategy'] === null),
                 'container-table' => $result['tableName'],
-                'relationship-column' => $result['customData']['tx_grid']['columnToProcess'],
+                'container-field' => $result['customData']['tx_grid']['columnToProcess'],
                 'area-uid' => $parameters['area']['uid'],
                 'language-uid' => $result['customData']['tx_grid']['language']['uid'],
                 'language-title' => $result['customData']['tx_grid']['language']['title'],
