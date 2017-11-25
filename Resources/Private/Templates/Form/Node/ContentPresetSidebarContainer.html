@@ -13,9 +13,11 @@
                     <ul class="t3-sidebar-group-container">
                         <f:for each="{group.elements}" as="element">
                             <li class="t3-sidebar-group-container-item">
-                                <span class="t3-sidebar-group-container-item-icon t3js-content-element t3js-content-element-draghandle"
-                                      data-values="{element.defaultValues -> f:format.json()}">
-                                    {g:icon(identifier: '{element.iconIdentifier}')}
+                                <span class="t3-sidebar-group-container-item-icon t3js-grid-drag-drop-item"
+                                      data-values="{element.parameters -> f:format.json()}">
+                                    <span class="t3js-grid-drag-drop-handle">
+                                        {g:icon(identifier: '{element.iconIdentifier}')}
+                                    </span>
                                 </span>
                                 <span class="text">
                                     <span class="title">{element.title}</span><br/>

@@ -10,128 +10,132 @@
  *
  * The TYPO3 project - inspiring people to share!
  */
-
-/**
- * Module: TYPO3/CMS/Grid/Sidebar
- * this JS code does the collapsing logic for the Sidebar
- * based on jQuery UI
- */
-define(['jquery', 'jquery-ui/resizable'], function($) {
-    'use strict';
-
-    var Sidebar = {
-        containerIdentifier: '.t3js-sidebar',
-        toggleIdentifier: '.t3js-sidebar-toggle',
-        splitIdentifier: '.t3js-sidebar-split',
-        panelIdentifier: '.t3js-sidebar-panel',
-        toggleStates: ['collapsed', 'expanded', 'full-expanded'],
-        moduleIdentifier: '.module, .module-docheader',
-        options: ['minWidth', 'maxWidth'],
-        collapsedState: 'collapsed'
-    };
-
-    Sidebar.initialize = function() {
-        var container = $(Sidebar.containerIdentifier);
-        var toggle = $(Sidebar.toggleIdentifier);
-        var viewport = $(window);
-        var module = $(Sidebar.moduleIdentifier);
-        var split = $(Sidebar.splitIdentifier);
-
-        toggle.on('click', Sidebar.onToggled);
-        viewport.on('resize', Sidebar.onUpdate);
-
-        split.css({right: Sidebar.calculateOffset()});
-        toggle.css({visibility: 'visible'});
-
-        if (container.attr('data-resizable') !== undefined) {
-            container.resizable({
-                handles: {
-                    'w': Sidebar.splitIdentifier
-                },
-                resize: Sidebar.onResizing,
-                stop: Sidebar.onResized,
-                start: Sidebar.onResize
-            });
-
-            $.each(Sidebar.options, function(i, option) {
-                if (container.data().hasOwnProperty(option)) {
-                    container.resizable('option', option, container.data(option));
-                }
-            })
+define(["require", "exports", "jquery", "jquery-ui/resizable"], function (require, exports, $) {
+    "use strict";
+    /**
+     * Toggle states
+     */
+    var ToggleState;
+    (function (ToggleState) {
+        ToggleState["Collapsed"] = "collapsed";
+        ToggleState["Expanded"] = "expanded";
+        ToggleState["FullExpanded"] = "full-expanded";
+    })(ToggleState || (ToggleState = {}));
+    /**
+     * Handle toggling of a backend module sidebar
+     *
+     * @exports TYPO3/CMS/Grid/Sidebar
+     * @todo Move to sysext `backend`
+     */
+    var Sidebar = (function () {
+        function Sidebar() {
         }
-
-        Sidebar.onUpdate();
-    };
-
-    Sidebar.onUpdate = function() {
-        var height = $(window).height();
-        var panel = $(Sidebar.panelIdentifier);
-
-        panel.css('height', height + 'px');
-    };
-
-    Sidebar.onToggled = function() {
-        var container = $(Sidebar.containerIdentifier);
-        var module = $(Sidebar.moduleIdentifier);
-        var state = container.attr('data-toggle');
-
-        container.attr('data-toggle', Sidebar.getToggleState(state, 1));
-        container.removeAttr('style');
-
-        if (Sidebar.getToggleState(state, 2) === Sidebar.collapsedState) {
-            container.removeAttr('data-expandable', '');
-        } else {
-            container.attr('data-expandable', '');
-
-            if (container.attr('data-size')) {
-                container.css('width', container.attr('data-size'));
+        /**
+         * Get toggle state
+         *
+         * @param start
+         * @param offset
+         */
+        Sidebar.getState = function (start, offset) {
+            var values = Object.keys(ToggleState).map(function (k) { return ToggleState[k]; });
+            var n = values.length;
+            return values[(($.inArray(start, values) + offset) % n + n) % n];
+        };
+        /**
+         * Initialize sidebar
+         */
+        Sidebar.prototype.initialize = function () {
+            var _this = this;
+            var $element = $(Sidebar.identifier.element);
+            var $toggle = $(Sidebar.identifier.toggle);
+            $toggle.on('click', function (event) { return _this.onToggle(); });
+            $(window).on('resize', function (event) { return _this.onUpdate(); });
+            $(Sidebar.identifier.split).css({ right: this.calculateOffset() });
+            $toggle.css({ visibility: 'visible' });
+            if ($element.data('resizable') !== undefined) {
+                $element.resizable({
+                    handles: {
+                        w: Sidebar.identifier.split,
+                    },
+                    resize: function (event, ui) { return _this.onResize(); },
+                    start: function (event, ui) { return _this.onStart(); },
+                });
+                $.each(['minWidth', 'maxWidth'], function (index, option) {
+                    if ($element.data().hasOwnProperty(option)) {
+                        $element.resizable('option', option, $element.data(option));
+                    }
+                });
             }
-        }
-
-        module.css('width', 'calc( 100% - ' + Sidebar.calculateWidth() + 'px )');
-    };
-
-    Sidebar.onResize = function() {
-        var container = $(Sidebar.containerIdentifier);
-
-        container.removeAttr('data-collapsed');
-        container.attr('data-toggle', Sidebar.getToggleState(Sidebar.collapsedState, -1));
-    };
-
-    Sidebar.onResizing = function() {
-        var width = Sidebar.calculateWidth();
-        var module = $(Sidebar.moduleIdentifier);
-
-        // See https://bugs.jqueryui.com/ticket/4985
-        $(this).css('left', '');
-        $(this).attr('data-size', width);
-
-        $(Sidebar.moduleIdentifier).css('width', 'calc( 100% - ' + width + 'px )');
-        $(Sidebar.splitIdentifier).css('right', Sidebar.calculateOffset());
-    };
-
-    Sidebar.onResized = function() {
-    };
-
-    Sidebar.calculateWidth = function() {
-        return $(Sidebar.containerIdentifier).outerWidth();
-    };
-
-    Sidebar.calculateOffset = function() {
-        var module = $(Sidebar.moduleIdentifier);
-        var split = $(Sidebar.splitIdentifier);
-
-        return module.get(0).offsetWidth - module.get(0).clientWidth + split.outerWidth();
-    }
-
-    Sidebar.getToggleState = function(start, offset) {
-        var i = $.inArray(start, Sidebar.toggleStates);
-        var n = Sidebar.toggleStates.length;
-
-        return Sidebar.toggleStates[((i + offset) % n + n) % n]
-    };
-
-    $(Sidebar.initialize);
-
-    return Sidebar;
-})
+            this.onUpdate();
+        };
+        /**
+         * Called when sidebar needs update
+         */
+        Sidebar.prototype.onUpdate = function () {
+            $(Sidebar.identifier.panel).css('height', $(window).height() + 'px');
+        };
+        /**
+         * Called when sidebar toggles
+         */
+        Sidebar.prototype.onToggle = function () {
+            var $element = $(Sidebar.identifier.element);
+            var state = $element.data('toggle');
+            $element.data('toggle', Sidebar.getState(state, 1));
+            $element.removeAttr('style');
+            if (Sidebar.getState(state, 2) === ToggleState.Collapsed) {
+                $element.removeAttr('data-expandable');
+            }
+            else {
+                $element.data('expandable', '');
+                if ($element.data('size')) {
+                    $element.css('width', $element.data('size'));
+                }
+            }
+            $(Sidebar.identifier.module).css('width', 'calc( 100% - ' + this.calculateWidth() + 'px )');
+        };
+        /**
+         * Called on sidebar resize
+         */
+        Sidebar.prototype.onResize = function () {
+            var $element = $(Sidebar.identifier.element);
+            $element.removeAttr('data-collapsed');
+            $element.data('toggle', Sidebar.getState(ToggleState.Collapsed, -1));
+        };
+        /**
+         * Called on sidebar start
+         */
+        Sidebar.prototype.onStart = function () {
+            var width = this.calculateWidth();
+            // See https://bugs.jqueryui.com/ticket/4985
+            $(this).css('left', '');
+            $(this).data('size', width);
+            $(Sidebar.identifier.module).css('width', 'calc( 100% - ' + width + 'px )');
+            $(Sidebar.identifier.split).css('right', this.calculateOffset());
+        };
+        /**
+         * Calculate sidebar width
+         */
+        Sidebar.prototype.calculateWidth = function () {
+            return $(Sidebar.identifier.element).outerWidth();
+        };
+        /**
+         * Calculate sidebar offset
+         */
+        Sidebar.prototype.calculateOffset = function () {
+            var $module = $(Sidebar.identifier.module);
+            return $module.get(0).offsetWidth - $module.get(0).clientWidth + $(Sidebar.identifier.split).outerWidth();
+        };
+        /**
+         * Identifier for sidebar elements
+         */
+        Sidebar.identifier = {
+            element: '.t3js-sidebar',
+            module: '.module, .module-docheader',
+            panel: '.t3js-sidebar-panel',
+            split: '.t3js-sidebar-split',
+            toggle: '.t3js-sidebar-toggle',
+        };
+        return Sidebar;
+    }());
+    return new Sidebar();
+});

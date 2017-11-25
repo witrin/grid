@@ -1,11 +1,11 @@
 <html data-namespace-typo3-fluid="true" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers">
-<div class="t3-content-element t3js-content-element t3js-content-element-sortable
+<div class="t3-content-element t3-grid-drag-drop-item t3js-grid-drag-drop-item
         {f:if(condition: '!{visible}', then: ' t3-content-element-hidden')}
         {f:if(condition: '{errors}', then: ' t3-content-element-danger')}
         {f:if(condition: '{warnings}', then: ' t3-content-element-warning')}"
      data-uid="{record}">
-    <div class="t3-content-element-drag-item">
-        <div class="t3-content-element-header t3-content-element-header-draggable t3js-content-element-drag-handle">
+    <div>
+        <div class="t3-content-element-header t3-grid-drag-drop-handle t3js-grid-drag-drop-handle">
             <div class="t3-content-element-header-icons-left">
                 {g:record.icon(table: '{table}', data: '{data}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
                 <f:if condition="{flag}">

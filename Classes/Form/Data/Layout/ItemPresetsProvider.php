@@ -96,12 +96,9 @@ class ItemPresetsProvider implements FormDataProviderInterface
                     $parameters = array_merge((array)$element['defaults.'], $defaults);
 
                     $element['parameters'] = [
-                        'defVals' => [
-                            $table => TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters)
-                        ],
-                        'overrideVals' => [
-                            $table => array_diff_key($parameters, TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters))
-                        ],
+                        'table' => $table,
+                        'defaults' => TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters),
+                        'overrides' => array_diff_key($parameters, TcaUtility::filterHiddenFields($GLOBALS['TCA'][$table]['columns'], $parameters)),
                     ];
 
                     $result[$key] = $element;

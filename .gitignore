@@ -22,3 +22,4 @@ phantomjsdriver.log
 #
 # Ignore build stuff
 /Build/node_modules/*
+/Build/JavaScript/*

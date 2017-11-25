@@ -125,30 +125,14 @@ class LayoutContainer extends AbstractContainer
     protected function mapData($data)
     {
         return [
-            'language' => $data['customData']['tx_grid']['language'],
             'areas' => $data['customData']['tx_grid']['template']['areas'],
             'uid' => $data['vanillaUid'],
             'pid' => $data['effectivePid'],
             'actions' => $data['customData']['tx_grid']['actions'],
             'title' => $data['recordTitle'],
             'record' => $this->data['databaseRow'],
-            'tca' => [
-                'container' => [
-                    'table' => $data['tableName'],
-                    'field' => $data['customData']['tx_grid']['columnToProcess']
-                ],
-                'element' => [
-                    'table' => $data['customData']['tx_grid']['items']['config']['foreign_table'],
-                    'fields' => [
-                        'area' => $data['customData']['tx_grid']['items']['config']['foreign_area_field'],
-                        'language' => $data['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'],
-                        'foreign' => [
-                            'table' => $data['customData']['tx_grid']['items']['config']['foreign_table_field'],
-                            'field' => $data['customData']['tx_grid']['items']['config']['foreign_field']
-                        ]
-                    ]
-                ]
-            ]
+            'table' => $this->data['tableName'],
+            'field' => $this->data['customData']['tx_grid']['columnToProcess']
         ];
     }
 
@@ -177,11 +161,26 @@ class LayoutContainer extends AbstractContainer
                     'TYPO3/CMS/Backend/Tooltip',
                     'TYPO3/CMS/Backend/ContextMenu',
                     'TYPO3/CMS/Backend/Modal',
-                    'TYPO3/CMS/Grid/DragDrop',
-                    'TYPO3/CMS/Grid/Actions',
-                    'TYPO3/CMS/Grid/Localization',
-                    'TYPO3/CMS/Grid/Paste',
-                    'TYPO3/CMS/Grid/Wizard'
+                    [
+                        'TYPO3/CMS/Grid/DragDrop' => 'function(DragDrop) {
+                            DragDrop.initialize();
+                        }'
+                    ],
+                    [
+                        'TYPO3/CMS/Grid/Wizard/Localization' => 'function(Localization) {
+                            Localization.initialize();
+                        }',
+                    ],
+                    [
+                        'TYPO3/CMS/Grid/Paste' => 'function(Paste) {
+                            Paste.initialize();
+                        }'
+                    ],
+                    [
+                        'TYPO3/CMS/Grid/Actions' => 'function(Actions) {
+                            Actions.initialize();
+                        }'
+                    ]
                 ]
             ]
         );

@@ -65,8 +65,11 @@ class ContentPresetSidebarContainer extends AbstractContainer
             parent::initializeResultArray(),
             [
                 'requireJsModules' => [
-                    'TYPO3/CMS/Grid/Sidebar',
-                    'TYPO3/CMS/Grid/DragDrop'
+                    [
+                        'TYPO3/CMS/Grid/Sidebar' => 'function(Sidebar) {
+                            Sidebar.initialize();
+                        }'
+                    ]
                 ]
             ]
         );

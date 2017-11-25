@@ -78,12 +78,12 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
         return [
             'data' => [
                 'has-elements' => (int)!empty($parameters['overlay']['items']),
-                'allow-copy' => (int)($result['customData']['tx_grid']['localization']['strategy'] === 'unbound' ||
-                    $result['customData']['tx_grid']['localization']['strategy'] === null),
-                'allow-translate' => (int)($result['customData']['tx_grid']['localization']['strategy'] === 'bound' ||
-                    $result['customData']['tx_grid']['localization']['strategy'] === null),
+                'allow-copy' => (int)($result['customData']['tx_grid']['localization']['status'] === 'unbound' ||
+                    $result['customData']['tx_grid']['localization']['status'] === null),
+                'allow-translate' => (int)($result['customData']['tx_grid']['localization']['status'] === 'bound' ||
+                    $result['customData']['tx_grid']['localization']['status'] === null),
                 'container-table' => $result['tableName'],
-                'relationship-column' => $result['customData']['tx_grid']['columnToProcess'],
+                'container-field' => $result['customData']['tx_grid']['columnToProcess'],
                 'area-uid' => $parameters['area']['uid'],
                 'language-uid' => $result['customData']['tx_grid']['language']['uid'],
                 'language-title' => $result['customData']['tx_grid']['language']['title'],
@@ -94,7 +94,7 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
             'title' => $this->getLanguageService()->sL('LLL:EXT:lang/Resources/Private/Language/locallang_misc.xlf:localize'),
             'section' => 'header',
             'category' => 'ui',
-            'class' => 't3js-localize',
+            'class' => 't3js-grid-localize',
             'priority' => 10
         ];
     }

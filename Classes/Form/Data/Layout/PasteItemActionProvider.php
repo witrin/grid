@@ -18,6 +18,7 @@ use TYPO3\CMS\Backend\Clipboard\Clipboard;
 use TYPO3\CMS\Backend\Form\FormDataProviderInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Grid\Utility\TcaUtility;
 
 /**
  * Resolve paste action URL for the grid container
@@ -44,31 +45,34 @@ class PasteItemActionProvider implements FormDataProviderInterface
                 $title = BackendUtility::getRecordTitle($table, $record);
 
                 foreach ($result['customData']['tx_grid']['template']['areas'] as &$area) {
-                    $area['actions']['paste'] = $this->getAttributes(
-                        $result,
-                        [
-                            'area' => $area,
-                            'class' => 't3js-paste t3js-paste-into',
-                            'mode' => $this->getClipboard()->clipData['normal']['mode'],
-                            'record' => ['uid' => $uid, 'title' => $title],
-                            'title' => 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pasteIntoColumn',
-                            'section' => 'body'
-                        ]
-                    );
-                }
+                    if ($this->isAvailable($result, ['area' => $area])) {
+                        $area['actions']['paste'] = $this->getAttributes(
+                            $result,
+                            [
+                                'area' => $area,
+                                'class' => 't3js-grid-paste',
+                                'mode' => $this->getClipboard()->clipData['normal']['mode'],
+                                'record' => ['uid' => $uid, 'title' => $title],
+                                'title' => 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pasteIntoColumn',
+                                'section' => 'body'
+                            ]
+                        );
 
-                foreach ($result['customData']['tx_grid']['items']['children'] as &$child) {
-                    $child['customData']['tx_grid']['actions']['paste'] = $this->getAttributes(
-                        $result,
-                        [
-                            'child' => $child,
-                            'class' => 't3js-paste t3js-paste-after',
-                            'mode' => $this->getClipboard()->clipData['normal']['mode'],
-                            'record' => ['uid' => $uid, 'title' => $title],
-                            'title' => 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pasteAfterRecord',
-                            'section' => 'after'
-                        ]
-                    );
+                        foreach ($area['items'] as &$item) {
+                            $item['customData']['tx_grid']['actions']['paste'] = $this->getAttributes(
+                                $result,
+                                [
+                                    'area' => $area,
+                                    'item' => $item,
+                                    'class' => 't3js-grid-paste',
+                                    'mode' => $this->getClipboard()->clipData['normal']['mode'],
+                                    'record' => ['uid' => $uid, 'title' => $title],
+                                    'title' => 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:pasteAfterRecord',
+                                    'section' => 'after'
+                                ]
+                           );
+                        }
+                    }
                 }
             }
         }
@@ -83,9 +87,15 @@ class PasteItemActionProvider implements FormDataProviderInterface
      */
     protected function isAvailable(array $result, array $parameters) : bool
     {
-        return $result['customData']['tx_grid']['localization']['mode'] !== 'strict' ||
+        return (
+            $result['customData']['tx_grid']['localization']['mode'] !== 'strict' ||
             empty($result['customData']['tx_grid']['items']['children']) ||
-            $result['customData']['tx_grid']['language']['uid'] <= 0;
+            $result['customData']['tx_grid']['language']['uid'] <= 0
+        ) && (
+            !isset($parameters['area']) ||
+            !$parameters['area']['restricted'] &&
+            $parameters['area']['assigned']
+        );
     }
 
     /**
@@ -118,12 +128,32 @@ class PasteItemActionProvider implements FormDataProviderInterface
      */
     protected function getAttributes(array $result, array $parameters) : array
     {
+        $defaults = array_merge([
+            $result['customData']['tx_grid']['items']['config']['foreign_area_field'] => $parameters['area']['uid'],
+            $result['customData']['tx_grid']['items']['vanillaTca']['ctrl']['languageField'] => $result['customData']['tx_grid']['language']['uid']
+        ], $result['customData']['tx_grid']['items']['defaultValues']);
+
         return [
             'data' => [
                 'uid' => $parameters['record']['uid'],
-                'title' => $parameters['record']['title']
+                'title' => $parameters['record']['title'],
+                'target' => isset($parameters['item']) ? '-' . $parameters['item']['vanillaUid'] : $result['effectivePid'],
+                'parameters' => [
+                    'table' => $result['customData']['tx_grid']['items']['config']['foreign_table'],
+                    'defaults' => TcaUtility::filterHiddenFields(
+                        $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
+                        $defaults
+                    ),
+                    'overrides' => array_diff_key(
+                        $defaults,
+                        TcaUtility::filterHiddenFields(
+                            $result['customData']['tx_grid']['items']['vanillaTca']['columns'],
+                            $defaults
+                        )
+                    )
+                ]
             ],
-            'class' => 't3js-paste' . ($parameters['mode'] ? '-' . $parameters['mode'] : '') . ' ' . $parameters['class'],
+            'class' => 't3js-grid-paste' . ($parameters['mode'] ? '-' . $parameters['mode'] : '') . ' ' . $parameters['class'],
             'title' => $this->getLanguageService()->sL($parameters['title']),
             'icon' => 'actions-document-paste-into',
             'section' => $parameters['section'],

@@ -183,9 +183,9 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
      * @dataProvider fetchOriginLanguageDataProvider
      * @test
      */
-    public function fetchOriginLanguage($containerUid, $areaUid, $localizedLanguage, $containerTable, $relationshipColumn, $expectedResult)
+    public function fetchOriginLanguage($containerUid, $areaUid, $localizedLanguage, $containerTable, $containerField, $expectedResult)
     {
-        $result = $this->subject->fetchOriginLanguage($containerUid, $areaUid, $localizedLanguage, $containerTable, $relationshipColumn);
+        $result = $this->subject->fetchOriginLanguage($containerUid, $areaUid, $localizedLanguage, $containerTable, $containerField);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -313,9 +313,9 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
      * @dataProvider getLocalizedRecordCountDataProvider
      * @test
      */
-    public function getLocalizedRecordCount($containerUid, $areaUid, $languageUid, $containerTable, $relationshipColumn, $expectedResult)
+    public function getLocalizedRecordCount($containerUid, $areaUid, $languageUid, $containerTable, $containerField, $expectedResult)
     {
-        $result = $this->subject->getLocalizedRecordCount($containerUid, $areaUid, $languageUid, $containerTable, $relationshipColumn);
+        $result = $this->subject->getLocalizedRecordCount($containerUid, $areaUid, $languageUid, $containerTable, $containerField);
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -450,9 +450,9 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
      * @dataProvider getRecordsToCopyDatabaseResultDataProvider
      * @test
      */
-    public function getRecordsToCopyDatabaseResult($containerUid, $areaUid, $destinationLanguageUid, $languageUid, $containerTable, $relationshipColumn, $expectedResult)
+    public function getRecordsToCopyDatabaseResult($containerUid, $areaUid, $destinationLanguageUid, $languageUid, $containerTable, $containerField, $expectedResult)
     {
-        $result = $this->subject->getRecordsToCopyDatabaseResult($containerUid, $areaUid, $destinationLanguageUid, $languageUid, 'uid', $containerTable, $relationshipColumn);
+        $result = $this->subject->getRecordsToCopyDatabaseResult($containerUid, $areaUid, $destinationLanguageUid, $languageUid, 'uid', $containerTable, $containerField);
         $result = $result->fetchAll();
         $this->assertEquals($expectedResult, $result);
     }
