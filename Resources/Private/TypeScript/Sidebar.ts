@@ -68,7 +68,7 @@ class Sidebar {
     $(Sidebar.identifier.split).css({ right: this.calculateOffset() });
     $toggle.css({ visibility: 'visible' });
 
-    if ($element.data('resizable') !== undefined) {
+    if ($element.attr('data-resizable') !== undefined) {
       $element.resizable({
         handles: {
           w: Sidebar.identifier.split,
@@ -99,18 +99,18 @@ class Sidebar {
    */
   protected onToggle() {
     const $element = $(Sidebar.identifier.element);
-    const state = $element.data('toggle');
+    const state = $element.attr('data-toggle');
 
-    $element.data('toggle', Sidebar.getState(state, 1));
+    $element.attr('data-toggle', Sidebar.getState(state, 1));
     $element.removeAttr('style');
 
     if (Sidebar.getState(state, 2) === ToggleState.Collapsed) {
       $element.removeAttr('data-expandable');
     } else {
-      $element.data('expandable', '');
+      $element.attr('data-expandable', '');
 
-      if ($element.data('size')) {
-        $element.css('width', $element.data('size'));
+      if ($element.attr('data-size')) {
+        $element.css('width', $element.attr('data-size'));
       }
     }
 
@@ -124,7 +124,7 @@ class Sidebar {
     const $element = $(Sidebar.identifier.element);
 
     $element.removeAttr('data-collapsed');
-    $element.data('toggle', Sidebar.getState(ToggleState.Collapsed, -1));
+    $element.attr('data-toggle', Sidebar.getState(ToggleState.Collapsed, -1));
   }
 
   /**
@@ -135,7 +135,7 @@ class Sidebar {
 
     // See https://bugs.jqueryui.com/ticket/4985
     $(this).css('left', '');
-    $(this).data('size', width);
+    $(this).attr('data-size', width);
 
     $(Sidebar.identifier.module).css('width', 'calc( 100% - ' + width + 'px )');
     $(Sidebar.identifier.split).css('right', this.calculateOffset());

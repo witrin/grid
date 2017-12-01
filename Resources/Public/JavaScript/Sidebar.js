@@ -52,7 +52,7 @@ define(["require", "exports", "jquery", "jquery-ui/resizable"], function (requir
             $(window).on('resize', function (event) { return _this.onUpdate(); });
             $(Sidebar.identifier.split).css({ right: this.calculateOffset() });
             $toggle.css({ visibility: 'visible' });
-            if ($element.data('resizable') !== undefined) {
+            if ($element.attr('data-resizable') !== undefined) {
                 $element.resizable({
                     handles: {
                         w: Sidebar.identifier.split,
@@ -79,16 +79,16 @@ define(["require", "exports", "jquery", "jquery-ui/resizable"], function (requir
          */
         Sidebar.prototype.onToggle = function () {
             var $element = $(Sidebar.identifier.element);
-            var state = $element.data('toggle');
-            $element.data('toggle', Sidebar.getState(state, 1));
+            var state = $element.attr('data-toggle');
+            $element.attr('data-toggle', Sidebar.getState(state, 1));
             $element.removeAttr('style');
             if (Sidebar.getState(state, 2) === ToggleState.Collapsed) {
                 $element.removeAttr('data-expandable');
             }
             else {
-                $element.data('expandable', '');
-                if ($element.data('size')) {
-                    $element.css('width', $element.data('size'));
+                $element.attr('data-expandable', '');
+                if ($element.attr('data-size')) {
+                    $element.css('width', $element.attr('data-size'));
                 }
             }
             $(Sidebar.identifier.module).css('width', 'calc( 100% - ' + this.calculateWidth() + 'px )');
@@ -99,7 +99,7 @@ define(["require", "exports", "jquery", "jquery-ui/resizable"], function (requir
         Sidebar.prototype.onResize = function () {
             var $element = $(Sidebar.identifier.element);
             $element.removeAttr('data-collapsed');
-            $element.data('toggle', Sidebar.getState(ToggleState.Collapsed, -1));
+            $element.attr('data-toggle', Sidebar.getState(ToggleState.Collapsed, -1));
         };
         /**
          * Called on sidebar start
@@ -108,7 +108,7 @@ define(["require", "exports", "jquery", "jquery-ui/resizable"], function (requir
             var width = this.calculateWidth();
             // See https://bugs.jqueryui.com/ticket/4985
             $(this).css('left', '');
-            $(this).data('size', width);
+            $(this).attr('data-size', width);
             $(Sidebar.identifier.module).css('width', 'calc( 100% - ' + width + 'px )');
             $(Sidebar.identifier.split).css('right', this.calculateOffset());
         };
