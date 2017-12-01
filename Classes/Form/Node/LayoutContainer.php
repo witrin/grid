@@ -125,6 +125,7 @@ class LayoutContainer extends AbstractContainer
     protected function mapData($data)
     {
         return [
+            'language' => $data['customData']['tx_grid']['language'],
             'areas' => $data['customData']['tx_grid']['template']['areas'],
             'uid' => $data['vanillaUid'],
             'pid' => $data['effectivePid'],
