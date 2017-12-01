@@ -15,8 +15,5 @@ defined('TYPO3_MODE') or die();
     ]
 );
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess']['grid']
-    = \TYPO3\CMS\Grid\Hook\Core\Page\PageRenderer\RenderPreProcessHook::class . '->process';
-
 // Temporary as long as this is not part of `backend`
 $GLOBALS['TBE_STYLES']['skins']['backend']['stylesheetDirectories']['grid'] = 'EXT:grid/Resources/Public/Css/';
