@@ -31,7 +31,7 @@ class LocalizationModeProvider implements FormDataProviderInterface
     {
         $pageTsConfig = $result['pageTsConfig']['tx_grid.'][$result['tableName'] . '.'][$result['customData']['tx_grid']['columnToProcess'] . '.'];
 
-        $result['customData']['tx_grid']['localization']['mode'] = $pageTsConfig['allowInconsistentLanguageHandling'] ? 'flexible' : 'strict';
+        $result['customData']['tx_grid']['localization']['mode'] = $pageTsConfig['allowInconsistentLanguageHandling'] ? 'free' : 'strict';
 
         return $result;
     }

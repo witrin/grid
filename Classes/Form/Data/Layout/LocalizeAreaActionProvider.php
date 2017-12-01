@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
  * Add localize action for grid area overlays
  *
  * @todo Support localize action without overlays
+ * @todo Source language row is required in free mode, see `\TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseLanguageRows`
  */
 class LocalizeAreaActionProvider implements FormDataProviderInterface
 {
@@ -33,13 +34,20 @@ class LocalizeAreaActionProvider implements FormDataProviderInterface
      */
     public function addData(array $result)
     {
+        $mode = $result['customData']['tx_grid']['localization']['mode'];
         $areas = array_column($result['customData']['tx_grid']['template']['areas'], null, 'uid');
 
         foreach ($result['customData']['tx_grid']['overlays'] as &$overlay) {
             $translated = array_column(
-                array_column(
-                    (array)$overlay['customData']['tx_grid']['items']['children'],
-                    'defaultLanguageRow'
+                array_merge(
+                    array_column(
+                        (array)$overlay['customData']['tx_grid']['items']['children'],
+                        'defaultLanguageRow'
+                    ),
+                    $mode === 'free' ? array_column(
+                        (array)$overlay['customData']['tx_grid']['items']['children'],
+                        'sourceLanguageRow'
+                    ) : []
                 ),
                 'uid'
             );

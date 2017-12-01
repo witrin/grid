@@ -214,6 +214,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['contentContai
         ],
         \TYPO3\CMS\Grid\Form\Data\Layout\LocalizeAreaActionProvider::class => [
             'depends' => [
+                \TYPO3\CMS\Backend\Form\FormDataProvider\DatabaseLanguageRows::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageProvider::class,
                 \TYPO3\CMS\Grid\Form\Data\LanguageOverlayProvider::class
             ]
