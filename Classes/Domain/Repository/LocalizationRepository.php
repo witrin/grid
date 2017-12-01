@@ -34,42 +34,33 @@ class LocalizationRepository
      * @param int $areaUid
      * @param int $languageUid
      * @param string $containerTable
-     * @param string $itemsField
+     * @param string $containerField
      * @return array|false
      */
-    public function fetchOriginLanguage($containerUid, $areaUid, $languageUid, $containerTable = 'pages', $itemsField = 'content')
+    public function fetchOriginLanguage($containerUid, $areaUid, $languageUid, $containerTable = 'pages', $containerField = 'content')
     {
-        $this->validateTableConfiguration($containerTable, $itemsField);
+        $this->validateTableConfiguration($containerTable, $containerField);
 
-        $itemTable = $GLOBALS['TCA'][$containerTable]['columns'][$itemsField]['config']['foreign_table'];
-        $contentTableConfiguration = $GLOBALS['TCA'][$itemTable];
+        $itemTable = $GLOBALS['TCA'][$containerTable]['columns'][$containerField]['config']['foreign_table'];
+        $itemTableConfiguration = $GLOBALS['TCA'][$itemTable];
         $queryBuilder = $this->getQueryBuilderWithWorkspaceRestriction($itemTable);
-        $constraints = $this->getItemRecordConstraints($containerTable, $itemsField, $queryBuilder, $containerUid, $areaUid, $languageUid);
+        $constraints = $this->getItemRecordConstraints($containerTable, $containerField, $queryBuilder, $containerUid, $areaUid, $languageUid);
 
         $constraints += $this->getAllowedLanguageConstraintsForBackendUser();
 
-        $queryBuilder->select($itemTable . '_orig.' . $contentTableConfiguration['ctrl']['languageField'])
+        $queryBuilder->select($itemTable . '_orig.' . $itemTableConfiguration['ctrl']['languageField'])
             ->from($itemTable)
             ->join(
                 $itemTable,
                 $itemTable,
                 $itemTable . '_orig',
                 $queryBuilder->expr()->eq(
-                    $itemTable . '.' . $contentTableConfiguration['ctrl']['translationSource'],
+                    $itemTable . '.' . $itemTableConfiguration['ctrl']['translationSource'],
                     $queryBuilder->quoteIdentifier($itemTable . '_orig.uid')
                 )
             )
-            ->join(
-                $itemTable . '_orig',
-                'sys_language',
-                'sys_language',
-                $queryBuilder->expr()->eq(
-                    $itemTable . '_orig.' . $contentTableConfiguration['ctrl']['languageField'],
-                    $queryBuilder->quoteIdentifier('sys_language.uid')
-                )
-            )
             ->where(...$constraints)
-            ->groupBy($itemTable . '_orig.' . $contentTableConfiguration['ctrl']['languageField']);
+            ->groupBy($itemTable . '_orig.' . $itemTableConfiguration['ctrl']['languageField']);
 
         return $queryBuilder->execute()->fetch();
     }

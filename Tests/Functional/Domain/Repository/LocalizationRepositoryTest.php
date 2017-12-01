@@ -361,7 +361,7 @@ class LocalizationRepositoryTest extends \TYPO3\TestingFramework\Core\Functional
                 0,
                 []
             ],
-            'from language 1 to 2 free mode  mode copied' => [
+            'from language 1 to 2 free mode copied' => [
                 3,
                 0,
                 2,
