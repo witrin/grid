@@ -251,27 +251,17 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
                 }
                 break;
             case 'shortcut':
-                if (!empty($row['records'])) {
-                    $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-                    $recordList = explode(',', $row['records']);
-                    foreach ($recordList as $recordIdentifier) {
-                        $split = BackendUtility::splitTable_Uid($recordIdentifier);
-                        $tableName = empty($split[0]) ? 'tt_content' : $split[0];
-                        $shortcutRecord = BackendUtility::getRecord($tableName, $split[1]);
-                        if (is_array($shortcutRecord)) {
-                            $icon = $iconFactory->getIconForRecord($tableName, $shortcutRecord, Icon::SIZE_SMALL)->render();
-                            $icon = BackendUtility::wrapClickMenuOnIcon(
-                                $icon,
-                                $tableName,
-                                $shortcutRecord['uid'],
-                                1,
-                                '',
-                                '+copy,info,edit,view'
-                            );
-                            $lines[] = $icon
-                                . htmlspecialchars(BackendUtility::getRecordTitle($tableName, $shortcutRecord));
-                        }
-                    }
+                foreach ($row['records'] ?? [] as $record) {
+                    $icon = GeneralUtility::makeInstance(IconFactory::class)->getIconForRecord(
+                        $record['table'],
+                        $record['row'],
+                        Icon::SIZE_SMALL
+                    )->render();
+                    $lines[] = BackendUtility::wrapClickMenuOnIcon(
+                        $icon,
+                        $record['table'],
+                        $record['uid']
+                    ) . '&nbsp;' . htmlspecialchars($record['title']);
                 }
                 break;
             case 'list':
