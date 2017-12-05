@@ -27,6 +27,7 @@ use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Backend\View\PageLayoutViewDrawFooterHookInterface;
 
 /**
  * Generates the preview of a page content element
@@ -51,7 +52,9 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
         $view = $this->initializeView();
 
         $header = $this->renderHeader();
-        $content = $this->processHook($header);
+        $footer = $this->renderFooter();
+
+        $content = $this->processHooks($header, $footer);
 
         if ($content === null) {
             $content = $this->renderContent();
@@ -73,7 +76,8 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
             'errors' => $this->data['renderData']['hasErrors'],
             'warnings' => $this->data['renderData']['hasWarnings'],
             'data' => $this->data['databaseRow'],
-            'content' => $header . '<span class="exampleContent">' . $content . '</span>'
+            'content' => $header . $content,
+            'footer' => implode('<br />', $footer)
         ]);
 
         $result['html'] = $view->render();
@@ -134,6 +138,27 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
     }
 
     /**
+     * @return array
+     * @deprecated
+     */
+    protected function getRow()
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('tt_content');
+
+        $queryBuilder->getRestrictions()
+            ->removeByType(HiddenRestriction::class)
+            ->removeByType(StartTimeRestriction::class)
+            ->removeByType(EndTimeRestriction::class);
+
+        return $queryBuilder->select('*')
+            ->from('tt_content')
+            ->where($queryBuilder->expr()->eq('uid', $this->data['vanillaUid']))
+            ->execute()
+            ->fetch();
+    }
+
+    /**
      * @return string
      */
     protected function renderHeader()
@@ -158,40 +183,72 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
     }
 
     /**
+     * @return array
+     */
+    protected function renderFooter()
+    {
+        $html = [];
+
+        // info fields
+        foreach ([
+            'starttime',
+            'endtime',
+            'fe_group',
+            'space_before_class',
+            'space_after_class'
+        ] as $field) {
+            if ($this->data['databaseRow'][$field]) {
+                $html[] = '<strong>' . htmlspecialchars($this->getLanguageService()->sL($GLOBALS['TCA']['tt_content']['columns'][$field]['label'])) . '</strong> '
+                    . htmlspecialchars(BackendUtility::getProcessedValue('tt_content', $field, $this->data['databaseRow'][$field]));
+            }
+        }
+
+        // content element annotation
+        if (!empty($GLOBALS['TCA']['tt_content']['ctrl']['descriptionColumn'])) {
+            $html[] = htmlspecialchars($this->data['databaseRow'][$GLOBALS['TCA']['tt_content']['ctrl']['descriptionColumn']]);
+        }
+
+        return $html;
+    }
+
+    /**
      * @param string $header
+     * @param array $footer
      * @return string
      */
-    protected function processHook(&$header)
+    protected function processHooks(&$header, array &$footer)
     {
-        $hooks = &$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem'];
-        $view = $this->getPageLayoutView();
+        $hooks = &$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'];
         $html = null;
         $draw = true;
 
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getQueryBuilderForTable('tt_content');
+        if (!empty($hooks['tt_content_drawItem']) || !empty($hooks['tt_content_drawFooter'])) {
+            // legacy calls caused by the hook interfaces
+            $view = $this->getPageLayoutView();
+            $row = $this->getRow();
 
-        $queryBuilder->getRestrictions()
-            ->removeByType(HiddenRestriction::class)
-            ->removeByType(StartTimeRestriction::class)
-            ->removeByType(EndTimeRestriction::class);
-
-        $row = $queryBuilder->select('*')
-            ->from('tt_content')
-            ->where($queryBuilder->expr()->eq('uid', $this->data['vanillaUid']))
-            ->execute()
-            ->fetch();
-
-        if (is_array($hooks)) {
-            foreach ($hooks as $hookClass) {
-                $hookObject = GeneralUtility::makeInstance($hookClass);
-                if (!$hookObject instanceof PageLayoutViewDrawItemHookInterface) {
+            // call draw item hooks
+            foreach ($hooks['tt_content_drawItem'] ?? [] as $class) {
+                $object = GeneralUtility::makeInstance($class);
+                if (!$object instanceof PageLayoutViewDrawItemHookInterface) {
                     throw new \UnexpectedValueException(
-                        $hookClass . ' must implement interface ' . PageLayoutViewDrawItemHookInterface::class,
+                        $class . ' must implement interface ' . PageLayoutViewDrawItemHookInterface::class,
                         1218547409
                     );
                 }
-                $hookObject->preProcess($view, $draw, $header, $html, $row);
+                $object->preProcess($view, $draw, $header, $html, $row);
+            }
+
+            // call draw footer hooks
+            foreach ($hooks['tt_content_drawFooter'] ?? [] as $class) {
+                $object = GeneralUtility::makeInstance($class);
+                if (!$object instanceof PageLayoutViewDrawFooterHookInterface) {
+                    throw new \UnexpectedValueException(
+                        $class . ' must implement interface ' . PageLayoutViewDrawFooterHookInterface::class,
+                        1404378171
+                    );
+                }
+                $object->preProcess($view, $footer, $row);
             }
         }
 
@@ -338,7 +395,7 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
     }
 
     /**
-     * Truncates larger amounts of text (usually from RTE/bodytext fields) with word wrapping etc.
+     * Truncates larger amounts of text with word wrapping etc.
      *
      * @param string $text
      * @return string
@@ -352,8 +409,6 @@ class PageContentPreview extends ContentPreview implements NodeResolverInterface
     }
 
     /**
-     * Will create a link on the input string and possibly a big button after the string which links to editing in the RTE
-     *
      * Used for content element content displayed so the user can click the content.
      *
      * @param string $label String to link. Must be prepared for HTML output.
