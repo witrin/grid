@@ -1,18 +1,18 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" data-namespace-typo3-fluid="true">
-<div class="t3-content-element t3-grid-drag-drop-item t3js-grid-drag-drop-item
-        {f:if(condition: '!{visible}', then: ' t3-content-element-hidden')}
-        {f:if(condition: '{errors}', then: ' t3-content-element-danger')}
-        {f:if(condition: '{warnings}', then: ' t3-content-element-warning')}"
+<div class="t3-grid-item t3-grid-drag-drop-item t3js-grid-drag-drop-item
+        {f:if(condition: '!{visible}', then: ' t3-grid-item-hidden')}
+        {f:if(condition: '{errors}', then: ' t3-grid-item-danger')}
+        {f:if(condition: '{warnings}', then: ' t3-grid-item-warning')}"
      data-uid="{record}">
     <div>
-        <div class="t3-content-element-header t3-grid-drag-drop-handle t3js-grid-drag-drop-handle">
-            <div class="t3-content-element-header-icons-left">
+        <div class="t3-grid-item-header t3-grid-drag-drop-handle t3js-grid-drag-drop-handle">
+            <div class="t3-grid-item-header-icons-left">
                 {g:record.icon(table: '{table}', data: '{data}', contextMenu: 1, toolTip: 1, size: 'small') -> f:format.raw()}
                 <f:if condition="{flag}">
                     {g:icon(identifier: '{flag}', size: 'small')}
                 </f:if>
             </div>
-            <div class="t3-content-element-header-icons-right">
+            <div class="t3-grid-item-header-icons-right">
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-sm" role="group">
                         <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'header') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
@@ -24,14 +24,14 @@
                 </div>
             </div>
         </div>
-        <div class="t3-content-element-body">
-            <div class="t3-content-element-body-inner">
+        <div class="t3-grid-item-body">
+            <div class="t3-grid-item-body-inner">
                 <div>
                     {content -> f:format.raw()}
                 </div>
             </div>
-            <div class="t3-content-element-footer">
-                <div class="t3-content-element-info">
+            <div class="t3-grid-item-footer">
+                <div class="t3-grid-item-info">
                     <div>
                         {footer -> f:format.raw()}
                     </div>

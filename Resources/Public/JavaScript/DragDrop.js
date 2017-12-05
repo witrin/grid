@@ -150,7 +150,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
                     $(item).parent().detach().insertAfter($(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0));
                 }
                 else {
-                    $(item).clone().wrap('<div class="t3-content-wrapper"></div>').insertAfter($(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0));
+                    $(item).clone().wrap('<div class="t3-grid-wrapper"></div>').insertAfter($(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0));
                 }
                 self.location.reload(true);
             }).catch(function (error) {

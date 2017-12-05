@@ -177,7 +177,7 @@ class DragDrop {
           $(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0),
         );
       } else {
-        $(item).clone().wrap('<div class="t3-content-wrapper"></div>').insertAfter(
+        $(item).clone().wrap('<div class="t3-grid-wrapper"></div>').insertAfter(
           $(zone).parentsUntil(DragDrop.identifier.area).addBack().get(0),
         );
       }

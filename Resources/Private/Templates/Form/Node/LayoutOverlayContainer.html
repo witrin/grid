@@ -1,18 +1,18 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" data-namespace-typo3-fluid="true">
-<div class="t3-content-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
-    <table class="t3-grid-table t3-content-overlays">
+<div class="t3-grid-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
+    <table class="t3-grid-table t3-grid-overlays">
         <tr>
-            <td class="t3-content-overlay">
+            <td class="t3-grid-overlay">
                 <h2>{language.title}</h2>
             </td>
             <f:for each="{overlays}" as="overlay">
-                <td class="t3-content-overlay">
+                <td class="t3-grid-overlay">
                     <h2>{overlay.language.title}</h2>
                 </td>
             </f:for>
         </tr>
         <tr>
-            <td class="t3-content-overlay nowrap">
+            <td class="t3-grid-overlay nowrap">
                 <div class="btn-group">
                     <f:for each="{actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                         <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
@@ -24,7 +24,7 @@
                 {title -> f:format.crop(maxCharacters: 20)}
             </td>
             <f:for each="{overlays}" as="overlay">
-                <td class="t3-content-overlay nowrap">
+                <td class="t3-grid-overlay nowrap">
                     <div class="btn-group">
                         <f:for each="{overlay.actions -> g:iterator.filter(property: 'icon', nullFilter: 1, invert: 1) -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
@@ -40,11 +40,11 @@
         <f:for each="{areas}" as="area">
             <tr>
                 <f:if condition="{area.assigned} && !{area.restricted}">
-                    <td class="t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')}">
+                    <td class="t3-grid-area t3-grid-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-grid-area-unassigned')}">
                         <f:render partial="Area" arguments="{area -> g:iterator.merge(b: '{pid: pid, table: table}')}" />
                     </td>
                     <f:for each="{overlays}" as="overlay">
-                        <td class="t3-content-area t3-content-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-content-area-unassigned')} t3js-grid-drag-drop-area">
+                        <td class="t3-grid-area t3-grid-area-{area.uid}{f:if(condition: '!{area.assigned}', then: ' t3-grid-area-unassigned')} t3js-grid-drag-drop-area">
                             <f:render partial="Area" arguments="{overlay.areas -> g:iterator.filter(filter: area.uid, property: 'uid') -> g:iterator.first() -> g:iterator.merge(b: '{pid: pid}')}" />
                         </td>
                     </f:for>
@@ -53,8 +53,8 @@
         </f:for>
         <f:if condition="{unused -> f:count()} > 0">
             <tr>
-                <td class="t3-content-area">
-                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning'}" />
+                <td class="t3-grid-area">
+                    <f:render partial="Area" arguments="{items: unused, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-grid-area-padded-header t3-grid-area-header-warning'}" />
                 </td>
             </tr>
         </f:if>

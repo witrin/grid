@@ -1,8 +1,8 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
-<div class="t3-content-area-header{class}">
+<div class="t3-grid-area-header{class}">
     <f:if condition="{actions -> f:count()} > 0">
-        <div class="t3-content-area-header-icons">
+        <div class="t3-grid-area-header-icons">
             <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'header') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
                 <g:record.action action="{action}" title="{action.title}">
                     {g:icon(identifier: action.icon, size: 'small')}
@@ -10,7 +10,7 @@
             </f:for>
         </div>
     </f:if>
-    <div class="t3-content-area-header-label">
+    <div class="t3-grid-area-header-label">
         <f:if condition="{title}">{title}</f:if>
         <f:if condition="{restricted}">
             <f:then>({f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout:noAccess')})</f:then>
@@ -18,7 +18,7 @@
         </f:if>
     </div>
 </div>
-<div class="t3-content-area-body{f:if(condition: '{uid} > -1', then: ' t3js-grid-drag-drop-area')}">
+<div class="t3-grid-area-body{f:if(condition: '{uid} > -1', then: ' t3js-grid-drag-drop-area')}">
     <div class="{f:if(condition: '{actions.insert} && {pid}', then: 't3js-grid-drag-drop-zone')}" data-target="{pid}" data-parameters="{actions.insert.data.parameters -> f:format.json()}">
         <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'body') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">

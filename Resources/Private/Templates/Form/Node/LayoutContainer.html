@@ -1,6 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" data-namespace-typo3-fluid="true">
-<div class="t3-content-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
-    <table class="t3-content-areas t3-grid-table">
+<div class="t3-grid-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
+    <table class="t3-grid-areas t3-grid-table">
         <colgroup>
             <f:for each="{columns}" as="column">
                 <col style="width: {column}%"></col>
@@ -12,7 +12,7 @@
                     <td valign="top"
                         rowspan="{cell.row.end - cell.row.start + 1}"
                         colspan="{cell.column.end - cell.column.start + 1}"
-                        class="t3-content-area{f:if(condition: '!{cell.assigned}', then: ' t3-content-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-content-area-restricted')}">
+                        class="t3-grid-area{f:if(condition: '!{cell.assigned}', then: ' t3-grid-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-grid-area-restricted')}">
                         <f:render partial="Area" arguments="{uid: cell.uid, table: table, items: cell.items, title: cell.title, actions: cell.actions, assigned: cell.assigned, restricted: cell.restricted, pid: pid}" />
                     </td>
                 </f:for>
@@ -20,8 +20,8 @@
         </f:for>
         <f:if condition="{unused -> f:count()} > 0">
             <tr>
-                <td class="t3-content-area" colspan="{columns -> f:count()}">
-                    <f:render partial="Area" arguments="{items: unused, table: table, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-content-area-padded-header t3-content-area-header-warning', assigned: 1, restricted: 0, pid: pid}" />
+                <td class="t3-grid-area" colspan="{columns -> f:count()}">
+                    <f:render partial="Area" arguments="{items: unused, table: table, title: '{f:translate(key: \'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:colPos.I.unused\')}', class: ' t3-grid-area-padded-header t3-grid-area-header-warning', assigned: 1, restricted: 0, pid: pid}" />
                 </td>
             </tr>
         </f:if>
