@@ -18,7 +18,7 @@
         </f:if>
     </div>
 </div>
-<div class="t3-content-area-body{f:if(condition: uid, then: ' t3js-grid-drag-drop-area')}">
+<div class="t3-content-area-body{f:if(condition: '{uid} > -1', then: ' t3js-grid-drag-drop-area')}">
     <div class="{f:if(condition: '{actions.insert} && {pid}', then: 't3js-grid-drag-drop-zone')}" data-target="{pid}" data-parameters="{actions.insert.data.parameters -> f:format.json()}">
         <f:for each="{actions -> g:iterator.filter(property: 'section', filter: 'body') -> g:iterator.filter(property: 'category', filter: 'ui') -> g:iterator.sort(columns: {priority: {order: 'asc', flags: 'numeric'}})}" as="action">
             <g:record.action action="{action}" class="btn btn-default btn-sm" title="{action.title}">
