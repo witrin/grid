@@ -1,7 +1,7 @@
 {
 	"name" : "typo3/cms-grid",
 	"type" : "typo3-cms-extension",
-	"description" : "TYPO3 Core",
+	"description" : "Grid component for the TYPO3 backend.",
 	"homepage" : "https://typo3.org",
 	"license" : "GPL-2.0+",
 	"require" : {
