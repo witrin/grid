@@ -5,8 +5,8 @@
 	"homepage" : "https://typo3.org",
 	"license" : "GPL-2.0+",
 	"require" : {
-		"typo3/cms-core" : "*",
-		"typo3/cms-backend" : "*"
+		"typo3/cms-core" : "9.1.*@dev",
+		"typo3/cms-backend" : "9.1.*@dev"
 	},
 	"replace" : {
 		"grid" : "*"
