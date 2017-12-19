@@ -101,7 +101,7 @@ class ContentWizardController extends AbstractController
                 'renderType' => 'contentWizardContainer',
                 'renderData' => [
                     'context' => $parameters['context'],
-                    'steps' => array_merge(['presets'], ($parameters['areaUid'] ? [] : ['positions'])),
+                    'steps' => array_merge(['presets'], (array_key_exists('areaUid', $parameters) ? [] : ['positions'])),
                     'url' => BackendUtility::getModuleUrl(
                         'record_edit',
                         [
