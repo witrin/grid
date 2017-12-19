@@ -1,12 +1,12 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" data-namespace-typo3-fluid="true">
 <div class="media">
     <div class="t3-grid-preset-icon media-left">
-        <g:tag name="a" additionalAttributes="{href: '#'}" data="{data}">
+        <g:tag name="a" additionalAttributes="{href: '#', class: class}" data="{data}">
             {g:icon(identifier: '{preset.iconIdentifier}')}
         </g:tag>
     </div>
     <div class="t3-grid-preset-body media-body">
-        <g:tag name="a" additionalAttributes="{href: '#'}" data="{data}">
+        <g:tag name="a" additionalAttributes="{href: '#', class: class}" data="{data}">
             <strong>{preset.title}</strong>
             <br />
             {preset.description}

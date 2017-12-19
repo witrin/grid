@@ -46,7 +46,8 @@ class ContentPreset extends AbstractElement
                 $this->data['renderData']['context'] === 'modal' ?
                     (in_array('positions', (array)$this->data['renderData']['steps']) 
                         ? ['slide' => 'next'] : ['dismiss' => 'modal']) : []
-            )
+            ),
+            'class' => $this->data['renderData']['context'] === 'modal' ? 't3js-grid-content-creation-wizard-item' : ''
         ]);
 
         $result['html'] = $view->render();
