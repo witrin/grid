@@ -53,9 +53,10 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/Modal", "TYPO3/CMS/Ba
                 var parameters = $(element).data('parameters');
                 $(element).find(Creation.identifier.item).on('click', function (event) {
                     event.preventDefault();
-                    parameters = $.extend(true, parameters, $container.data('parameters'));
+                    parameters = $.extend(true, parameters, $(event.currentTarget).data('parameters'));
                     if (!$(event.currentTarget).is('[data-slide=next]')) {
                         var query = {
+                            edit: parameters.edit,
                             defVals: (_a = {}, _a[parameters.table] = parameters.defaults, _a),
                             overrideVals: (_b = {}, _b[parameters.table] = parameters.overrides, _b),
                         };

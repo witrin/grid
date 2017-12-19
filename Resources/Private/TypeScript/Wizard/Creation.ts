@@ -67,10 +67,11 @@ class Creation {
       $(element).find(Creation.identifier.item).on('click', (event: any) => {
         event.preventDefault();
 
-        parameters = $.extend(true, parameters, $container.data('parameters'));
+        parameters = $.extend(true, parameters, $(event.currentTarget).data('parameters'));
 
         if (!$(event.currentTarget).is('[data-slide=next]')) {
           const query = {
+            edit: parameters.edit,
             defVals: { [parameters.table]: parameters.defaults },
             overrideVals: { [parameters.table]: parameters.overrides },
           };
