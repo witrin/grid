@@ -37,12 +37,12 @@ class Creation {
    */
   public show(url: string, title: string): void {
     Modal.advanced({
-      callback: (modal: Element) => {
-        $(modal).find('.t3js-modal-body').addClass('t3-grid-content-creation-wizard-window');
-        $(modal).on('modal-loaded', (event) => {
-          this.modal = modal;
-          this.initialize();
-        });
+      ajaxCallback: () => {
+        this.modal = Modal.currentModal.get(0);
+
+        $(this.modal).find('.t3js-modal-body').addClass('t3-grid-content-creation-wizard-window');
+
+        this.initialize();
       },
       content: `${url}`,
       severity: Severity.notice,

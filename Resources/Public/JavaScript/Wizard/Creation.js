@@ -29,12 +29,10 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/Modal", "TYPO3/CMS/Ba
         Creation.prototype.show = function (url, title) {
             var _this = this;
             Modal.advanced({
-                callback: function (modal) {
-                    $(modal).find('.t3js-modal-body').addClass('t3-grid-content-creation-wizard-window');
-                    $(modal).on('modal-loaded', function (event) {
-                        _this.modal = modal;
-                        _this.initialize();
-                    });
+                ajaxCallback: function () {
+                    _this.modal = Modal.currentModal.get(0);
+                    $(_this.modal).find('.t3js-modal-body').addClass('t3-grid-content-creation-wizard-window');
+                    _this.initialize();
                 },
                 content: "" + url,
                 severity: Severity.notice,
