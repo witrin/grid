@@ -39,11 +39,14 @@ class ContentPreset extends AbstractElement
 
         $view->assignMultiple([
             'preset' => $this->data['renderData']['preset'],
-            'data' => [
-                'parameters' => json_encode($this->data['renderData']['preset']['parameters']),
-                'slide' => in_array('positions', (array)$this->data['renderData']['steps']) ? 'next' : null,
-                'dismiss' => $this->data['renderData']['context'] === 'modal' && !in_array('positions', (array)$this->data['renderData']['steps']) ? 'modal' : null
-            ]
+            'data' => array_merge(
+                [
+                    'parameters' => json_encode($this->data['renderData']['preset']['parameters'])
+                ],
+                $this->data['renderData']['context'] === 'modal' ?
+                    (in_array('positions', (array)$this->data['renderData']['steps']) 
+                        ? ['slide' => 'next'] : ['dismiss' => 'modal']) : []
+            )
         ]);
 
         $result['html'] = $view->render();
