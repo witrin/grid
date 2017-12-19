@@ -63,6 +63,8 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
             $area['row']['start'] = max(1, $area['row']['start']);
             $area['column']['end'] = max($area['column']['end'], $area['column']['start']);
             $area['row']['end'] = max($area['row']['end'], $area['row']['start']);
+            $area['row']['span'] = $area['row']['start'] - $area['row']['start'] + 1;
+            $area['column']['span'] = $area['column']['start'] - $area['column']['start'] + 1;
         }
 
         $result['customData']['tx_grid']['template']['areas'] = array_values($result['customData']['tx_grid']['template']['areas']);

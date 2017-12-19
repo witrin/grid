@@ -1,4 +1,4 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" xmlns:g="http://typo3.org/ns/TYPO3/CMS/Grid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <div class="t3-grid-container t3js-grid-actions-container t3js-grid-drag-drop-container" data-table="{table}" data-field="{field}">
     <table class="t3-grid-areas t3-grid-table">
         <colgroup>
@@ -10,8 +10,8 @@
             <tr>
                 <f:for each="{row}" as="cell">
                     <td valign="top"
-                        rowspan="{cell.row.end - cell.row.start + 1}"
-                        colspan="{cell.column.end - cell.column.start + 1}"
+                        rowspan="{cell.row.span}"
+                        colspan="{cell.column.span}"
                         class="t3-grid-area{f:if(condition: '!{cell.assigned}', then: ' t3-grid-area-unassigned')}{f:if(condition: '{cell.restricted}', then: ' t3-grid-area-restricted')}">
                         <f:render partial="Area" arguments="{uid: cell.uid, table: table, items: cell.items, title: cell.title, actions: cell.actions, assigned: cell.assigned, restricted: cell.restricted, pid: pid}" />
                     </td>

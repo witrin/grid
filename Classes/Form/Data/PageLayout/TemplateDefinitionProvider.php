@@ -80,11 +80,13 @@ class TemplateDefinitionProvider implements FormDataProviderInterface
                         'assigned' => is_numeric($column['colPos']),
                         'row' => [
                             'start' => $x + 1,
-                            'end' => $x + ($column['rowspan'] ?? 1)
+                            'end' => $x + ($column['rowspan'] ?? 1),
+                            'span' => ($column['rowspan'] ?? 1)
                         ],
                         'column' => [
                             'start' => $y + 1,
-                            'end' => $y + ($column['colspan'] ?? 1)
+                            'end' => $y + ($column['colspan'] ?? 1),
+                            'span' => ($column['colspan'] ?? 1)
                         ],
                         'restricted' => !empty($allowedAreas) && !isset($allowedAreas[$column['colPos']])
                     ];

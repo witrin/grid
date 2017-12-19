@@ -10,8 +10,8 @@
             <tr>
                 <f:for each="{row}" as="cell">
                     <td class="col-nowrap col-min" valign="top"
-                        rowspan="{cell.row.end - cell.row.start + 1}"
-                        colspan="{cell.column.end - cell.column.start + 1}">
+                        rowspan="{cell.row.span}"
+                        colspan="{cell.column.span}">
                         <p>
                             <strong>{cell.title}</strong>
                         </p>
