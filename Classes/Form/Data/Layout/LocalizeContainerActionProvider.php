@@ -100,44 +100,16 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
      */
     protected function getAttributes(array $result, array $parameters) : array
     {
-        $defaults = [
-            $result['processedTca']['ctrl']['languageField'] => $parameters['language']['uid']
-        ];
-
-        if (isset($result['processedTca']['ctrl']['transOrigPointerField'])) {
-            $defaults[$result['processedTca']['ctrl']['transOrigPointerField']] = $result['vanillaUid'];
-        }
-
-        if (isset($result['processedTca']['ctrl']['translationSource'])) {
-            $defaults[$result['processedTca']['ctrl']['translationSource']] = $result['vanillaUid'];
-        }
-
         return [
-            'url' => BackendUtility::getModuleUrl(
-                'record_edit',
-                [
-                    'edit' => [
-                        $result['tableName'] => [
-                            $result['effectivePid'] => 'new'
-                        ]
-                    ],
-                    'defVals' => [
-                        $result['tableName'] => TcaUtility::filterHiddenFields(
-                            $result['processedTca']['columns'],
-                            $defaults
-                        )
-                    ],
-                    'overrideVals' => [
-                        $result['tableName'] => array_diff_key(
-                            $defaults,
-                            TcaUtility::filterHiddenFields(
-                                $result['processedTca']['columns'],
-                                $defaults
-                            )
-                        )
-                    ],
-                    'returnUrl' => $result['returnUrl']
-                ]
+            'url' => BackendUtility::getLinkToDataHandlerAction(
+                '&cmd[pages][' . $result['vanillaUid'] . '][localize]=' . $parameters['language']['uid'],
+                BackendUtility::getModuleUrl(
+                    'record_edit',
+                    [
+                        'justLocalized' => $result['tableName'] . ':' . $result['vanillaUid'] . ':' . $parameters['language']['uid'],
+                        'returnUrl' => $result['returnUrl']
+                    ]
+                )
             ),
             'title' => $parameters['language']['title'],
             'category' => 'ui'
