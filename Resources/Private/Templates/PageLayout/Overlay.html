@@ -6,11 +6,8 @@
         <f:if condition="{actions.localize -> f:count()} > 0">
             <div class="form-inline form-inline-spaced">
                 <div class="form-group">
-                    <label for="translatePage">
-                        {f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:new_language')}
-                    </label>
                     <select class="form-control input-sm" id="translatePage" onchange="window.location.href=this.value">
-                        <option disabled selected></option>
+                        <option disabled selected>{f:translate(key: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:new_language')}</option>
                         <f:for each="{actions.localize}" as="action">
                             <option value="{action.url}">{action.title}</option>
                         </f:for>
