@@ -131,9 +131,9 @@ class LayoutContainer extends AbstractContainer
             'pid' => $data['effectivePid'],
             'actions' => $data['customData']['tx_grid']['actions'],
             'title' => $data['recordTitle'],
-            'record' => $this->data['databaseRow'],
-            'table' => $this->data['tableName'],
-            'field' => $this->data['customData']['tx_grid']['columnToProcess']
+            'record' => $data['databaseRow'],
+            'table' => $data['tableName'],
+            'field' => $data['customData']['tx_grid']['columnToProcess']
         ];
     }
 
