@@ -114,12 +114,16 @@ define(["require", "exports", "jquery", "jquery-ui/resizable"], function (requir
         };
         /**
          * Calculate sidebar width
+         *
+         * @returns number
          */
         Sidebar.prototype.calculateWidth = function () {
             return $(Sidebar.identifier.element).outerWidth();
         };
         /**
          * Calculate sidebar offset
+         *
+         * @returns number
          */
         Sidebar.prototype.calculateOffset = function () {
             var $module = $(Sidebar.identifier.module);

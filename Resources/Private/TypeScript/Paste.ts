@@ -22,12 +22,10 @@ import Severity = require('TYPO3/CMS/Backend/Severity');
  */
 class Paste {
 
-  protected static readonly identifier = {
+  protected static readonly identifier: { [key: string]: string } = {
     item: '.t3js-grid-paste',
-    mode: {
-      copy: '.t3js-grid-paste-copy',
-      move: '.t3js-grid-paste-move',
-    },
+    copy: '.t3js-grid-paste-copy',
+    move: '.t3js-grid-paste-move',
   };
 
   /**
@@ -55,7 +53,7 @@ class Paste {
     let query: object;
 
     // check requested action
-    if ($(item).is(Paste.identifier.mode.copy)) {
+    if ($(item).is(Paste.identifier.copy)) {
       query = {
         cmd: { [parameters.table]: { [uid]: { copy: { action: 'paste', target, update: data } } } },
       };
@@ -92,7 +90,7 @@ class Paste {
 
     let content;
 
-    if ($(element).is(Paste.identifier.mode.copy)) {
+    if ($(element).is(Paste.identifier.copy)) {
       content = TYPO3.lang['paste.modal.pastecopy'] || 'Do you want to copy the record to this position?';
       buttons.push({
         btnClass: 'btn-' + Severity.getCssClass(severity),

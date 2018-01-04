@@ -42,7 +42,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "TY
             var data = $.extend(true, {}, parameters.defaults, parameters.overrides);
             var query;
             // check requested action
-            if ($(item).is(Paste.identifier.mode.copy)) {
+            if ($(item).is(Paste.identifier.copy)) {
                 query = {
                     cmd: (_a = {}, _a[parameters.table] = (_b = {}, _b[uid] = { copy: { action: 'paste', target: target, update: data } }, _b), _a),
                 };
@@ -77,7 +77,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "TY
                 },
             ];
             var content;
-            if ($(element).is(Paste.identifier.mode.copy)) {
+            if ($(element).is(Paste.identifier.copy)) {
                 content = TYPO3.lang['paste.modal.pastecopy'] || 'Do you want to copy the record to this position?';
                 buttons.push({
                     btnClass: 'btn-' + Severity.getCssClass(severity),
@@ -97,10 +97,8 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "TY
         };
         Paste.identifier = {
             item: '.t3js-grid-paste',
-            mode: {
-                copy: '.t3js-grid-paste-copy',
-                move: '.t3js-grid-paste-move',
-            },
+            copy: '.t3js-grid-paste-copy',
+            move: '.t3js-grid-paste-move',
         };
         return Paste;
     }());

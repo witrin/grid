@@ -23,7 +23,7 @@ import ContentCreationWizard = require('TYPO3/CMS/Grid/Wizard/Creation');
  */
 class Actions {
 
-  protected static readonly identifier = {
+  protected static readonly identifier: { [s: string]: string|any } = {
     container: '.t3js-grid-actions-container',
     hiddenContent: '.t3js-hidden-content',
     hiddenContentVisibilityToggle: '.t3js-hidden-content-visibility-toggle',
@@ -39,7 +39,7 @@ class Actions {
   /**
    * Intialize actions for grid container
    */
-  public initialize() {
+  public initialize(): void {
     this.$container = $(Actions.identifier.container);
     this.$toggleHiddenContentVisibilityCheckbox = $(Actions.identifier.hiddenContentVisibilityToggle);
     this.$showContentWizardButton = $(Actions.identifier.showContentCreationWizard);
@@ -88,7 +88,7 @@ class Actions {
    *
    * @param event
    */
-  protected onShowContentWizardClicked(event: any) {
+  protected onShowContentWizardClicked(event: any): void {
     ContentCreationWizard.show(
       $(event.currentTarget).data('url'),
       $(event.currentTarget).data('title'),

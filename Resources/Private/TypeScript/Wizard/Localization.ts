@@ -39,14 +39,14 @@ class Localization {
   /**
    * Identifier for markup
    */
-  protected static readonly identifier = {
+  protected static readonly identifier: { [key: string]: string } = {
     action: '.t3js-grid-localize',
   };
 
   /**
    * Available options
    */
-  protected options: any = {
+  protected options: { [key: string]: { [key: string]: string } } = {
     copy: {
       description: 'localize.educate.copy',
       icon: 'actions-localize',
@@ -64,11 +64,16 @@ class Localization {
   /**
    * Current settings
    */
-  protected settings = {
-    area: null as AreaLocator,
-    language: null as string,
-    mode: null as string,
-    records: null as number[],
+  protected settings: {
+    area: AreaLocator,
+    language: string,
+    mode: string,
+    records: number[],
+  } = {
+    area: null,
+    language: null,
+    mode: null,
+    records: null,
   };
 
   /**

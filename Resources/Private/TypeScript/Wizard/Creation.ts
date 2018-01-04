@@ -22,7 +22,7 @@ import Severity = require('TYPO3/CMS/Backend/Severity');
  */
 class Creation {
 
-  protected static readonly identifier = {
+  protected static readonly identifier: { [key: string]: string } = {
     container: '.t3js-grid-content-creation-wizard-container',
     item: '.t3js-grid-content-creation-wizard-item',
   };

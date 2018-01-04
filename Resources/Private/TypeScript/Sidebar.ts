@@ -34,7 +34,7 @@ class Sidebar {
   /**
    * Identifier for sidebar elements
    */
-  protected static readonly identifier = {
+  protected static readonly identifier: { [key: string]: string } = {
     element: '.t3js-sidebar',
     module: '.module, .module-docheader',
     panel: '.t3js-sidebar-panel',
@@ -58,7 +58,7 @@ class Sidebar {
   /**
    * Initialize sidebar
    */
-  public initialize() {
+  public initialize(): void {
     const $element = $(Sidebar.identifier.element);
     const $toggle = $(Sidebar.identifier.toggle);
 
@@ -90,14 +90,14 @@ class Sidebar {
   /**
    * Called when sidebar needs update
    */
-  protected onUpdate() {
+  protected onUpdate(): void {
     $(Sidebar.identifier.panel).css('height', $(window).height() + 'px');
   }
 
   /**
    * Called when sidebar toggles
    */
-  protected onToggle() {
+  protected onToggle(): void {
     const $element = $(Sidebar.identifier.element);
     const state = $element.attr('data-toggle');
 
@@ -120,7 +120,7 @@ class Sidebar {
   /**
    * Called on sidebar resize
    */
-  protected onResize() {
+  protected onResize(): void {
     const $element = $(Sidebar.identifier.element);
 
     $element.removeAttr('data-collapsed');
@@ -130,7 +130,7 @@ class Sidebar {
   /**
    * Called on sidebar start
    */
-  protected onStart() {
+  protected onStart(): void {
     const width = this.calculateWidth();
 
     // See https://bugs.jqueryui.com/ticket/4985
@@ -143,15 +143,19 @@ class Sidebar {
 
   /**
    * Calculate sidebar width
+   *
+   * @returns number
    */
-  protected calculateWidth() {
+  protected calculateWidth(): number {
     return $(Sidebar.identifier.element).outerWidth();
   }
 
   /**
    * Calculate sidebar offset
+   *
+   * @returns number
    */
-  protected calculateOffset() {
+  protected calculateOffset(): number {
     const $module = $(Sidebar.identifier.module);
 
     return $module.get(0).offsetWidth - $module.get(0).clientWidth + $(Sidebar.identifier.split).outerWidth();

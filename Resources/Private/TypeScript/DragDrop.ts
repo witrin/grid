@@ -32,7 +32,7 @@ enum DragType {
  */
 class DragDrop {
 
-  protected static readonly identifier = {
+  protected static readonly identifier: { [key: string]: string } = {
     area: '.t3js-grid-drag-drop-area',
     container: '.t3js-grid-drag-drop-container',
     handle: '.t3js-grid-drag-drop-handle',
@@ -40,14 +40,9 @@ class DragDrop {
     zone: '.t3js-grid-drag-drop-zone',
   };
 
-  protected static readonly styles = {
-    container: {
-      active: 't3-grid-drag-drop-active',
-    },
-    zone: {
-      active: 't3-grid-drag-drop-zone-active',
-      hover: 't3-grid-drag-drop-zone-hover',
-    },
+  protected static readonly styles: { [key: string]: string } = {
+    active: 't3-grid-drag-drop-active',
+    hover: 't3-grid-drag-drop-hover',
   };
 
   /**
@@ -76,9 +71,9 @@ class DragDrop {
     $(DragDrop.identifier.zone).each((index: number, element: Element) => {
       $(element).droppable({
         accept: ($draggable: JQuery) => this.isDropAllowed(element, $draggable.get(0)),
-        activeClass: DragDrop.styles.zone.active,
+        activeClass: DragDrop.styles.active,
         drop: (event: Event, ui: any) => this.onDrop(ui.draggable, element, event),
-        hoverClass: DragDrop.styles.zone.hover,
+        hoverClass: DragDrop.styles.hover,
         scope: table,
         tolerance: 'pointer',
       });
@@ -90,8 +85,9 @@ class DragDrop {
    *
    * @param droppable
    * @param draggable
+   * @returns boolean
    */
-  protected isDropAllowed(zone: Element, item: Element) {
+  protected isDropAllowed(zone: Element, item: Element): boolean {
     const target = Math.abs(Number($(zone).data('target')));
     const $area = $(zone).closest(DragDrop.identifier.area);
     const $content = $area.find(`${DragDrop.identifier.item}[data-uid=${target}]`);
@@ -111,7 +107,7 @@ class DragDrop {
    */
   protected onDragStart(item: Element, clone: Element): void {
     // update container status
-    $(DragDrop.identifier.container).addClass(DragDrop.styles.container.active);
+    $(DragDrop.identifier.container).addClass(DragDrop.styles.active);
     // prepare common item
     $(clone).css('width', $(item).outerWidth());
     // prepare record item
@@ -129,7 +125,7 @@ class DragDrop {
    */
   protected onDragStop(item: Element, clone: Element): void {
     // update container status
-    $(DragDrop.identifier.container).removeClass(DragDrop.styles.container.active);
+    $(DragDrop.identifier.container).removeClass(DragDrop.styles.active);
     // prepare if item is a record
     if (this.getDragType(item) === DragType.Record) {
       $(item).attr('style', null);

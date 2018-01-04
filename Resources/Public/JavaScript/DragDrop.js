@@ -55,9 +55,9 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
             $(DragDrop.identifier.zone).each(function (index, element) {
                 $(element).droppable({
                     accept: function ($draggable) { return _this.isDropAllowed(element, $draggable.get(0)); },
-                    activeClass: DragDrop.styles.zone.active,
+                    activeClass: DragDrop.styles.active,
                     drop: function (event, ui) { return _this.onDrop(ui.draggable, element, event); },
-                    hoverClass: DragDrop.styles.zone.hover,
+                    hoverClass: DragDrop.styles.hover,
                     scope: table,
                     tolerance: 'pointer',
                 });
@@ -68,6 +68,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
          *
          * @param droppable
          * @param draggable
+         * @returns boolean
          */
         DragDrop.prototype.isDropAllowed = function (zone, item) {
             var target = Math.abs(Number($(zone).data('target')));
@@ -88,7 +89,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
          */
         DragDrop.prototype.onDragStart = function (item, clone) {
             // update container status
-            $(DragDrop.identifier.container).addClass(DragDrop.styles.container.active);
+            $(DragDrop.identifier.container).addClass(DragDrop.styles.active);
             // prepare common item
             $(clone).css('width', $(item).outerWidth());
             // prepare record item
@@ -105,7 +106,7 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
          */
         DragDrop.prototype.onDragStop = function (item, clone) {
             // update container status
-            $(DragDrop.identifier.container).removeClass(DragDrop.styles.container.active);
+            $(DragDrop.identifier.container).removeClass(DragDrop.styles.active);
             // prepare if item is a record
             if (this.getDragType(item) === DragType.Record) {
                 $(item).attr('style', null);
@@ -175,13 +176,8 @@ define(["require", "exports", "jquery", "TYPO3/CMS/Backend/AjaxDataHandler", "jq
             zone: '.t3js-grid-drag-drop-zone',
         };
         DragDrop.styles = {
-            container: {
-                active: 't3-grid-drag-drop-active',
-            },
-            zone: {
-                active: 't3-grid-drag-drop-zone-active',
-                hover: 't3-grid-drag-drop-zone-hover',
-            },
+            active: 't3-grid-drag-drop-active',
+            hover: 't3-grid-drag-drop-hover',
         };
         return DragDrop;
     }());
