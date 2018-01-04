@@ -31,8 +31,6 @@ body {
         }
 
         .t3-sidebar-group-container-item {
-            justify-content: center;
-
             .icon {
                 margin: 0;
             }
@@ -42,8 +40,16 @@ body {
     &[data-toggle=full-expanded] {
         width: $sidebar-width-large;
 
-        .t3-sidebar-group-container-item .text {
-            display: block;
+        .t3-sidebar-group-container-item {
+            justify-content: start;
+
+            .icon {
+                margin-right: $grid-gutter-width/3;
+            }
+
+            .text {
+                display: block;
+            }
         }
     }
 
@@ -144,6 +150,7 @@ body {
 }
 
 .t3-sidebar-group-container-item {
+    justify-content: center;
     padding: $grid-gutter-width/3;
     display: flex;
 
@@ -154,7 +161,6 @@ body {
 
     & .icon {
         flex-shrink: 0;
-        margin-right: $grid-gutter-width/3;
 
         &:hover {
             cursor: move;

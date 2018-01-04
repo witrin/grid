@@ -112,9 +112,10 @@ class DragDrop {
   protected onDragStart(item: Element, clone: Element): void {
     // update container status
     $(DragDrop.identifier.container).addClass(DragDrop.styles.container.active);
-    // prepare if item is a record
+    // prepare common item
+    $(clone).css('width', $(item).outerWidth());
+    // prepare record item
     if (this.getDragType(item) === DragType.Record) {
-      $(clone).css('width', $(item).outerWidth());
       $(item).css('visibility', 'hidden');
       $(clone).append(`<div class="ui-draggable-copy-message">${TYPO3.lang['dragdrop.copy.message']}</div>`);
     }

@@ -10,22 +10,21 @@
                     <div class="t3-sidebar-group-header">
                         <span class="t3-sidebar-group-header-title">{group.header}</span>
                     </div>
-                    <ul class="t3-sidebar-group-container">
+                    <div class="t3-sidebar-group-container">
                         <f:for each="{group.elements}" as="element">
-                            <li class="t3-sidebar-group-container-item">
-                                <span class="t3-sidebar-group-container-item-icon t3js-grid-drag-drop-item"
-                                      data-values="{element.parameters -> f:format.json()}">
-                                    <span class="t3js-grid-drag-drop-handle">
+                            <div class="t3js-grid-drag-drop-item" data-values="{element.parameters -> f:format.json()}">
+                                <div class="t3-sidebar-group-container-item t3js-grid-drag-drop-handle t3-grid-drag-drop-handle">
+                                    <span class="t3-sidebar-group-container-item-icon">
                                         {g:icon(identifier: '{element.iconIdentifier}')}
                                     </span>
-                                </span>
-                                <span class="text">
-                                    <span class="title">{element.title}</span><br/>
-                                    <span class="description">{element.description}</span>
-                                </span>
-                            </li>
+                                    <span class="text">
+                                        <span class="title">{element.title}</span><br/>
+                                        <span class="description">{element.description}</span>
+                                    </span>
+                                </div>
+                            </div>
                         </f:for>
-                    </ul>
+                    </div>
                 </div>
             </f:for>
         </div>
