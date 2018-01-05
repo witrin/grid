@@ -102,7 +102,7 @@ class LocalizeContainerActionProvider implements FormDataProviderInterface
     {
         return [
             'url' => BackendUtility::getLinkToDataHandlerAction(
-                '&cmd[pages][' . $result['vanillaUid'] . '][localize]=' . $parameters['language']['uid'],
+                '&cmd[' . $result['tableName'] . '][' . $result['vanillaUid'] . '][localize]=' . $parameters['language']['uid'],
                 BackendUtility::getModuleUrl(
                     'record_edit',
                     [
